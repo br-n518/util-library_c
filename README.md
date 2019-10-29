@@ -18,7 +18,6 @@
 - C++ &lt;random&gt; library wrapper for C (**rand.h**)
 
 ### Notes
-- XML text elements not implemented (ignored by parser).
 - btree.h and graph.h need more testing.
 - Some non-crucial functions not implemented (yet).
 
