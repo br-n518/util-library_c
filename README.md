@@ -14,7 +14,6 @@
 
 - INI file reader/writer (**ini_doc.h**)
 - XML file reader/writer (**xml_doc.h**)
- - (text elements in node bodies not yet implemented)
 
 - C++ &lt;random&gt; library wrapper for C (**rand.h**)
 
