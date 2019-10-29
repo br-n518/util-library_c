@@ -36,6 +36,9 @@ typedef struct vector_str {
 	vs_node *head;
 } vector_str;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 void vs_init( vector_str *s);
 void vs_destroy( vector_str *s );
@@ -61,5 +64,10 @@ void vs_replace_idx( vector_str *s, const char *from, const char *to, const int 
 
 // slow, used for testing
 int vs_test( vector_str *s, const char *cstr );
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

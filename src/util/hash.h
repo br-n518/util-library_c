@@ -51,6 +51,10 @@ typedef struct hash_table {
 	struct hash_table_entry entries[HASH_TABLE_SIZE];
 } hash_table;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief Generate a byte-size hash from a string key.
  * 
@@ -75,5 +79,9 @@ void ht_clear( hash_table* );
 void ht_clear_free( hash_table*, void (*free_func) (void*) );
 
 void* ht_remove( hash_table*, void* );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

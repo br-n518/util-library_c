@@ -43,6 +43,10 @@ struct ini_doc {
 
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void ini_doc_init( struct ini_doc *doc );
 void ini_doc_destroy( struct ini_doc* );
 
@@ -58,6 +62,10 @@ void ini_doc_save( struct ini_doc *doc, const char *filename );
 
 void ini_doc_parse( struct ini_doc *doc, const char *data );
 char ini_doc_load( struct ini_doc *dest, const char *filename );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

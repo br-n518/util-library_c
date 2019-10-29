@@ -102,6 +102,10 @@ struct xml_doc {
 
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // return 1 for matching filename extension ( ".xml", or ".XML", or ".xMl" etc: case-insensitive )
 char	xml_check_filename ( const char *fname, const int len );
 
@@ -142,5 +146,9 @@ void xml_node_insert_child_at	( struct xml_node*, struct xml_node*, int idx );
 
 
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

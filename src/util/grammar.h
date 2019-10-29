@@ -36,9 +36,19 @@ typedef struct rule_t {
 
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+
 char* create_grammar_str( const char *init_str, node_t *rules, const int iterations );
 
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

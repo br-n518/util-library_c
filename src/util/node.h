@@ -33,6 +33,10 @@ typedef struct node_t {
 
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 node_t* node_create( void *data );
 
 void node_free_chain( node_t *node );
@@ -56,6 +60,10 @@ int node_has( node_t *node, const void *data );
 void node_remove( node_t **head, const void *data );
 
 int node_count( node_t *head );
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

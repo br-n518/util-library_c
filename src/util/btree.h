@@ -33,6 +33,10 @@ typedef struct btree {
 	int key;
 } btree;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 btree* bt_alloc( );
 void bt_init(btree*, const int key, void *data);
 
@@ -46,5 +50,9 @@ void bt_clear(btree*); // free tree nodes
 void bt_clear_free(btree*, void (*free_func) (void*)); // tree nodes plus free_func for data
 
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

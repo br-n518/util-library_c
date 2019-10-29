@@ -62,6 +62,10 @@ typedef struct strbuff {
 
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 void sb_init( strbuff *sb );
 void sb_reset( strbuff *sb );
@@ -87,5 +91,12 @@ char* sb_cstr( strbuff *sb );
 void sb_strip_trailing( strbuff *sb );
 
 int sb_get_next_line( strbuff *dest_buffer, const char *data, const int data_len, const int from_idx );
+
+
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif

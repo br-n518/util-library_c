@@ -31,6 +31,10 @@ typedef struct graph_node {
 } graph_node;
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 graph_node* graph_node_create( void *data );
 void* graph_node_destroy( graph_node *g );
 void graph_node_destroy_all( graph_node *g, void (*free_func)(void*) );
@@ -42,6 +46,10 @@ void graph_node_unlink_all( graph_node *g );
 int graph_node_neighbor_count( const graph_node *g );
 
 int graph_node_has_path( graph_node *a, graph_node *b );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 
