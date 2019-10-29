@@ -24,6 +24,21 @@
 
 
 
+#ifdef XML_TEXT_SEPARATE_SPACE
+#define XML_TEXT_APPEND_SPACER " "
+
+#elseifdef XML_TEXT_SEPARATE_NEWLINE
+#define XML_TEXT_APPEND_SPACER "\n"
+
+#elseifdef XML_TEXT_SEPARATE_TAB
+#define XML_TEXT_APPEND_SPACER "\t"
+
+#endif
+
+
+
+
+
 
 struct xml_docparse_state
 {
@@ -142,18 +157,57 @@ struct xml_attribute* xml_attribute_create( const char *name, const char *value 
 void xml_text_create( struct xml_text *t, const char *value )
 {
 	assert( t );
+	assert( value );
 	
 	if ( t->text )
 	{
 		xml_text_free( t );
 	}
 	
-	if ( value )
+	int len = strlen(value);
+	if ( len > 0 )
 	{
-		t->text_len = strlen( value );
-		t->text = malloc( t->text_len + 1 );
-		strncpy( t->text, value, t->text_len );
-		t->text[t->text_len] = '\0';
+		t->text_len = len;
+		t->text = malloc( len + 1 );
+		strcpy( t->text, value );
+		//t->text[len] = '\0';
+	}
+}
+
+
+void xml_text_append ( struct xml_text *t, const char *value )
+{
+	assert( t );
+	assert( value );
+	
+	int len = strlen( value );
+	if ( len > 0 )
+	{
+		// check for existing text
+		if ( t->text && t->text_len > 0 )
+		{
+			char *ref = t->text;
+			
+			
+			t->text_len = t->text_len + len + 1;
+			t->text = malloc( t->text_len + 1 );
+			t->text[0] = '\0';
+			
+			strcat( t->text, ref );
+			
+			// allow definition of a text separator
+			// parser combines text bodies using xml_text_append
+#ifdef XML_TEXT_APPEND_SPACER
+			strcat(t->text,XML_TEXT_APPEND_SPACER);
+#endif
+			
+			strcat( t->text, value );
+			free( ref );
+		}
+		else
+		{
+			xml_text_create( t, value );
+		}
 	}
 }
 
@@ -668,6 +722,12 @@ void xml_docparse_tag( struct xml_docparse_state *state, const char *tag, const 
 	// detect prolog header
 	if ( tag[0] == '?' )
 	{
+		if ( state->node )
+		{
+			puts("xml_doc_parse warning: Found prolog (XML header) but not at start of file. Ignoring.");
+			return;
+		}
+		
 		if ( xml_check_xml( tag, 1 ) )
 		{
 			xml_docparse_header( state, tag + 4, tag_len - 4 ); // skip '?xml'
@@ -767,34 +827,51 @@ struct xml_doc* xml_doc_parse( const char *x_data, const size_t x_data_len, cons
 	
 	strbuff line_buffer;
 	sb_init( &line_buffer );
+	char tbody_started, c;
 	
 	// loop whole data string
 	int i = 0;
 	while ( i < x_data_len )
 	{
 		// loop until '<'
-		while ( i < x_data_len && (x_data[i] != '<' || state.in_quote) )
+		// TODO record text body
+		tbody_started = 0;
+		while ( i < x_data_len && ((c = x_data[i]) != '<' || state.in_quote) )
 		{
 			// record chars in quotes, instead of finding tag
 			// otherwise just increment index (trying to find start of token)
-			if ( x_data[i] == '\\')
+			
+			if ( isspace( c ) )
 			{
-				if ( state.in_quote )
+				if ( tbody_started )
 				{
-					sb_putc( &line_buffer, x_data[i] );
+					sb_putc( &line_buffer, c );
 				}
+			}
+			else
+			{
+				sb_putc( &line_buffer, c );
+				tbody_started = 1;
+			}
+			
+			if (c == '\\')
+			{
+				//~ if ( state.in_quote )
+				//~ {
+					//~ sb_putc( &line_buffer, x_data[i] );
+				//~ }
 				// increment and check length
 				if ( ++i >= x_data_len ) break;
 				sb_putc( &line_buffer, x_data[i] );
 			}
-			else if ( x_data[i] == '\"' )
+			else if ( c == '\"' )
 			{
 				state.in_quote = ! state.in_quote;
 			}
-			else if ( state.in_quote )
-			{
-				sb_putc( &line_buffer, x_data[i] );
-			}
+			//~ else if ( state.in_quote )
+			//~ {
+				//~ sb_putc( &line_buffer, x_data[i] );
+			//~ }
 			i++;
 		}
 		if ( i >= x_data_len )
@@ -803,20 +880,32 @@ struct xml_doc* xml_doc_parse( const char *x_data, const size_t x_data_len, cons
 			break;
 		}
 		
-		//i++; //skip opening bracket
+		// TODO check buffer for text body
+		if ( state.node && tbody_started )
+		{
+			sb_strip_trailing( &line_buffer );
+			char *s = sb_cstr( &line_buffer );
+			if ( s )
+			{
+				
+				xml_text_append( &(state.node->text_body), s );
+				free( s );
+			}
+		}
+		sb_reset( &line_buffer );
 		
 		// other bracket
-		while ( ++i < x_data_len && (x_data[i] != '>' || state.in_quote) )
+		while ( ++i < x_data_len && ((c = x_data[i]) != '>' || state.in_quote) )
 		{
 			// record everything, including quotes
-			sb_putc( &line_buffer, x_data[i] );
-			if ( x_data[i] == '\\' )
+			sb_putc( &line_buffer, c );
+			if ( c == '\\' )
 			{
 				// record extra character for escape sequence (in case it's a double quote)
 				if ( ++i >= x_data_len ) break; // check line end
 				sb_putc( &line_buffer, x_data[i] );
 			}
-			else if ( x_data[i] == '\"')
+			else if ( c == '\"')
 			{
 				// char already added, just flip quote bits
 				state.in_quote = ! state.in_quote;

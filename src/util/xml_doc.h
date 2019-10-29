@@ -108,8 +108,10 @@ char	xml_check_filename ( const char *fname, const int len );
 struct xml_doc*		 xml_doc_create		();
 struct xml_node*		 xml_node_create		( const char *name ); // strings are copied
 struct xml_attribute* xml_attribute_create( const char *name, const char *value );
-void						 xml_text_create		( struct xml_text *t, const char *value );
 
+void xml_text_create ( struct xml_text *t, const char *value );
+
+void xml_text_append ( struct xml_text *t, const char *value );
 
 void xml_text_free		( struct xml_text* );
 void xml_attribute_free	( struct xml_attribute* );
