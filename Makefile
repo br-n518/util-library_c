@@ -32,10 +32,10 @@ all: clean_all test_util bin/$(OUTPUT_FILE)$(OUTPUT_EXT)
 
 
 
-*.o: $(SRC) src/util/rand/rand.cpp
+*.o: $(SRC) src/rand/rand.cpp
 	# COMPILE
 	$(CC) -c $(CFLAGS) $(SRC)
-	$(CXX) -c $(CXXFLAGS) src/util/rand/rand.cpp
+	$(CXX) -c $(CXXFLAGS) src/rand/rand.cpp
 
 
 
