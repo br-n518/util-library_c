@@ -55,7 +55,6 @@
 
 
 
-// xml_text uses a non-dynamically allocated object, 
 /**
  * @brief Represents an XML text element.
  * This object isn't allocated, but used to store an allocated string.
@@ -125,14 +124,14 @@ void xml_doc_free			( struct xml_doc* );
 // open and save XML file
 struct xml_doc* xml_doc_open	( const char *fname, const char strict_formatting_bool );
 struct xml_doc* xml_doc_parse	( const char *x_data, const size_t x_data_len, const char strict_formatting_bool );
-void				 xml_doc_save	( struct xml_doc *doc, const char *fname );
+void			xml_doc_save	( struct xml_doc *doc, const char *fname );
 
 // attributes must live in a node, so no xml_attribute functions
 void		xml_node_set_attr( struct xml_node*, const char *name, const char *value );
 void		xml_node_apply_attr( struct xml_node*, struct xml_attribute* );
 
 struct xml_attribute* xml_node_get_attr		( struct xml_node*, const char *name );
-struct xml_text*		 xml_node_get_attr_value( struct xml_node*, const char *name );
+struct xml_text*	  xml_node_get_attr_value( struct xml_node*, const char *name );
 
 void xml_node_add_child			( struct xml_node*, struct xml_node* );
 void xml_node_insert_child_at	( struct xml_node*, struct xml_node*, int idx );
