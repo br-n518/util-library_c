@@ -814,8 +814,8 @@ struct xml_doc* xml_doc_parse( const char *x_data, const size_t x_data_len, cons
 	char tbody_started, c;
 	
 	// loop whole data string
-	int i = 0;
-	while ( i < x_data_len )
+	int i = -1;
+	while ( ++i < x_data_len )
 	{
 		// loop until '<'
 		tbody_started = 0;
@@ -844,11 +844,6 @@ struct xml_doc* xml_doc_parse( const char *x_data, const size_t x_data_len, cons
 				if ( ++i >= x_data_len ) break;
 				sb_putc( &line_buffer, x_data[i] );
 			}
-			else if ( c == '\"' )
-			{
-				// ignore brackets < > inside of quotes " "
-				state.in_quote = ! state.in_quote;
-			}
 			i++;
 			
 		} //end while
@@ -862,6 +857,7 @@ struct xml_doc* xml_doc_parse( const char *x_data, const size_t x_data_len, cons
 		// accumulate text elements
 		if ( state.node && tbody_started )
 		{
+			tbody_started = 0;
 			sb_strip_trailing( &line_buffer );
 			char *s = sb_cstr( &line_buffer );
 			if ( s )
@@ -874,22 +870,19 @@ struct xml_doc* xml_doc_parse( const char *x_data, const size_t x_data_len, cons
 		sb_reset( &line_buffer );
 		
 		// handle comments
-		if ( i+3 < x_data_len && x_data[i] == '<' && x_data[i+1] == '!' && x_data[i+2] == '-' && x_data[i+3] == '-' )
+		if ( i+3 < x_data_len && strncmp( (x_data + i), "<!--", 4 ) == 0 )
 		{
-			printf("Found comment.\n");
-			i += 4;
-			while ( i < x_data_len )
+			// advance index
+			i += 3;
+			// loop until end of data string (-2)
+			while ( ++i + 2 < x_data_len )
 			{
-				if ( c == '-' && i+2 < x_data_len )
+				if ( strncmp( (x_data + i), "-->", 3 ) == 0 )
 				{
-					if ( x_data[i+1] == '-' && x_data[i+2] == '>' )
-					{
-						i += 2;
-						break;
-					}
+					i += 2; // main loop increments, so 2 instead of 3
+					break;
 				}
-				i++;
-			}
+			} //end while
 		}
 		// non-comment
 		else
@@ -910,7 +903,7 @@ struct xml_doc* xml_doc_parse( const char *x_data, const size_t x_data_len, cons
 					// char already added, just flip quote bits
 					state.in_quote = ! state.in_quote;
 				}
-			}
+			} //end while
 			// end of string, break
 			if ( i >= x_data_len )
 			{
@@ -932,9 +925,7 @@ struct xml_doc* xml_doc_parse( const char *x_data, const size_t x_data_len, cons
 				
 			}
 		}
-		
-		i++;
-	}
+	} //end while
 	
 	sb_clear( &line_buffer );
 	return doc;
