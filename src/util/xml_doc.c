@@ -164,16 +164,15 @@ void xml_text_append ( struct xml_text *t, const char *value )
 	assert( t );
 	assert( value );
 	
-	int len = strlen( value );
+	const int len = strlen( value );
 	if ( len > 0 )
 	{
 		// check for existing text
-		if ( t->text && t->text_len > 0 )
+		if ( t->text )
 		{
 			char *ref = t->text;
 			
-			
-			t->text_len = t->text_len + len + 1;
+			t->text_len = t->text_len + len;
 			t->text = malloc( t->text_len + 1 );
 			t->text[0] = '\0';
 			
@@ -364,6 +363,13 @@ struct xml_doc* xml_doc_open( const char *fname, const char strict_formatting_bo
 }
 
 
+
+
+
+void xml_docparse_strip_comments(  )
+{
+	
+}
 
 
 
@@ -812,7 +818,6 @@ struct xml_doc* xml_doc_parse( const char *x_data, const size_t x_data_len, cons
 	while ( i < x_data_len )
 	{
 		// loop until '<'
-		// TODO record text body
 		tbody_started = 0;
 		while ( i < x_data_len && ((c = x_data[i]) != '<' || state.in_quote) )
 		{
@@ -828,37 +833,33 @@ struct xml_doc* xml_doc_parse( const char *x_data, const size_t x_data_len, cons
 			}
 			else
 			{
+				// record non-space character
 				sb_putc( &line_buffer, c );
 				tbody_started = 1;
 			}
 			
 			if (c == '\\')
 			{
-				//~ if ( state.in_quote )
-				//~ {
-					//~ sb_putc( &line_buffer, x_data[i] );
-				//~ }
 				// increment and check length
 				if ( ++i >= x_data_len ) break;
 				sb_putc( &line_buffer, x_data[i] );
 			}
 			else if ( c == '\"' )
 			{
+				// ignore brackets < > inside of quotes " "
 				state.in_quote = ! state.in_quote;
 			}
-			//~ else if ( state.in_quote )
-			//~ {
-				//~ sb_putc( &line_buffer, x_data[i] );
-			//~ }
 			i++;
-		}
+			
+		} //end while
+		
 		if ( i >= x_data_len )
 		{
 			// exceeded length of string, no node found
 			break;
 		}
 		
-		// TODO check buffer for text body
+		// accumulate text elements
 		if ( state.node && tbody_started )
 		{
 			sb_strip_trailing( &line_buffer );
@@ -872,37 +873,64 @@ struct xml_doc* xml_doc_parse( const char *x_data, const size_t x_data_len, cons
 		}
 		sb_reset( &line_buffer );
 		
-		// other bracket
-		while ( ++i < x_data_len && ((c = x_data[i]) != '>' || state.in_quote) )
+		// handle comments
+		if ( i+3 < x_data_len && x_data[i] == '<' && x_data[i+1] == '!' && x_data[i+2] == '-' && x_data[i+3] == '-' )
 		{
-			// record everything, including quotes
-			sb_putc( &line_buffer, c );
-			if ( c == '\\' )
+			printf("Found comment.\n");
+			i += 4;
+			while ( i < x_data_len )
 			{
-				// record extra character for escape sequence (in case it's a double quote)
-				if ( ++i >= x_data_len ) break; // check line end
-				sb_putc( &line_buffer, x_data[i] );
-			}
-			else if ( c == '\"')
-			{
-				// char already added, just flip quote bits
-				state.in_quote = ! state.in_quote;
+				if ( c == '-' && i+2 < x_data_len )
+				{
+					if ( x_data[i+1] == '-' && x_data[i+2] == '>' )
+					{
+						i += 2;
+						break;
+					}
+				}
+				i++;
 			}
 		}
-		// end of string, break
-		if ( i >= x_data_len )
+		// non-comment
+		else
 		{
-			break;
-		}
-		else if ( x_data[i] == '>' && ! state.in_quote )
-		{
-			char *tag = sb_cstr( &line_buffer );
-			if ( tag )
+			// other bracket
+			while ( ++i < x_data_len && ((c = x_data[i]) != '>' || state.in_quote) )
 			{
-				xml_docparse_tag( &state, tag, sb_len(&line_buffer) );
-				free( tag );
+				// record everything, including quotes
+				sb_putc( &line_buffer, c );
+				if ( c == '\\' )
+				{
+					// record extra character for escape sequence (in case it's a double quote)
+					if ( ++i >= x_data_len ) break; // check line end
+					sb_putc( &line_buffer, x_data[i] );
+				}
+				else if ( c == '\"')
+				{
+					// char already added, just flip quote bits
+					state.in_quote = ! state.in_quote;
+				}
 			}
-			sb_reset( &line_buffer );
+			// end of string, break
+			if ( i >= x_data_len )
+			{
+				break;
+			}
+			// found end of tag
+			else if ( x_data[i] == '>' )
+			{
+				if ( ! state.in_quote )
+				{
+					char *tag = sb_cstr( &line_buffer );
+					if ( tag )
+					{
+						xml_docparse_tag( &state, tag, sb_len(&line_buffer) );
+						free( tag );
+					}
+					sb_reset( &line_buffer );
+				}
+				
+			}
 		}
 		
 		i++;
