@@ -24,22 +24,6 @@
 
 
 
-#ifdef XML_TEXT_SEPARATE_SPACE
-#define XML_TEXT_APPEND_SPACER " "
-
-#elseifdef XML_TEXT_SEPARATE_NEWLINE
-#define XML_TEXT_APPEND_SPACER "\n"
-
-#elseifdef XML_TEXT_SEPARATE_TAB
-#define XML_TEXT_APPEND_SPACER "\t"
-
-#endif
-
-
-
-
-
-
 struct xml_docparse_state
 {
 	struct xml_node *node;
@@ -194,14 +178,8 @@ void xml_text_append ( struct xml_text *t, const char *value )
 			t->text[0] = '\0';
 			
 			strcat( t->text, ref );
-			
-			// allow definition of a text separator
-			// parser combines text bodies using xml_text_append
-#ifdef XML_TEXT_APPEND_SPACER
-			strcat(t->text,XML_TEXT_APPEND_SPACER);
-#endif
-			
 			strcat( t->text, value );
+			
 			free( ref );
 		}
 		else
