@@ -14,6 +14,9 @@
 
 - INI file reader/writer (**ini_doc.h**)
 - XML file reader/writer (**xml_doc.h**)
+	- Comments are stripped and ignored.
+	- Text elements inside nodes are concatenated after  
+	stripping leading & trailing whitespace (per block of text).
 
 - C++ &lt;random&gt; library wrapper for C (**rand.h**)
 
