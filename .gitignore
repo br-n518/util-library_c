@@ -1,6 +1,9 @@
+project.*
 *.geany
-*.o
-*.so
-*.a
-*.dll
 *.out
+*.o
+*.a
+*.so
+*.dll
+*.exe
+
