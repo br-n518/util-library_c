@@ -38,6 +38,11 @@
  */
 #define XML_STRING_BUFFER_SIZE 256
 /**
+ * @brief Max length for XML attribute values.
+ * 
+ */
+#define XML_LARGE_STRING_BUFFER_SIZE 2048
+/**
  * @brief Connect child nodes to parent node in xml_node_free().
  * @see xml_node_free()
  * 
@@ -121,10 +126,13 @@ void xml_attribute_free	( struct xml_attribute* );
 void xml_node_free		( struct xml_node*, const char connect_children ); //connect_children as 0 will delete child nodes recursively.
 void xml_doc_free			( struct xml_doc* );
 
-// open and save XML file
+// open XML file
 struct xml_doc* xml_doc_open	( const char *fname, const char strict_formatting_bool );
 struct xml_doc* xml_doc_parse	( const char *x_data, const size_t x_data_len, const char strict_formatting_bool );
-void			xml_doc_save	( struct xml_doc *doc, const char *fname );
+
+// save XML file
+void				 xml_doc_save	( struct xml_doc *doc, const char *fname );
+void xml_doc_save_sans_prolog	( struct xml_doc *doc, const char *fname );
 
 // attributes must live in a node, so no xml_attribute functions
 void		xml_node_set_attr( struct xml_node*, const char *name, const char *value );

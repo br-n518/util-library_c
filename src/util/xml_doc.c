@@ -366,12 +366,6 @@ struct xml_doc* xml_doc_open( const char *fname, const char strict_formatting_bo
 
 
 
-void xml_docparse_strip_comments(  )
-{
-	
-}
-
-
 
 void xml_docparse_header( struct xml_docparse_state *state, const char *buffer, const int buffer_len )
 {
@@ -515,7 +509,7 @@ void xml_docparse_attributes( struct xml_docparse_state *state, struct xml_node 
 	sb_init(&sb);
 	char name[XML_STRING_BUFFER_SIZE];
 	name[0] = '\0';
-	char value[XML_STRING_BUFFER_SIZE];
+	char value[XML_LARGE_STRING_BUFFER_SIZE];
 	value[0] = '\0';
 	
 	char found_attribute = 0;
@@ -548,7 +542,7 @@ void xml_docparse_attributes( struct xml_docparse_state *state, struct xml_node 
 				{
 					found_attribute = 0;
 					
-					sb_gets( &sb, value, XML_STRING_BUFFER_SIZE ); // SB_GETS IS here
+					sb_gets( &sb, value, XML_LARGE_STRING_BUFFER_SIZE ); // SB_GETS IS here
 					sb_reset( &sb );
 					xml_node_set_attr( node, name, value );
 					name[0] = '\0';
@@ -879,10 +873,12 @@ struct xml_doc* xml_doc_parse( const char *x_data, const size_t x_data_len, cons
 			{
 				if ( strncmp( (x_data + i), "-->", 3 ) == 0 )
 				{
-					i += 2; // main loop increments, so 2 instead of 3
+					// i += 2 here, but moved outside loop for comments with no end tag
 					break;
 				}
 			} //end while
+			// increment for ending processing, if comment has no end tag (at end of data)
+			i += 2; // main loop increments, so 2 instead of 3
 		}
 		// non-comment
 		else
@@ -1013,15 +1009,18 @@ void xml_write_node( const struct xml_node *node, FILE *file ) {
 	
 }
 
-void xml_write_document( struct xml_doc *doc, FILE *file ) {
+void xml_write_document( struct xml_doc *doc, FILE *file, const char include_prolog ) {
 	assert( doc );
 	assert( file );
 	
-	if ( doc->encoding[0] == '\0') {
-		strcpy( doc->encoding, "UTF-8" );
+	if ( include_prolog )
+	{
+		if ( doc->encoding[0] == '\0') {
+			strcpy( doc->encoding, "UTF-8" );
+		}
+		// write header
+		fprintf( file, "<?xml version=\"%i.%i\" encoding=\"%s\" ?>", doc->version_major, doc->version_minor, doc->encoding );
 	}
-	// write header
-	fprintf( file, "<?xml version=\"%i.%i\" encoding=\"%s\" ?>", doc->version_major, doc->version_minor, doc->encoding );
 	
 	// write root node
 	xml_write_node( doc->root_node, file );
@@ -1037,27 +1036,62 @@ void xml_write_document( struct xml_doc *doc, FILE *file ) {
  * 
  * 
  */
-void xml_doc_save( struct xml_doc *doc, const char *fname ) {
+void xml_doc_save( struct xml_doc *doc, const char *fname )
+{
 	assert( doc );
 	
-	if ( fname && fname[0] != '\0' ) {
+	if ( fname && fname[0] != '\0' )
+	{
 		if ( ! xml_check_filename( fname, strlen(fname) ) )
 		{
-			printf("xml_doc_save error: Invalid file name. File not saved.\n");
+			puts("xml_doc_save error: Invalid file name. File not saved.");
 			return;
 		}
 	}
 	else
 	{
-		printf("xml_doc_save error: Empty file name. File not saved.\n");
+		puts("xml_doc_save error: Empty file name. File not saved.");
 	}
 	
 	FILE *file = fopen(fname, "w");
-	if ( file ) {
-		xml_write_document( doc, file );
+	if ( file )
+	{
+		xml_write_document( doc, file, 1 );
 		fclose( file );
-	} else {
-		printf("Error: Could not open file for writing (%s).\n", fname);
+	}
+	else
+	{
+		printf("xml_doc_save error: Could not open file for writing (%s).\n", fname);
+		//return;
+	}
+}
+
+void xml_doc_save_sans_prolog( struct xml_doc *doc, const char *fname )
+{
+	assert( doc );
+	
+	if ( fname && fname[0] != '\0' )
+	{
+		if ( ! xml_check_filename( fname, strlen(fname) ) )
+		{
+			puts("xml_doc_save (sans_prolog) error: Invalid file name. File not saved.");
+			return;
+		}
+	}
+	else
+	{
+		puts("xml_doc_save (sans_prolog) error: Empty file name. File not saved.");
+	}
+	
+	FILE *file = fopen(fname, "w");
+	if ( file )
+	{
+		xml_write_document( doc, file, 0 );
+		fclose( file );
+	}
+	else
+	{
+		printf("xml_doc_save (sans_prolog) error: Could not open file for writing (%s).\n", fname);
 		//return;
 	}
 }
