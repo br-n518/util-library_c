@@ -56,7 +56,7 @@ void ini_doc_destroy( struct ini_doc *doc )
 	//
 	
 	// clear globals
-	ht_clear_free( &(doc->globals), free );
+	ht_clear_free( &(doc->globals), _FREE );
 	
 	// clear sections
 	struct hash_table_entry *temp_entry;
@@ -71,20 +71,20 @@ void ini_doc_destroy( struct ini_doc *doc )
 			// loop section node chain
 			if (temp_entry->data)
 			{
-				ht_clear_free( (hash_table*) temp_entry->data, free );
+				ht_clear_free( (hash_table*) temp_entry->data, _FREE );
 				//free( temp_entry->data ); // called at end of func, ht_clear_free
 				temp_entry->data = 0;
 			}
 			
 			//hash_table_entry *prev_entry = temp_entry
 			temp_entry = temp_entry->next;
-			//free( prev_entry );
+			//_FREE( prev_entry );
 		}
 	}
 	
 	// clear doc
-	ht_clear_free( &(doc->sections), free );
-	//free( doc );
+	ht_clear_free( &(doc->sections), _FREE );
+	//_FREE( doc );
 }
 
 
@@ -108,12 +108,12 @@ void ini_doc_set( struct ini_doc *doc, const char *section, const char *key, con
 	hash_table *sect = ini_doc_get_section( doc, section, sect_len );
 	if ( ! sect )
 	{
-		sect = malloc( sizeof(hash_table) );
+		sect = _MALLOC( sizeof(hash_table) );
 		ht_init( sect );
 		ht_set( &(doc->sections), section, sect_len, sect );
 	}
 	int val_len = strlen(value) + 1;
-	char *duple = malloc(val_len);
+	char *duple = _MALLOC(val_len);
 	strncpy( duple, value, val_len );
 	ht_set( sect, key, strlen(key), duple );
 }
@@ -124,7 +124,7 @@ void ini_doc_set_global( struct ini_doc *doc, const char *key, const char *value
 	assert( doc ); assert( key ); assert( value );
 	
 	int val_len = strlen(value) + 1;
-	char *duple = malloc( val_len );
+	char *duple = _MALLOC( val_len );
 	strncpy( duple, value, val_len );
 	ht_set( &(doc->globals), key, strlen(key), duple );
 }
@@ -410,14 +410,14 @@ void ini_doc_parse( struct ini_doc *doc, const char *data )
 								if ( ! section_ptr )
 								{
 									// create section
-									section_ptr = malloc( sizeof(hash_table) );
+									section_ptr = _MALLOC( sizeof(hash_table) );
 									ht_init( section_ptr );
 									// store section_ptr hash_table inside base hash_table
 									// temp_c holds the section name string
 									ht_set( &(doc->sections), temp_c, temp_len, section_ptr );
 								}
 								// free name array
-								free( temp_c );
+								_FREE( temp_c );
 								temp_c = 0;
 								state = 0;
 								// break FOR loop
@@ -492,7 +492,7 @@ void ini_doc_parse( struct ini_doc *doc, const char *data )
 				// allocate c string for data
 				ht_set( section_ptr, key, key_len, sb_cstr( &sb ) );
 				
-				free( key );
+				_FREE( key );
 				key = 0;
 				key_len = 0;
 				
@@ -504,14 +504,14 @@ void ini_doc_parse( struct ini_doc *doc, const char *data )
 				
 				ht_set( section_ptr, key, sb_len( &sb ), 0 );
 				
-				free( key );
+				_FREE( key );
 				key = 0;
 				sb_reset( &sb );
 			}
 			
 			state = 0;
 			
-			free( curr_line );
+			_FREE( curr_line );
 		}
 	} //end while
 	// clean up memory
@@ -554,7 +554,7 @@ char ini_doc_load( struct ini_doc *dest, const char *filename )
 		sb_clear( &sb );
 		
 		ini_doc_parse( dest, cstr );
-		free( cstr );
+		_FREE( cstr );
 		
 		return 1;
 	}

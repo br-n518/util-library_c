@@ -1,33 +1,29 @@
-/*
- * This is free and unencumbered software released into the public domain.
+/* godot_macros.h
+ *
+ * Copyright (c) 2019 br-n518
  * 
- * Anyone is free to copy, modify, publish, use, compile, sell, or
- * distribute this software, either in source code form or as a compiled
- * binary, for any purpose, commercial or non-commercial, and by any
- * means.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  * 
- * In jurisdictions that recognize copyright laws, the author or authors
- * of this software dedicate any and all copyright interest in the
- * software to the public domain. We make this dedication for the benefit
- * of the public at large and to the detriment of our heirs and
- * successors. We intend this dedication to be an overt act of
- * relinquishment in perpetuity of all present and future rights to this
- * software under copyright law.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
- * 
- * For more information, please refer to <http://unlicense.org>
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 #ifndef GDN_C_MACROS_H
 #define GDN_C_MACROS_H
 
-/**
+/** API
 
 GD_VARIANT_OBJECT(VAR,OBJ_NAME)
 - Init godot_variant to godot_object by class name.
@@ -38,7 +34,7 @@ GD_METHOD_PREPARE()
 - Allow calls to GD_METHOD_CALL or GD_METHOD_CALL_RET
 
 GD_METHOD_FINISH()
-- Called after GD_METHOD_PREPARE and after call method calls are complete.
+- Called after GD_METHOD_PREPARE and after all method calls are complete.
 
 GD_METHOD_CALL(SELF,NAME,ARGS,ARGC)
 - SELF is godot_variant ptr and NAME is method name (C str).
@@ -50,7 +46,7 @@ GD_METHOD_CALL_RET(SELF,NAME,ARGS,ARGC,RET)
 - RET = GD_METHOD_CALL(SELF,NAME,ARGS,ARGC)
 
 GD_METHOD_SINGLE_CALL(SELF,NAME,ARGS,ARGC)
-- Calls PREPARE and FINISH for you.
+- Calls PREPARE, METHOD_CALL and FINISH.
 
 GD_METHOD_IS_CALL_OK()
 - Use after GD_METHOD_CALL etc.
@@ -64,6 +60,8 @@ GD_PRINT_WITH(C_STR,GD_STR)
 	godot_string s;
 	api->godot_string_new(&s);
 	GD_PRINT_WITH("Hello", &s)
+	GD_PRINT_WITH("World", &s)
+	api->godot_string_destroy(&s);
 
 **/
 
@@ -78,15 +76,15 @@ GD_PRINT_WITH(C_STR,GD_STR)
 #endif
 
 #define GD_RETURN_NIL() {\
-	godot_variant ret;api->godot_variant_new_nil(&ret);\
-	return ret;}
+	godot_variant _ret;api->godot_variant_new_nil(&_ret);\
+	return _ret;}
 
 #define GD_RETURN_INT(N) {\
-	godot_variant ret;api->godot_variant_new_int(&ret,N);\
-	return ret;}
+	godot_variant _ret;api->godot_variant_new_int(&_ret,N);\
+	return _ret;}
 
 
-// Call once per function.
+// Call once per function body.
 #define GD_METHOD_PREPARE() \
 		godot_string gdmtd_m_name;\
 		api->godot_string_new(&gdmtd_m_name);\
@@ -105,7 +103,7 @@ GD_PRINT_WITH(C_STR,GD_STR)
 		RET=api->godot_variant_call(SELF,&gdmtd_m_name,(const godot_variant**)ARGS,ARGC,&gdmtd_m_e);
 
 
-// Call once per function
+// Call once per function body.
 #define GD_METHOD_FINISH() api->godot_string_destroy(&gdmtd_m_name);
 
 
@@ -123,14 +121,28 @@ GD_PRINT_WITH(C_STR,GD_STR)
 #define GD_METHOD_CALL_ERROR() (gdmtd_m_e.error)
 
 #define GD_PRINT(C_STR) {\
-	godot_string s;api->godot_string_new(&s);\
-	api->godot_string_parse_utf8(&s,C_STR);api->godot_print(&s);\
-	api->godot_string_destroy(&s);}
+	godot_string gd_str_s;api->godot_string_new(&gd_str_s);\
+	api->godot_string_parse_utf8(&gd_str_s,C_STR);api->godot_print(&gd_str_s);\
+	api->godot_string_destroy(&gd_str_s);}
 
 
 #define GD_PRINT_WITH(C_STR,GD_STR) {\
 	api->godot_string_parse_utf8(GD_STR,C_STR);\
 	api->godot_print(GD_STR);}
+
+
+#define GD_PV3A_APPEND(_pv3a, _v3, _x,_y,_z) \
+	api->godot_vector3_new(_v3,_x,_y,_z);\
+	api->godot_pool_vector3_array_append(_pv3a,_v3);
+
+#define GD_PV2A_APPEND(_pv2a, _v2, _x,_y) \
+	api->godot_vector2_new(_v2,_x,_y);\
+	api->godot_pool_vector2_array_append(_pv2a,_v2);
+
+
+
+
+
 
 #endif
 

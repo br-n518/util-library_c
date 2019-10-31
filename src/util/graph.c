@@ -23,7 +23,7 @@
 #include "graph.h"
 
 graph_node* graph_node_create( void *data ) {
-	graph_node *ret = malloc( sizeof(graph_node) );
+	graph_node *ret = _MALLOC( sizeof(graph_node) );
 	ret->nbors = NULL;
 	ret->data = data;
 	return ret;
@@ -36,7 +36,7 @@ void* graph_node_destroy( graph_node *g ) {
 	graph_node_unlink_all( g );
 	g->nbors = NULL;
 	void *data = g->data;
-	free( g );
+	_FREE( g );
 	return data;
 }
 
@@ -55,7 +55,7 @@ node_t* _graph_node_destroy_all( graph_node *g, void (*free_func)(void*), node_t
 	if ( free_func ) {
 		free_func( g->data );
 	}
-	free( g );
+	_FREE( g );
 	return visited;
 }
 

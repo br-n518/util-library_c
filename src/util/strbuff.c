@@ -61,7 +61,7 @@ void sbpart_free( struct strbuff_part *sbp )
 	assert( sbp );
 	
 	if ( sbp->next ) sbpart_free(sbp->next);
-	free( sbp );
+	_FREE( sbp );
 }
 
 
@@ -76,7 +76,7 @@ void sb_free( strbuff *sb )
 	assert( sb );
 	
 	if ( sb->head.next ) sbpart_free( sb->head.next );
-	free( sb );
+	_FREE( sb );
 }
 
 /**
@@ -98,7 +98,7 @@ void sb_clear( strbuff *sb )
 
 void sb_add_part( strbuff *sb )
 {
-	sb->curr->next = malloc( sizeof(struct strbuff_part) );
+	sb->curr->next = _MALLOC( sizeof(struct strbuff_part) );
 	sb->curr->next->next = 0;
 }
 
@@ -326,7 +326,7 @@ void sb_cat( strbuff *sb, strbuff *cat )
 /**
  * @brief Allocate a string containing the strbuff's current data.
  * @param sb @struct strbuff object to operate on.
- * @returns A malloc allocated character string (null-terminated).
+ * @returns An allocated character string (null-terminated).
  * 
  * 
  */
@@ -340,7 +340,7 @@ char* sb_cstr( strbuff *sb )
 	if ( len > 0 )
 	{
 		// create string
-		ret = malloc( len + 1 );
+		ret = _MALLOC( len + 1 );
 		sb_gets( sb, ret, len );
 		ret[len] = '\0';
 	}

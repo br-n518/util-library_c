@@ -4,7 +4,8 @@ CXX=g++
 
 # INPUT FILES
 UTIL_SRC=src/util/*.c
-SRC=src/*.c $(UTIL_SRC)
+TERRAIN_SRC=src/terrain/*.c
+SRC=$(UTIL_SRC) src/terrain/*.c src/pcg/*.c
 
 # OUT FILE
 OUTPUT_FILE=libpcg
@@ -17,11 +18,12 @@ OUTPUT_EXEC=$(OUTPUT_FILE)$(EXEC_EXT)
 CFLAGS=-std=c99 -Wall -Werror
 CXXFLAGS=-std=c++11 -Wall -Werror -O3
 
-GDFLAGS=$(CFLAGS) -I"godot_headers"
-
 # LINK
 LDFLAGS=-lstdc++
 
+# GODOT
+GDSRC=$(UTIL_SRC) src/terrain/*.c src/pcg/*.c src/godot.c
+GDFLAGS=$(CFLAGS) -I"godot_headers" -D"GODOT"
 DEPLOY=godot_project/lib/$(OUTPUT_SHARED)
 
 .PHONY: all clean rand shared build_shared godot build_godot test_util deploy
@@ -48,7 +50,7 @@ build_shared: $(SRC) rand
 
 build_godot: $(SRC) rand
 	# COMPILE
-	$(CC) -c -fPIC $(GDFLAGS) $(SRC)
+	$(CC) -c -fPIC $(GDFLAGS) $(GDSRC)
 
 rand: src/rand/rand.cpp
 	$(CXX) -c -fPIC $(CXXFLAGS) src/rand/rand.cpp

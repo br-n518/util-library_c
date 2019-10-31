@@ -62,7 +62,7 @@ void eht_set(hash_table_e *ht, const char *key, const int key_len, void *data)
 	
 	if ( ! hte )
 	{
-		hte = malloc( sizeof( struct hash_table_e_entry ) );
+		hte = _MALLOC( sizeof( struct hash_table_e_entry ) );
 		memset( hte, 0, sizeof( struct hash_table_e_entry ));
 		ht->entries[hash_key] = hte;
 	}
@@ -87,7 +87,7 @@ void eht_set(hash_table_e *ht, const char *key, const int key_len, void *data)
 			else if (hte->next == 0)
 			{
 				// create node
-				hte->next = malloc(sizeof(struct hash_table_e_entry));
+				hte->next = _MALLOC(sizeof(struct hash_table_e_entry));
 				// switch to created node
 				hte = hte->next;
 				hte->next = 0;
@@ -181,7 +181,7 @@ void* eht_unset( hash_table_e *ht, const char *key, const int key_len )
 				ht->entries[hash_key] = hte->next;
 			}
 			
-			free(hte);
+			_FREE(hte);
 			return data;
 		}
 		prev = hte;
@@ -238,7 +238,7 @@ void eht_clear( hash_table_e *ht ) {
 		{
 			prev = hte;
 			hte = hte->next;
-			free(prev);
+			_FREE(prev);
 		}
 		ht->entries[i] = 0;
 	}
@@ -257,7 +257,7 @@ void eht_clear_free( hash_table_e *ht, void (*free_func) (void*) ) {
 			free_func( hte->data );
 			prev = hte;
 			hte = hte->next;
-			free(prev);
+			_FREE(prev);
 		}
 	}
 }
@@ -278,12 +278,12 @@ void* eht_remove( hash_table_e *ht, void *value ) {
 				if (prev)
 				{
 					prev->next = hte->next;
-					free( hte );
+					_FREE( hte );
 				}
 				else
 				{
 					ht->entries[i] = hte->next;
-					free( hte );
+					_FREE( hte );
 				}
 				
 				return value;

@@ -25,7 +25,7 @@
 
 
 node_t * node_create( void *data ) {
-	node_t *ret = malloc(sizeof(node_t));
+	node_t *ret = _MALLOC(sizeof(node_t));
 	ret->next = 0;
 	ret->data = data;
 	return ret;
@@ -38,11 +38,11 @@ void node_free_chain( node_t *node ) {
 	
 	node_t *next = node->next;
 	while ( next ) {
-		free( node );
+		_FREE( node );
 		node = next;
 		next = next->next;
 	}
-	free(node);
+	_FREE(node);
 }
 
 void node_free_chain_data( node_t *node, void (*data_free_func)(void*) ) {
@@ -53,11 +53,11 @@ void node_free_chain_data( node_t *node, void (*data_free_func)(void*) ) {
 	while ( next ) {
 		if ( node->data )
 			data_free_func( node->data );
-		free( node );
+		_FREE( node );
 		node = next;
 		next = next->next;
 	}
-	free(node);
+	_FREE(node);
 }
 
 node_t* node_copy_chain( node_t *head ) {
@@ -94,7 +94,7 @@ void* node_pop( node_t **head, node_t *node ) {
 		}
 	}
 	
-	free(node);
+	_FREE(node);
 	return ret;
 }
 
@@ -155,13 +155,13 @@ void node_remove( node_t **head, const void *data ) {
 			if (prev) {
 				// node is NOT first in list (head)
 				prev->next = node->next;
-				free( node );
+				_FREE( node );
 			} else {
 				// no previous, we're on the head node
 				assert( node == *head );
 				//node = *head;
 				*head = node->next;
-				free( node );
+				_FREE( node );
 			}
 			break;
 		}

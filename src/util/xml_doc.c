@@ -73,7 +73,7 @@ char xml_check_filename( const char *fname, const int len )
  */
 struct xml_doc* xml_doc_create()
 {
-	struct xml_doc *doc = malloc( sizeof(*doc) );
+	struct xml_doc *doc = _MALLOC( sizeof(*doc) );
 	memset( doc, 0, sizeof(struct xml_doc) );
 	strcpy( doc->encoding, "UTF-8" );
 	doc->version_major = 1;
@@ -96,7 +96,7 @@ struct xml_node* xml_node_create( const char *name )
 	assert( name );
 	assert( strlen(name) < XML_STRING_BUFFER_SIZE );
 	
-	struct xml_node *node = malloc( sizeof( struct xml_node ) );
+	struct xml_node *node = _MALLOC( sizeof( struct xml_node ) );
 	memset( node, 0, sizeof(struct xml_node) );
 	strncpy( node->name, name, XML_STRING_BUFFER_SIZE );
 	return node;
@@ -119,7 +119,7 @@ struct xml_attribute* xml_attribute_create( const char *name, const char *value 
 	assert( name );
 	assert( strlen(name) < XML_STRING_BUFFER_SIZE );
 	
-	struct xml_attribute *attr = malloc( sizeof( struct xml_attribute ) );
+	struct xml_attribute *attr = _MALLOC( sizeof( struct xml_attribute ) );
 	memset( attr, 0, sizeof( struct xml_attribute ) );
 	strncpy( attr->name, name, XML_STRING_BUFFER_SIZE );
 	
@@ -152,7 +152,7 @@ void xml_text_create( struct xml_text *t, const char *value )
 	if ( len > 0 )
 	{
 		t->text_len = len;
-		t->text = malloc( len + 1 );
+		t->text = _MALLOC( len + 1 );
 		strcpy( t->text, value );
 		//t->text[len] = '\0';
 	}
@@ -173,13 +173,13 @@ void xml_text_append ( struct xml_text *t, const char *value )
 			char *ref = t->text;
 			
 			t->text_len = t->text_len + len;
-			t->text = malloc( t->text_len + 1 );
+			t->text = _MALLOC( t->text_len + 1 );
 			t->text[0] = '\0';
 			
 			strcat( t->text, ref );
 			strcat( t->text, value );
 			
-			free( ref );
+			_FREE( ref );
 		}
 		else
 		{
@@ -203,7 +203,7 @@ void xml_text_free( struct xml_text *t )
 	
 	if ( t->text )
 	{
-		free( t->text );
+		_FREE( t->text );
 		memset( t, 0, sizeof( struct xml_text ) );
 	}
 }
@@ -221,7 +221,7 @@ void xml_attribute_free( struct xml_attribute *attr )
 	assert( attr );
 	
 	xml_text_free( &(attr->text_body)  );
-	free( attr );
+	_FREE( attr );
 }
 
 
@@ -278,7 +278,7 @@ void xml_node_free( struct xml_node *node, const char connect_children )
 	
 	assert( ! node->child_nodes );
 	
-	free( node );
+	_FREE( node );
 }
 
 
@@ -301,9 +301,6 @@ void xml_doc_free( struct xml_doc *doc )
 	}
 	doc->root_node->child_nodes = 0;
 	xml_node_free( doc->root_node, 0 );
-	// free manually, to avoid freeing self in xml_node
-	//~ xml_text_free( &(doc->root_node.text_body) );
-	//~ ht_clear_free( &(doc->root_node.attributes), xml_attribute_proxy_free );
 }
 
 
@@ -351,7 +348,7 @@ struct xml_doc* xml_doc_open( const char *fname, const char strict_formatting_bo
 		if ( data )
 		{
 			ret = xml_doc_parse( data, len, strict_formatting_bool );
-			free(data);
+			_FREE(data);
 		}
 		else
 		{
@@ -365,7 +362,38 @@ struct xml_doc* xml_doc_open( const char *fname, const char strict_formatting_bo
 
 
 
-
+int __str_to_int( const char *s )
+{
+	int ret = 0;
+	
+	if ( s )
+	{
+		int c;
+		int i = strlen(s) - 1;
+		int k = 0;
+		for (; i >= 0 && (c = s[i]); i-- )
+		{
+			if ( isdigit( c ) )
+			{
+				if ( c > '0' )
+				{
+					c = c - '0';
+					// adjust tens multiple
+					if ( k > 0 )
+					{
+						for ( int multiple = k; multiple > 0; multiple-- )
+						{
+							c = c * 10;
+						}
+					}
+					ret = ret + c;
+				}
+				k++;
+			}
+		}
+	}
+	return ret;
+}
 
 void xml_docparse_header( struct xml_docparse_state *state, const char *buffer, const int buffer_len )
 {
@@ -414,8 +442,8 @@ void xml_docparse_header( struct xml_docparse_state *state, const char *buffer, 
 						{
 							cstr = sb_cstr(&sb);
 							sb_reset(&sb); //reset for next set of numerals (second and final set)
-							state->doc->version_major = atoi(cstr);
-							free( cstr );
+							state->doc->version_major = __str_to_int(cstr);
+							_FREE( cstr );
 						}
 						else if ( ! state->strict )
 						{
@@ -427,8 +455,8 @@ void xml_docparse_header( struct xml_docparse_state *state, const char *buffer, 
 						
 					} //end while
 					cstr = sb_cstr(&sb);
-					state->doc->version_minor = atoi(cstr);
-					free( cstr );
+					state->doc->version_minor = __str_to_int(cstr);
+					_FREE( cstr );
 					sb_reset( &sb );
 				}
 				else if ( strcmp( name_buff, "encoding") == 0 )
@@ -858,7 +886,7 @@ struct xml_doc* xml_doc_parse( const char *x_data, const size_t x_data_len, cons
 			{
 				
 				xml_text_append( &(state.node->text_body), s );
-				free( s );
+				_FREE( s );
 			}
 		}
 		sb_reset( &line_buffer );
@@ -914,7 +942,7 @@ struct xml_doc* xml_doc_parse( const char *x_data, const size_t x_data_len, cons
 					if ( tag )
 					{
 						xml_docparse_tag( &state, tag, sb_len(&line_buffer) );
-						free( tag );
+						_FREE( tag );
 					}
 					sb_reset( &line_buffer );
 				}

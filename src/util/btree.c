@@ -23,7 +23,7 @@
 #include "btree.h"
 
 btree* bt_alloc() {
-	return malloc( sizeof(btree) );
+	return _MALLOC( sizeof(btree) );
 }
 
 void bt_init( btree *tree, const int key, void *data ) {
@@ -93,7 +93,7 @@ void bt_clear( btree *tree ) {
 	if ( tree->left ) {
 		bt_clear( tree->left );
 	}
-	free( tree );
+	_FREE( tree );
 }
 
 void bt_clear_free( btree *tree, void (*free_func) (void*) ) {
@@ -107,6 +107,6 @@ void bt_clear_free( btree *tree, void (*free_func) (void*) ) {
 		bt_clear_free( tree->left, free_func );
 	}
 	free_func( tree->data );
-	free( tree );
+	_FREE( tree );
 }
 

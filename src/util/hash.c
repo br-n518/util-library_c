@@ -72,7 +72,7 @@ void ht_set(hash_table *ht, const char *key, const int key_len, void *data) {
 			// key string didn't match, and no more next nodes
 			} else if (hte->next == 0) {
 				// create node
-				hte->next = malloc(sizeof(struct hash_table_entry));
+				hte->next = _MALLOC(sizeof(struct hash_table_entry));
 				// switch to created node
 				hte = hte->next;
 				hte->next = 0;
@@ -166,14 +166,14 @@ void* ht_unset( hash_table *ht, const char *key, const int key_len ) {
 					hte->next = hte->next->next;
 					// Data pointer is moved, next pointer remapped, it's ok to delete the node
 					// free copied node
-					free(prev);
+					_FREE(prev);
 				}
 			// if not first item in list
 			} else {
 				// connect prev and next nodes (next could be null, that's ok)
 				prev->next = hte->next;
 				// free this node
-				free(hte);
+				_FREE(hte);
 			}
 			return data;
 		}
@@ -234,7 +234,7 @@ void ht_clear( hash_table *ht ) {
 			while ( hte ) {
 				prev = hte;
 				hte = hte->next;
-				free(prev);
+				_FREE(prev);
 			}
 		}
 	}
@@ -266,7 +266,7 @@ void ht_clear_free( hash_table *ht, void (*free_func) (void*) ) {
 				}
 				prev = hte;
 				hte = hte->next;
-				free(prev);
+				_FREE(prev);
 			}
 		}
 	}
@@ -293,7 +293,7 @@ void* ht_remove( hash_table *ht, void *e ) {
 							hte->key[len] = '\0';
 							prev = hte->next;
 							hte->next = hte->next->next;
-							free( prev );
+							_FREE( prev );
 						// no previous node, no next node. Single node to remove.
 						} else {
 							hte->key[0] = '\0';
@@ -303,7 +303,7 @@ void* ht_remove( hash_table *ht, void *e ) {
 					// if not first node in list
 					} else {
 						prev->next = hte->next;
-						free( hte );
+						_FREE( hte );
 					}
 					return e;
 				}

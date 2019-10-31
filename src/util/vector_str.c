@@ -28,7 +28,7 @@ void vs_init( vector_str *s) {
 }
 
 vs_node* vs_node_create( const char c ) {
-	vs_node *ret = malloc( sizeof( vs_node ) );
+	vs_node *ret = _MALLOC( sizeof( vs_node ) );
 	ret->data = c;
 	ret->next = NULL;
 	return ret;
@@ -39,7 +39,7 @@ void vs_node_free( vs_node *n ) {
 		if ( n->next ) {
 			vs_node_free( n->next );
 		}
-		free( n );
+		_FREE( n );
 	}
 }
 
@@ -251,7 +251,7 @@ int vs_length( vector_str *s ) {
 }
 
 char* vs_cstr( vector_str *s ) {
-	char *ret = malloc( vs_length( s ) + 1 );
+	char *ret = _MALLOC( vs_length( s ) + 1 );
 	int i = 0;
 	vs_node *curr = s->head;
 	while ( curr ) {
@@ -394,7 +394,7 @@ void vs_replace_idx( vector_str *s, const char *from, const char *to, const int 
 int vs_test( vector_str *s, const char *cstr ) {
 	char *p = vs_cstr( s );
 	int ret = ( strcmp( p, cstr ) == 0 );
-	free( p );
+	_FREE( p );
 	
 	return ret;
 	

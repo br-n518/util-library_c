@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+<asset>
+	<contributor>
+		<author>Anonymous</author>
+		<authoring_tool>Collada Exporter for Blender 2.6+, by Juan Linietsky (juan@codenix.com)</authoring_tool>
+	</contributor>
+	<created>2019-07-31T16:49:50Z</created>
+	<modified>2019-07-31T16:49:50Z</modified>
+	<unit meter="1.0" name="meter"/>
+	<up_axis>Z_UP</up_axis>
+</asset>
+<library_images>
+	<image id="id-image-3" name="cobble_diffuse.png">
+		<init_from>cobble_diffuse.png</init_from>
+	</image>
+	<image id="id-image-6" name="cobble_normal.png">
+		<init_from>cobble_normal.png</init_from>
+	</image>
+	<image id="id-image-9" name="cobble_specular.png">
+		<init_from>cobble_specular.png</init_from>
+	</image>
+	<image id="id-image-14" name="inner_roof_diffuse.png">
+		<init_from>inner_roof_diffuse.png</init_from>
+	</image>
+	<image id="id-image-17" name="inner_roof_normal.png">
+		<init_from>inner_roof_normal.png</init_from>
+	</image>
+	<image id="id-image-20" name="inner_roof_specular.png">
+		<init_from>inner_roof_specular.png</init_from>
+	</image>
+	<image id="id-image-28" name="stone_wall.jpg">
+		<init_from>stone_wall.jpg</init_from>
+	</image>
+</library_images>
+<library_effects>
+	<effect id="id-fx-2" name="cobblestone-fx">
+		<profile_COMMON>
+			<newparam sid="id-fx_surf-4">
+				<surface type="2D">
+					<init_from>id-image-3</init_from>
+					<format>A8R8G8B8</format>
+				</surface>
+			</newparam>
+			<newparam sid="id-fx_sampler-5">
+				<sampler2D>
+					<source>id-fx_surf-4</source>
+				</sampler2D>
+			</newparam>
+			<newparam sid="id-fx_surf-7">
+				<surface type="2D">
+					<init_from>id-image-6</init_from>
+					<format>A8R8G8B8</format>
+				</surface>
+			</newparam>
+			<newparam sid="id-fx_sampler-8">
+				<sampler2D>
+					<source>id-fx_surf-7</source>
+				</sampler2D>
+			</newparam>
+			<newparam sid="id-fx_surf-10">
+				<surface type="2D">
+					<init_from>id-image-9</init_from>
+					<format>A8R8G8B8</format>
+				</surface>
+			</newparam>
+			<newparam sid="id-fx_sampler-11">
+				<sampler2D>
+					<source>id-fx_surf-10</source>
+				</sampler2D>
+			</newparam>
+			<technique sid="common">
+				<blinn>
+					<emission>
+						<color>  0.0 0.0 0.0 1.0 </color>
+					</emission>
+					<ambient>
+						<color>  0.0 0.0 0.0 1.0 </color>
+					</ambient>
+					<diffuse>
+						<texture texture="id-fx_sampler-5" texcoord="CHANNEL1"/>
+					</diffuse>
+					<specular>
+						<texture texture="id-fx_sampler-11" texcoord="CHANNEL1"/>
+					</specular>
+					<shininess>
+						<float>50</float>
+					</shininess>
+					<reflective>
+						<color>  1.0 1.0 1.0 1.0 </color>
+					</reflective>
+					<index_of_refraction>
+						<float>4.0</float>
+					</index_of_refraction>
+				</blinn>
+				<extra>
+					<technique profile="FCOLLADA">
+						<bump bumptype="NORMALMAP">
+							<texture texture="id-fx_sampler-8" texcoord="CHANNEL1"/>
+						</bump>
+					</technique>
+					<technique profile="GOOGLEEARTH">
+						<double_sided>0</double_sided>
+					</technique>
+				</extra>
+			</technique>
+		</profile_COMMON>
+	</effect>
+	<effect id="id-fx-13" name="inner_roof-fx">
+		<profile_COMMON>
+			<newparam sid="id-fx_surf-15">
+				<surface type="2D">
+					<init_from>id-image-14</init_from>
+					<format>A8R8G8B8</format>
+				</surface>
+			</newparam>
+			<newparam sid="id-fx_sampler-16">
+				<sampler2D>
+					<source>id-fx_surf-15</source>
+				</sampler2D>
+			</newparam>
+			<newparam sid="id-fx_surf-18">
+				<surface type="2D">
+					<init_from>id-image-17</init_from>
+					<format>A8R8G8B8</format>
+				</surface>
+			</newparam>
+			<newparam sid="id-fx_sampler-19">
+				<sampler2D>
+					<source>id-fx_surf-18</source>
+				</sampler2D>
+			</newparam>
+			<newparam sid="id-fx_surf-21">
+				<surface type="2D">
+					<init_from>id-image-20</init_from>
+					<format>A8R8G8B8</format>
+				</surface>
+			</newparam>
+			<newparam sid="id-fx_sampler-22">
+				<sampler2D>
+					<source>id-fx_surf-21</source>
+				</sampler2D>
+			</newparam>
+			<technique sid="common">
+				<blinn>
+					<emission>
+						<color>  0.0 0.0 0.0 1.0 </color>
+					</emission>
+					<ambient>
+						<color>  0.0 0.0 0.0 1.0 </color>
+					</ambient>
+					<diffuse>
+						<texture texture="id-fx_sampler-16" texcoord="CHANNEL1"/>
+					</diffuse>
+					<specular>
+						<texture texture="id-fx_sampler-22" texcoord="CHANNEL1"/>
+					</specular>
+					<shininess>
+						<float>50</float>
+					</shininess>
+					<reflective>
+						<color>  1.0 1.0 1.0 1.0 </color>
+					</reflective>
+					<index_of_refraction>
+						<float>4.0</float>
+					</index_of_refraction>
+				</blinn>
+				<extra>
+					<technique profile="FCOLLADA">
+						<bump bumptype="NORMALMAP">
+							<texture texture="id-fx_sampler-19" texcoord="CHANNEL1"/>
+						</bump>
+					</technique>
+					<technique profile="GOOGLEEARTH">
+						<double_sided>0</double_sided>
+					</technique>
+				</extra>
+			</technique>
+		</profile_COMMON>
+	</effect>
+	<effect id="id-fx-27" name="stone_wall-fx">
+		<profile_COMMON>
+			<newparam sid="id-fx_surf-29">
+				<surface type="2D">
+					<init_from>id-image-28</init_from>
+					<format>A8R8G8B8</format>
+				</surface>
+			</newparam>
+			<newparam sid="id-fx_sampler-30">
+				<sampler2D>
+					<source>id-fx_surf-29</source>
+				</sampler2D>
+			</newparam>
+			<technique sid="common">
+				<blinn>
+					<emission>
+						<color>  0.0 0.0 0.0 1.0 </color>
+					</emission>
+					<ambient>
+						<color>  0.0 0.0 0.0 1.0 </color>
+					</ambient>
+					<diffuse>
+						<texture texture="id-fx_sampler-30" texcoord="CHANNEL1"/>
+					</diffuse>
+					<specular>
+						<color>  0.5 0.5 0.5 1.0 </color>
+					</specular>
+					<shininess>
+						<float>50</float>
+					</shininess>
+					<reflective>
+						<color>  1.0 1.0 1.0 1.0 </color>
+					</reflective>
+					<index_of_refraction>
+						<float>4.0</float>
+					</index_of_refraction>
+				</blinn>
+				<extra>
+					<technique profile="FCOLLADA">
+					</technique>
+					<technique profile="GOOGLEEARTH">
+						<double_sided>0</double_sided>
+					</technique>
+				</extra>
+			</technique>
+		</profile_COMMON>
+	</effect>
+</library_effects>
+<library_materials>
+	<material id="id-material-12" name="cobblestone">
+		<instance_effect url="#id-fx-2"/>
+	</material>
+	<material id="id-material-23" name="inner_roof">
+		<instance_effect url="#id-fx-13"/>
+	</material>
+	<material id="id-material-31" name="stone_wall">
+		<instance_effect url="#id-fx-27"/>
+	</material>
+</library_materials>
+<library_geometries>
+	<geometry id="id-mesh-24" name="Plane">
+		<mesh>
+			<source id="id-mesh-24-positions">
+				<float_array id="id-mesh-24-positions-array" count="24"> 1.0 -1.0 0.0 -1.0 1.0 0.0 -1.0 -1.0 0.0 -1.0 1.0 2.0 1.0 -1.0 2.0 -1.0 -1.0 2.0 1.0 1.0 0.0 1.0 1.0 2.0</float_array>
+				<technique_common>
+				<accessor source="#id-mesh-24-positions-array" count="8" stride="3">
+					<param name="X" type="float"/>
+					<param name="Y" type="float"/>
+					<param name="Z" type="float"/>
+				</accessor>
+				</technique_common>
+			</source>
+			<source id="id-mesh-24-normals">
+				<float_array id="id-mesh-24-normals-array" count="24"> 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 0.0 1.0 0.0 0.0 -1.0</float_array>
+				<technique_common>
+				<accessor source="#id-mesh-24-normals-array" count="8" stride="3">
+					<param name="X" type="float"/>
+					<param name="Y" type="float"/>
+					<param name="Z" type="float"/>
+				</accessor>
+				</technique_common>
+			</source>
+			<source id="id-mesh-24-texcoord-0">
+				<float_array id="id-mesh-24-texcoord-0-array" count="16"> 0.9999000430107117 9.998001041822135e-05 9.998001041822135e-05 0.9999000430107117 0.00010003960051108152 9.998001041822135e-05 9.998001041822135e-05 0.9999000430107117 0.9999000430107117 9.998001041822135e-05 0.00010003960051108152 9.998001041822135e-05 0.9999000430107117 0.9999000430107117 0.9999000430107117 0.9999000430107117</float_array>
+				<technique_common>
+				<accessor source="#id-mesh-24-texcoord-0-array" count="8" stride="2">
+					<param name="S" type="float"/>
+					<param name="T" type="float"/>
+				</accessor>
+				</technique_common>
+			</source>
+			<vertices id="id-mesh-24-vertices">
+				<input semantic="POSITION" source="#id-mesh-24-positions"/>
+			</vertices>
+			<triangles count="2" material="id-trimat-25">
+				<input semantic="VERTEX" source="#id-mesh-24-vertices" offset="0"/>
+				<input semantic="NORMAL" source="#id-mesh-24-normals" offset="0"/>
+				<input semantic="TEXCOORD" source="#id-mesh-24-texcoord-0" offset="0" set="0"/>
+				<p> 0 1 2 0 6 1 </p>
+			</triangles>
+			<triangles count="2" material="id-trimat-26">
+				<input semantic="VERTEX" source="#id-mesh-24-vertices" offset="0"/>
+				<input semantic="NORMAL" source="#id-mesh-24-normals" offset="0"/>
+				<input semantic="TEXCOORD" source="#id-mesh-24-texcoord-0" offset="0" set="0"/>
+				<p> 3 4 5 3 7 4 </p>
+			</triangles>
+		</mesh>
+	</geometry>
+	<geometry id="id-mesh-32" name="Cube">
+		<mesh>
+			<source id="id-mesh-32-positions">
+				<float_array id="id-mesh-32-positions-array" count="48"> -1.0 -1.0 2.0 -1.0 1.0 0.0 -1.0 -1.0 0.0 -1.0 1.0 2.0 1.0 1.0 0.0 -1.0 1.0 0.0 1.0 1.0 2.0 1.0 -1.0 0.0 1.0 1.0 0.0 1.0 -1.0 2.0 -1.0 -1.0 0.0 1.0 -1.0 0.0 -1.0 1.0 2.0 1.0 1.0 2.0 1.0 -1.0 2.0 -1.0 -1.0 2.0</float_array>
+				<technique_common>
+				<accessor source="#id-mesh-32-positions-array" count="16" stride="3">
+					<param name="X" type="float"/>
+					<param name="Y" type="float"/>
+					<param name="Z" type="float"/>
+				</accessor>
+				</technique_common>
+			</source>
+			<source id="id-mesh-32-normals">
+				<float_array id="id-mesh-32-normals-array" count="48"> -1.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 -1.0 0.0 0.0 0.0 1.0 0.0 1.0 0.0 0.0 0.0 -1.0 0.0</float_array>
+				<technique_common>
+				<accessor source="#id-mesh-32-normals-array" count="16" stride="3">
+					<param name="X" type="float"/>
+					<param name="Y" type="float"/>
+					<param name="Z" type="float"/>
+				</accessor>
+				</technique_common>
+			</source>
+			<source id="id-mesh-32-texcoord-0">
+				<float_array id="id-mesh-32-texcoord-0-array" count="32"> 0.9999000430107117 1.123915672302246 9.995698928833008e-05 0.1241157054901123 0.9998999834060669 0.1241157054901123 0.9999000430107117 1.123915672302246 9.995698928833008e-05 0.1241157054901123 0.9998999834060669 0.1241157054901123 0.9999000430107117 1.123915672302246 9.998001041822135e-05 0.12411569803953171 0.9999000430107117 0.12411566823720932 0.9999000430107117 1.123915672302246 9.998001041822135e-05 0.12411569803953171 0.9999000430107117 0.12411566823720932 9.995698928833008e-05 1.123915672302246 9.995698928833008e-05 1.123915672302246 0.00010003960051108152 1.123915672302246 0.00010003960051108152 1.123915672302246</float_array>
+				<technique_common>
+				<accessor source="#id-mesh-32-texcoord-0-array" count="16" stride="2">
+					<param name="S" type="float"/>
+					<param name="T" type="float"/>
+				</accessor>
+				</technique_common>
+			</source>
+			<vertices id="id-mesh-32-vertices">
+				<input semantic="POSITION" source="#id-mesh-32-positions"/>
+			</vertices>
+			<triangles count="8" material="id-trimat-33">
+				<input semantic="VERTEX" source="#id-mesh-32-vertices" offset="0"/>
+				<input semantic="NORMAL" source="#id-mesh-32-normals" offset="0"/>
+				<input semantic="TEXCOORD" source="#id-mesh-32-texcoord-0" offset="0" set="0"/>
+				<p> 0 1 2 3 4 5 6 7 8 9 10 11 0 12 1 3 13 4 6 14 7 9 15 10 </p>
+			</triangles>
+		</mesh>
+	</geometry>
+</library_geometries>
+<library_visual_scenes>
+	<visual_scene id="id-scene-1" name="scene">
+		<node id="Floor-col" name="Floor-col" type="NODE">
+			<matrix sid="transform"> 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0  </matrix>
+			<instance_geometry url="#id-mesh-24">
+				<bind_material>
+					<technique_common>
+						<instance_material symbol="id-trimat-25" target="#id-material-12"/>
+						<instance_material symbol="id-trimat-26" target="#id-material-23"/>
+					</technique_common>
+				</bind_material>
+			</instance_geometry>
+		</node>
+		<node id="Wall-col" name="Wall-col" type="NODE">
+			<matrix sid="transform"> 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0  </matrix>
+			<instance_geometry url="#id-mesh-32">
+				<bind_material>
+					<technique_common>
+						<instance_material symbol="id-trimat-33" target="#id-material-31"/>
+					</technique_common>
+				</bind_material>
+			</instance_geometry>
+		</node>
+	</visual_scene>
+</library_visual_scenes>
+<scene>
+	<instance_visual_scene url="#id-scene-1" />
+</scene>
+</COLLADA>

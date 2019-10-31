@@ -6,4 +6,5 @@ bin/test/result__*
 *.so
 *.dll
 *.exe
+.import
 
