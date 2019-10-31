@@ -26,15 +26,7 @@
 #include <assert.h>
 #include <string.h>
 
-#ifdef GODOT
-#	include "../gdnative/godot_sub_native.h"
-#	define _MALLOC api->godot_alloc
-#	define _FREE api->godot_free
-#else
-#	include <stdlib.h>
-#	define _MALLOC malloc
-#	define _FREE free
-#endif
+#include "../alloc.h"
 
 #ifndef HASH_KEY_BUFFER_SIZE
 #	define HASH_KEY_BUFFER_SIZE 64
@@ -92,5 +84,7 @@ void* ht_remove( hash_table*, void* );
 #ifdef __cplusplus
 }
 #endif
+
+
 
 #endif

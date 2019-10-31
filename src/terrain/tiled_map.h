@@ -23,17 +23,7 @@
 #ifndef TILED_MAP_H_
 #define TILED_MAP_H_
 
-
-
-#ifdef GODOT
-#	include "../gdnative/godot_sub_native.h"
-#	define _MALLOC api->godot_alloc
-#	define _FREE api->godot_free
-#else
-#	include <stdlib.h>
-#	define _MALLOC malloc
-#	define _FREE free
-#endif
+#include "../alloc.h"
 
 
 
@@ -41,13 +31,21 @@ struct rect {
 	int x, y, w, h;
 };
 
-struct rect create_rect(int x, int y, int w, int h);
-
 typedef struct tiled_map {
 	char *tiles;
 	int width, height;
 	//struct rect bounds
 } tiled_map;
+
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+
+struct rect create_rect(int x, int y, int w, int h);
 
 // draw rect, but only overwrite tiles matching "mask" value
 void map_draw_rect(tiled_map *map, struct rect *r, char value, char mask);
@@ -59,6 +57,10 @@ void free_tiled_map(tiled_map *map);
 
 void set_tile(tiled_map *map, int x, int y, char value);
 char get_tile(tiled_map *map, int x, int y);
+
+#ifdef __cplusplus
+}
+#endif
 
 
 

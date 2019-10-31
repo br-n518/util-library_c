@@ -28,8 +28,8 @@ void ot_init (octree_turtle * t, octree_cell * start_cell, const char start_dire
 	t->current_cell = start_cell;
 	octree_cell_set (start_cell);
 	t->flags = start_direction & (char) 0x03;
-	t->cell_stack = NULL;
-	t->direction_stack = NULL;
+	t->cell_stack = 0;
+	t->direction_stack = 0;
 }
 
 void ot_destroy (octree_turtle * t)
@@ -46,7 +46,7 @@ void ot_move_down (octree_turtle * t, const char n)
 	assert (t);
 	assert (n > 0);
 
-	octree_cell *nbor = NULL;
+	octree_cell *nbor = 0;
 	for (char i = 0; i < n; i++)
 		{
 			nbor = t->current_cell->nbors[OCTREE_NBOR_Y_POS];

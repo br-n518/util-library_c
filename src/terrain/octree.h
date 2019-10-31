@@ -26,6 +26,8 @@
 #include <string.h>
 #include "../util/node.h"
 
+#include "../alloc.h"
+
 #define OCTREE_CELL_SOLID 1
 #define OCTREE_CELL_SPLIT 2
 #define OCTREE_CELL_PARENT 3
@@ -59,7 +61,13 @@ typedef struct octree {
 		godot_pool_vector3_array verts;
 		godot_pool_vector2_array uvs;
 	} octree_mesh;
+#endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifdef GODOT
 	void octree_mesh_init( octree_mesh *m );
 	void octree_mesh_destroy( octree_mesh *m );
 
@@ -82,6 +90,11 @@ void octree_cell_split_n( octree_cell *c, const int n );
 void octree_cell_split_to( octree_cell *c, const int target_size );
 
 octree_cell* octree_cut_point( octree *g, const int x, const int y, const int z );
+
+#ifdef __cplusplus
+}
+#endif
+
 
 
 #endif

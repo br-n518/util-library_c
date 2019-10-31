@@ -26,15 +26,8 @@
 
 #include <assert.h>
 
-#ifdef GODOT
-#	include "../gdnative/godot_sub_native.h"
-#	define _MALLOC api->godot_alloc
-#	define _FREE api->godot_free
-#else
-#	include <stdlib.h>
-#	define _MALLOC malloc
-#	define _FREE free
-#endif
+
+#include "../alloc.h"
 
 
 
@@ -44,7 +37,9 @@ typedef struct heightmap {
 	char *flags;
 } heightmap;
 
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 void hm_init( heightmap *map, const int size );
 void hm_destroy( heightmap *map );
@@ -56,6 +51,10 @@ void hm_set_elevation( heightmap *map, const int x, const int y, const int elev 
 void hm_set_flags( heightmap *map, const int x, const int y, const char flags );
 void hm_add_flags( heightmap *map, const int x, const int y, const char flags );
 void hm_remove_flags( heightmap *map, const int x, const int y, const char flags );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

@@ -25,6 +25,7 @@
 
 #include "rand/rand.h"
 
+#include "alloc.h"
 
 #include "pcg/dsquare_hmap.h"
 

@@ -28,6 +28,8 @@
 #include "../util/grammar.h"
 #include "../terrain/octree.h"
 
+#include "../alloc.h"
+
 // first two bits (number range)
 #define TURTLE_NORTH 0
 #define TURTLE_EAST 1
@@ -47,7 +49,9 @@ typedef struct octree_turtle {
 	char flags;
 } octree_turtle;
 
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 void ot_init( octree_turtle *t, octree_cell *start_cell, const char start_direction );
 void ot_destroy( octree_turtle *t );
@@ -66,6 +70,12 @@ void ot_push_cell( octree_turtle *t );
 void ot_pop_cell( octree_turtle *t );
 
 void ot_str_routine( octree_turtle *t, const char *s );
+
+#ifdef __cplusplus
+}
+#endif
+
+
 
 #endif
 

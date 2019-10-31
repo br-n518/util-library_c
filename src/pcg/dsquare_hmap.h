@@ -20,14 +20,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+#ifndef DSQUARE_HMAP_h
+#define DSQUARE_HMAP_h
+
 #include "../terrain/heightmap.h"
 
-#ifdef GODOT
-#	include "../gdnative/godot_sub_native.h"
+#include "../alloc.h"
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 // split map, floor result
 
 void dsquare_hmap( heightmap *map, const int seed, const int max_initial_height, const char roughness );
 
+#ifdef __cplusplus
+}
+#endif
 
+
+
+#endif

@@ -25,11 +25,11 @@
 
 #include "../terrain/tiled_map.h"
 
+#include "../alloc.h"
 
-#ifdef GODOT
-#	include "../gdnative/godot_sub_native.h"
+#ifdef __cplusplus
+extern "C" {
 #endif
-
 
 // room size 3 is messy, some empty rooms
 #ifndef TMD_MIN_ROOM_SIZE
@@ -49,6 +49,9 @@ void tmd_split_dungeon(tiled_map *map, unsigned int seed);
 unsigned int tmd_get_start_x();
 unsigned int tmd_get_start_y();
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

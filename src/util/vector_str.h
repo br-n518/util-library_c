@@ -26,15 +26,7 @@
 #include <assert.h>
 #include <string.h>
 
-#ifdef GODOT
-#	include "../gdnative/godot_sub_native.h"
-#	define _MALLOC api->godot_alloc
-#	define _FREE api->godot_free
-#else
-#	include <stdlib.h>
-#	define _MALLOC malloc
-#	define _FREE free
-#endif
+#include "../alloc.h"
 
 typedef struct vs_node {
 	char data;

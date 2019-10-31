@@ -24,6 +24,7 @@
 #define GRAPH_H_
 
 #include "node.h"
+#include "../alloc.h"
 
 typedef struct graph_node {
 	node_t *nbors;
@@ -50,6 +51,8 @@ int graph_node_has_path( graph_node *a, graph_node *b );
 #ifdef __cplusplus
 }
 #endif
+
+
 
 #endif
 
