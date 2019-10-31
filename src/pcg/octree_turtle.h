@@ -28,10 +28,6 @@
 #include "../util/grammar.h"
 #include "../terrain/octree.h"
 
-#ifdef GODOT
-#	include "../gdnative/godot_sub_native.h"
-#endif
-
 // first two bits (number range)
 #define TURTLE_NORTH 0
 #define TURTLE_EAST 1
@@ -51,19 +47,6 @@ typedef struct octree_turtle {
 	char flags;
 } octree_turtle;
 
-
-#ifdef GODOT_GDNATIVE_API_STRUCT_H
-	// for octree_cell_render
-	typedef struct octree_mesh {
-		godot_pool_vector3_array verts;
-		godot_pool_vector2_array uvs;
-	} octree_mesh;
-
-	void octree_mesh_init( octree_mesh *m );
-	void octree_mesh_destroy( octree_mesh *m );
-
-	void octree_cell_render( octree_cell *c, octree_mesh *floors, octree_mesh *walls, octree_mesh *ceilings );
-#endif
 
 
 void ot_init( octree_turtle *t, octree_cell *start_cell, const char start_direction );

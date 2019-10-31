@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="PCG Test Project"
-run/main_scene="res://Test_tiledmap.tscn"
+run/main_scene="res://Mainmenu.tscn"
 config/icon="res://icon.png"
 
 [autoload]

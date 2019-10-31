@@ -53,6 +53,20 @@ typedef struct octree {
 } octree;
 
 
+#ifdef GODOT
+	// for octree_cell_render
+	typedef struct octree_mesh {
+		godot_pool_vector3_array verts;
+		godot_pool_vector2_array uvs;
+	} octree_mesh;
+
+	void octree_mesh_init( octree_mesh *m );
+	void octree_mesh_destroy( octree_mesh *m );
+
+	void octree_cell_render( octree_cell *c, octree_mesh *floors, octree_mesh *walls, octree_mesh *ceilings );
+#endif
+
+
 void octree_init( octree *g, const int size );
 void octree_destroy( octree *g );
 

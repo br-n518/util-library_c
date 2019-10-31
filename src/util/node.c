@@ -25,7 +25,7 @@
 
 
 node_t * node_create( void *data ) {
-	node_t *ret = _MALLOC(sizeof(node_t));
+	node_t *ret = _MALLOC(sizeof(*ret));
 	ret->next = 0;
 	ret->data = data;
 	return ret;

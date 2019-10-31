@@ -69,11 +69,11 @@ func create_tile(x:int, z:int, size:int) -> MeshInstance:
 func _ready():
 	map_size = 64
 	map_seed = 20
-	map_roughness = 90
+	map_roughness = 8
 	
 # warning-ignore:return_value_discarded
 	gdn.initialize()
-	heights = gdn.call_native("standard_varcall", "dungeon_dsquare", [map_size, map_seed, 4, map_roughness])
+	heights = gdn.call_native("standard_varcall", "dungeon_dsquare", [map_size, map_seed, map_roughness])
 # warning-ignore:return_value_discarded
 	gdn.terminate()
 	

@@ -24,7 +24,7 @@
 
 // hidden function
 rule_t* create_grammar_rule( const char *from, const char *to ) {
-	rule_t *ret = _MALLOC( sizeof(rule_t) );
+	rule_t *ret = _MALLOC( sizeof(*ret) );
 	strcpy( ret->from, from );
 	strcpy( ret->to, to );
 	return ret;

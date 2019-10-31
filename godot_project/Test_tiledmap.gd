@@ -17,12 +17,12 @@ func _ready():
 	var pba:PoolByteArray = gdn.call_native("standard_varcall", "dungeon_split_tiled_map", [WIDTH, HEIGHT, SEED])
 	var start_x:int = gdn.call_native("standard_varcall", "tmd_get_start_x", [])
 	var start_y:int = gdn.call_native("standard_varcall", "tmd_get_start_y", [])
-	
+
 	get_node("Player").translation = Vector3(start_x*2, 3, start_y*2)
-	
+
 	grid = array_to_grid(pba)
 	add_child(grid)
-	
+
 	# add enemies and exit portal
 	var i:int = 0
 	for y in range(HEIGHT-1):
@@ -39,7 +39,7 @@ func _ready():
 				e.translation = Vector3(x*2, 0, y*2)
 				add_child(e)
 		i += WIDTH
-	
+
 	gdn.terminate()
 
 
