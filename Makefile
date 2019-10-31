@@ -7,59 +7,71 @@ UTIL_SRC=src/util/*.c
 SRC=src/*.c $(UTIL_SRC)
 
 # OUT FILE
-OUTPUT_FILE=a
-OUTPUT_EXT=.out
+OUTPUT_FILE=libpcg
+SHARED_EXT=.so
+OUTPUT_SHARED=$(OUTPUT_FILE)$(SHARED_EXT)
+EXEC_EXT=.out
+OUTPUT_EXEC=$(OUTPUT_FILE)$(EXEC_EXT)
 
 # COMPILE
 CFLAGS=-std=c99 -Wall -Werror
 CXXFLAGS=-std=c++11 -Wall -Werror -O3
 
+GDFLAGS=$(CFLAGS) -I"godot_headers"
+
 # LINK
 LDFLAGS=-lstdc++
 
+DEPLOY=godot_project/lib/$(OUTPUT_SHARED)
+
+.PHONY: all clean rand shared build_shared godot build_godot test_util deploy
 
 
-.PHONY: all clean clean_all test_util doxy
 
-
-
-bin/$(OUTPUT_FILE)$(OUTPUT_EXT): clean *.o
+shared: clean build_shared
 	# LINK
-	$(CC) -o bin/$(OUTPUT_FILE)$(OUTPUT_EXT) *.o $(LDFLAGS)
+	$(CC) -shared -o bin/$(OUTPUT_SHARED) *.o $(LDFLAGS)
+
+godot: clean build_godot
+	# LINK
+	$(CC) -shared -o bin/$(OUTPUT_SHARED) *.o $(LDFLAGS)
 
 
-all: clean_all test_util bin/$(OUTPUT_FILE)$(OUTPUT_EXT)
+all: clean shared
 
 
 
-*.o: $(SRC) src/rand/rand.cpp
+build_shared: $(SRC) rand
 	# COMPILE
-	$(CC) -c $(CFLAGS) $(SRC)
-	$(CXX) -c $(CXXFLAGS) src/rand/rand.cpp
+	$(CC) -c -fPIC $(CFLAGS) $(SRC)
 
+
+build_godot: $(SRC) rand
+	# COMPILE
+	$(CC) -c -fPIC $(GDFLAGS) $(SRC)
+
+rand: src/rand/rand.cpp
+	$(CXX) -c -fPIC $(CXXFLAGS) src/rand/rand.cpp
 
 
 clean:
 	# REMOVE OBJECTS AND TESTS
-	rm -f bin/test_util$(OUTPUT_EXT)
 	rm -f *.o
 
-clean_all: clean
-	# REMOVE BINARIES
-	rm -f bin/$(OUTPUT_FILE)$(OUTPUT_EXT)
 
+
+
+deploy: bin/$(OUTPUT_SHARED)
+	cp bin/$(OUTPUT_SHARED) $(DEPLOY)
 
 
 TEST_UTIL_SRC=src/test/util/main_test.c $(UTIL_SRC)
 TEST_UTIL_LDFLAGS=
-test_util: bin/test_util$(OUTPUT_EXT)
-bin/test_util$(OUTPUT_EXT): $(TEST_UTIL_SRC)
+test_util: bin/test_util$(EXEC_EXT)
+bin/test_util$(EXEC_EXT): $(TEST_UTIL_SRC)
 	# BUILD TEST UTIL
-	$(CC) $(CFLAGS) -o bin/test_util$(OUTPUT_EXT) $(TEST_UTIL_SRC) $(TEST_UTIL_LDFLAGS)
+	$(CC) $(CFLAGS) -o bin/test_util$(EXEC_EXT) $(TEST_UTIL_SRC) $(TEST_UTIL_LDFLAGS)
 
-
-doxy: doc/Doxyfile doc/doxygen/
-	doxygen doc/Doxyfile
 
 
 

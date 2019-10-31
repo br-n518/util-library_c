@@ -1,5 +1,4 @@
 bin/test/result__*
-project.*
 *.geany
 *.out
 *.o
