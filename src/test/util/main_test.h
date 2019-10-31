@@ -22,13 +22,7 @@
  */
 
 // include pertinent
-#include "../../util/xml_doc.h"
-#include "../../util/ini_doc.h"
-
-#include "../../util/btree.h"
-#include "../../util/graph.h"
-#include "../../util/vector_str.h"
-#include "../../util/grammar.h"
+#include "../../util/all.h"
 
 // include before "test_*.h"
 #include "../test.h"

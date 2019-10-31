@@ -23,9 +23,7 @@
 
 // tiled_map is module name
 
-#include "../../terrain/tiled_map.h"
-#include "../../terrain/heightmap.h"
-#include "../../terrain/octree.h"
+#include "../../terrain/all.h"
 
 // include before "test_*.h"
 #include "../test.h"

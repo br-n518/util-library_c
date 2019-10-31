@@ -23,9 +23,7 @@
 
 // $name is module name
 
-#include "../../pcg/dsquare_hmap.h"
-#include "../../pcg/octree_turtle.h"
-#include "../../pcg/split_tiled_map_drawer.h"
+#include "../../pcg/all.h"
 
 // include before "test_*.h"
 #include "../test.h"
@@ -38,11 +36,12 @@
 
 int test_pcg( )
 {
-	_test_feature( "dsquare_hmap", test_dsquare_hmap );
-	_test_feature( "octree_turtle", test_octree_turtle );
-	_test_feature( "split_tiled_map_drawer", test_split_tmd );
+	int ret = 1;
+	if ( ! _test_feature( "dsquare_hmap", test_dsquare_hmap ) ) ret = 0;
+	if ( ! _test_feature( "octree_turtle", test_octree_turtle ) ) ret = 0;
+	if ( ! _test_feature( "split_tiled_map_drawer", test_split_tmd ) ) ret = 0;
 	
-	return 0;
+	return ret;
 }
 
 
