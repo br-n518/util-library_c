@@ -23,6 +23,7 @@
 #ifndef VECSTR_H_
 #define VECSTR_H_
 
+#include <assert.h>
 #include <string.h>
 
 #ifdef GODOT

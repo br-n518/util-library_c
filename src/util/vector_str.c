@@ -24,13 +24,13 @@
 
 
 void vs_init( vector_str *s) {
-	s->head = NULL;
+	s->head = 0;
 }
 
 vs_node* vs_node_create( const char c ) {
-	vs_node *ret = _MALLOC( sizeof( vs_node ) );
+	vs_node *ret = _MALLOC( sizeof( *ret ) );
 	ret->data = c;
-	ret->next = NULL;
+	ret->next = 0;
 	return ret;
 }
 
@@ -49,7 +49,7 @@ void vs_destroy( vector_str *s ) {
 
 void vs_set( vector_str *s, const char *src ) {
 	vs_node_free( s->head );
-	s->head = NULL;
+	s->head = 0;
 	int len = strlen( src );
 	if ( len > 0 ) {
 		s->head = vs_node_create( src[0] );
@@ -151,7 +151,7 @@ int vs_index_of_c( vector_str *s, const char c ) {
 
 int vs_index_of_s( vector_str *s, const char *c ) {
 	if ( s->head ) {
-		vs_node *curr = s->head, *temp = NULL;
+		vs_node *curr = s->head, *temp = 0;
 		int i = 0, ci = 0, clen = strlen(c);
 		while ( curr ) {
 			if ( curr->data == c[ci] ) {
@@ -165,7 +165,7 @@ int vs_index_of_s( vector_str *s, const char *c ) {
 					if ( ci == clen ) return i;
 				} else {
 					ci = 0;
-					temp = NULL;
+					temp = 0;
 				}
 			}
 			i++;
@@ -204,11 +204,13 @@ int vs_index_of_c_idx( vector_str *s, const char c, const int index ) {
 
 
 int vs_index_of_s_idx( vector_str *s, const char *c, const int index ) {
+	assert( s );
+	assert( c );
+	
 	if ( s->head ) {
-		vs_node *curr = s->head, *temp = NULL;
+		vs_node *curr = s->head, *temp = 0;
 		int i = 0, ci = 0, clen = strlen(c);
-		if ( !curr )
-			return -1;
+		
 		while ( i < index ) {
 			curr = curr->next;
 			if ( !curr )
@@ -228,7 +230,7 @@ int vs_index_of_s_idx( vector_str *s, const char *c, const int index ) {
 						return i;
 				} else {
 					ci = 0;
-					temp = NULL;
+					temp = 0;
 				}
 			}
 			i++;
@@ -267,7 +269,7 @@ char* vs_cstr( vector_str *s ) {
 
 void vs_replace( vector_str *s, const char *from, const char *to ) {
 	int flen = strlen( from );
-	vs_node *curr = s->head, *prev = NULL;
+	vs_node *curr = s->head, *prev = 0;
 	// search for 'from'
 	while ( curr ) {
 		if ( curr->data == from[0] ) {
@@ -285,16 +287,16 @@ void vs_replace( vector_str *s, const char *from, const char *to ) {
 				// store tail
 				vs_node *tail = check->next;
 				// allow free, without freeing tail.
-				check->next = NULL;
+				check->next = 0;
 				// done with check pointer
-				check = NULL;
+				check = 0;
 				// if curr is not head node
 				if ( prev ) {
 					// clear 'from' string
 					vs_node_free( curr );
-					curr = NULL;
+					curr = 0;
 					// set null for vs_append call
-					prev->next = NULL;
+					prev->next = 0;
 					// append replacement text 'to'
 					vs_append( s, to );
 				} else {
@@ -323,7 +325,7 @@ void vs_replace( vector_str *s, const char *from, const char *to ) {
 
 
 void vs_replace_idx( vector_str *s, const char *from, const char *to, const int index ) {
-	vs_node *curr = s->head, *prev = NULL, *check;
+	vs_node *curr = s->head, *prev = 0, *check;
 	
 	if ( !curr )
 		return;
@@ -354,16 +356,16 @@ void vs_replace_idx( vector_str *s, const char *from, const char *to, const int 
 				// store tail
 				vs_node *tail = check->next;
 				// allow free, without freeing tail.
-				check->next = NULL;
+				check->next = 0;
 				// done with check pointer
-				check = NULL;
+				check = 0;
 				// if curr is not head node
 				if ( prev ) {
 					// clear 'from' string
 					vs_node_free( curr );
-					curr = NULL;
+					curr = 0;
 					// set null for vs_append call
-					prev->next = NULL;
+					prev->next = 0;
 					// append replacement text 'to'
 					vs_append( s, to );
 				} else {

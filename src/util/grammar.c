@@ -56,11 +56,13 @@ char* create_grammar_str( const char *init_str, node_t *rules, const int iterati
 	int idx;
 	node_t *curr;
 	rule_t *curr_rule;
+	
 	// loop for each iteration
 	for ( int i = 0; i < iterations; i++ ) {
-		idx = 0;
+		// point to head
 		curr = rules;
 		
+			idx = 0;
 		// loop rules
 		while ( curr ) {
 			// get rule data

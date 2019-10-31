@@ -111,7 +111,7 @@ godot_variant dungeon_octree_turtle(void *data, godot_array *args) {
 	
 	
 	// create grammar
-	node_t *rules = NULL;
+	node_t *rules = 0;
 	push_grammar_rule( &rules, "F", "F+F-F-F+F" );
 	
 	//switch ( R_ranlux_get() % 5 ) {
