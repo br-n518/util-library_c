@@ -13,12 +13,12 @@ func _enter_tree():
 
 func _ready():
 	gdn.initialize()
-	randomize()
-	var SEED = randi()
-	var pba:PoolByteArray = gdn.call_native("standard_varcall", "create_tiled_map", [WIDTH, HEIGHT, SEED])
-	var start:Vector2 = gdn.call_native("standard_varcall", "tmd_get_start", [])
+	var SEED = 0
+	var pba:PoolByteArray = gdn.call_native("standard_varcall", "dungeon_split_tiled_map", [WIDTH, HEIGHT, SEED])
+	var start_x:int = gdn.call_native("standard_varcall", "tmd_get_start_x", [])
+	var start_y:int = gdn.call_native("standard_varcall", "tmd_get_start_y", [])
 	
-	get_node("Player").translation = Vector3(start.x*2, 3, start.y*2)
+	get_node("Player").translation = Vector3(start_x*2, 3, start_y*2)
 	
 	grid = array_to_grid(pba)
 	add_child(grid)
