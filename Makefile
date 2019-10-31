@@ -5,14 +5,17 @@ CXX=g++
 # INPUT FILES
 UTIL_SRC=src/util/*.c
 TERRAIN_SRC=src/terrain/*.c
-SRC=$(UTIL_SRC) src/terrain/*.c src/pcg/*.c
+PCG_SRC=src/pcg/*.c
+SRC=$(UTIL_SRC) $(TERRAIN_SRC) $(PCG_SRC)
 
 # OUT FILE
-OUTPUT_FILE=libpcg
+
 SHARED_EXT=.so
-OUTPUT_SHARED=$(OUTPUT_FILE)$(SHARED_EXT)
 EXEC_EXT=.out
-OUTPUT_EXEC=$(OUTPUT_FILE)$(EXEC_EXT)
+
+OUTPUT_NAME=libpcg
+OUTPUT_SHARED=$(OUTPUT_NAME)$(SHARED_EXT)
+OUTPUT_EXEC=$(OUTPUT_NAME)$(EXEC_EXT)
 
 # COMPILE
 CFLAGS=-std=c99 -Wall -Werror
@@ -22,57 +25,66 @@ CXXFLAGS=-std=c++11 -Wall -Werror -O3
 LDFLAGS=-lstdc++
 
 # GODOT
-GDSRC=$(UTIL_SRC) src/terrain/*.c src/pcg/*.c src/godot.c
+GDSRC=$(SRC) src/godot.c
 GDFLAGS=$(CFLAGS) -I"godot_headers" -D"GODOT"
+
+# GODOT PROJECT
 DEPLOY=godot_project/lib/$(OUTPUT_SHARED)
 
-.PHONY: all clean rand shared build_shared godot build_godot test_util deploy
+.PHONY: all clean test shared build_shared godot build_godot deploy
 
 
 
-shared: clean build_shared
+shared: clean build_shared rand.o
 	# LINK
 	$(CC) -shared -o bin/$(OUTPUT_SHARED) *.o $(LDFLAGS)
 
-godot: clean build_godot
+
+
+godot: clean build_godot rand.o
 	# LINK
 	$(CC) -shared -o bin/$(OUTPUT_SHARED) *.o $(LDFLAGS)
+
 
 
 all: clean shared
 
 
 
-build_shared: $(SRC) rand
+build_shared: $(SRC)
 	# COMPILE
 	$(CC) -c -fPIC $(CFLAGS) $(SRC)
 
-
-build_godot: $(SRC) rand
+build_godot: $(SRC)
 	# COMPILE
 	$(CC) -c -fPIC $(GDFLAGS) $(GDSRC)
 
-rand: src/rand/rand.cpp
+
+
+rand.o: src/rand/rand.cpp
+	# COMPILE C++ <random> wrapper
 	$(CXX) -c -fPIC $(CXXFLAGS) src/rand/rand.cpp
 
 
+
 clean:
-	# REMOVE OBJECTS AND TESTS
+	# CLEAN
 	rm -f *.o
 
 
 
-
 deploy: bin/$(OUTPUT_SHARED)
+	# DEPLOY
 	cp bin/$(OUTPUT_SHARED) $(DEPLOY)
 
 
-TEST_UTIL_SRC=src/test/util/main_test.c $(UTIL_SRC)
-TEST_UTIL_LDFLAGS=
-test_util: bin/test_util$(EXEC_EXT)
-bin/test_util$(EXEC_EXT): $(TEST_UTIL_SRC)
-	# BUILD TEST UTIL
-	$(CC) $(CFLAGS) -o bin/test_util$(EXEC_EXT) $(TEST_UTIL_SRC) $(TEST_UTIL_LDFLAGS)
+
+TEST_SRC=rand.o src/test/test_main.c $(SRC)
+TEST_LDFLAGS=$(LDFLAGS)
+test: bin/test$(EXEC_EXT)
+bin/test$(EXEC_EXT): $(TEST_SRC)
+	# BUILD TEST
+	$(CC) $(CFLAGS) -o bin/test$(EXEC_EXT) $(TEST_SRC) $(TEST_LDFLAGS)
 
 
 

@@ -21,20 +21,44 @@
  * SOFTWARE.
  */
 
-// $name is module name
+// include pertinent
+#include "../../util/xml_doc.h"
+#include "../../util/ini_doc.h"
 
-#include "../../$folder/$name.h"
+#include "../../util/btree.h"
+#include "../../util/graph.h"
+#include "../../util/vector_str.h"
+#include "../../util/grammar.h"
+#include "../../util/hash_e.h"
 
 // include before "test_*.h"
 #include "../test.h"
 
-#include "test_$name.h"
+#include "test_btree.h"
+#include "test_grammar.h"
+#include "test_graph.h"
+#include "test_hash.h"
+#include "test_hash_e.h"
+#include "test_ini_doc.h"
+#include "test_node.h"
+#include "test_strbuff.h"
+#include "test_vector_str.h"
+#include "test_xml_doc.h"
 
 
 
-int main( int argc, char *argv[] )
+int test_util( )
 {
-	_test_feature( "$name", test_$name );
+	_test_feature( "btree",		test_btree		);
+	_test_feature( "grammar",	test_grammar	);
+	_test_feature( "graph",		test_graph		);
+	_test_feature( "hash",		test_hash		);
+	_test_feature( "hash_e",	test_hash_e		);
+	_test_feature( "ini_doc",	test_ini_doc	);
+	_test_feature( "node",		test_node		);
+	_test_feature( "strbuff",	test_strbuff	);
+	_test_feature( "vec_str",	test_vector_str);
+	_test_feature( "xml_doc",	test_xml_doc	);
 	
 	return 0;
 }

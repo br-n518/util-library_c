@@ -21,20 +21,26 @@
  * SOFTWARE.
  */
 
-// $name is module name
+// tiled_map is module name
 
-#include "../../$folder/$name.h"
+#include "../../terrain/tiled_map.h"
+#include "../../terrain/heightmap.h"
+#include "../../terrain/octree.h"
 
 // include before "test_*.h"
 #include "../test.h"
 
-#include "test_$name.h"
+#include "test_tiled_map.h"
+#include "test_heightmap.h"
+#include "test_octree.h"
 
 
 
-int main( int argc, char *argv[] )
+int test_terrain( )
 {
-	_test_feature( "$name", test_$name );
+	_test_feature( "tiled_map", test_tiled_map );
+	_test_feature( "heightmap", test_heightmap );
+	_test_feature( "octree", test_octree );
 	
 	return 0;
 }
