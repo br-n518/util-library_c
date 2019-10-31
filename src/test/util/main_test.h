@@ -41,17 +41,19 @@
 
 int test_util( )
 {
-	_test_feature( "btree",		test_btree		);
-	_test_feature( "grammar",	test_grammar	);
-	_test_feature( "graph",		test_graph		);
-	_test_feature( "hash",		test_hash		);
-	_test_feature( "ini_doc",	test_ini_doc	);
-	_test_feature( "node",		test_node		);
-	_test_feature( "strbuff",	test_strbuff	);
-	_test_feature( "vec_str",	test_vector_str);
-	_test_feature( "xml_doc",	test_xml_doc	);
+	int ret = 1;
 	
-	return 0;
+	if ( ! _test_feature( "btree",		test_btree		) ) ret = 0;
+	if ( ! _test_feature( "grammar",	test_grammar	) ) ret = 0;
+	if ( ! _test_feature( "graph",		test_graph		) ) ret = 0;
+	if ( ! _test_feature( "hash",		test_hash		) ) ret = 0;
+	if ( ! _test_feature( "ini_doc",	test_ini_doc	) ) ret = 0;
+	if ( ! _test_feature( "node",		test_node		) ) ret = 0;
+	if ( ! _test_feature( "strbuff",	test_strbuff	) ) ret = 0;
+	if ( ! _test_feature( "vec_str",	test_vector_str) ) ret = 0;
+	if ( ! _test_feature( "xml_doc",	test_xml_doc	) ) ret = 0;
+	
+	return ret;
 }
 
 

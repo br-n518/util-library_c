@@ -32,7 +32,7 @@ struct rect create_rect(int x, int y, int w, int h) {
 }
 
 void map_draw_rect(tiled_map *map, struct rect *r, char value, char mask) {
-	int xx, yy, i = map->width * map->height;
+	int xx, yy, i = (map->width * map->height) - 1;
 	for (yy = r->y + r->h-1; yy >= r->y; yy--) {
 		for (xx = r->x + r->w-1; xx >= r->x; xx--) {
 			if (map->tiles[i] == mask)

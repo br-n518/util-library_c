@@ -1,0 +1,34 @@
+|btree| SUCCESS!
+[ iter 1 ] FAILED (T_T)
+Value was: 'a'
+[ iter 2 ] FAILED (T_T)
+Value was: 'a'
+[ iter 3 ] FAILED (T_T)
+Value was: 'a'
+|grammar| FAILED (T_T)
+|graph| SUCCESS!
+|hash| SUCCESS!
+|ini_doc| SUCCESS!
+|node| SUCCESS!
+[ sb_strip_trailing ] SUCCESS!
+|strbuff| SUCCESS!
+|vec_str| SUCCESS!
+[ xml_doc_open ] SUCCESS!
+|xml_doc| SUCCESS!
+|test_util| FAILED (T_T)
+
+|tiled_map| SUCCESS!
+[ hmap_elev ] SUCCESS!
+[ hmap_flags ] FAILED (T_T)
+[ hmap_flags2 ] SUCCESS!
+[ hmap_flags3 ] SUCCESS!
+[ hmap_flags4 ] FAILED (T_T)
+|heightmap| FAILED (T_T)
+|octree| SUCCESS!
+|test_terrain| FAILED (T_T)
+
+|dsquare_hmap| FAILED (T_T)
+|octree_turtle| SUCCESS!
+|split_tiled_map_drawer| FAILED (T_T)
+|test_pcg| FAILED (T_T)
+

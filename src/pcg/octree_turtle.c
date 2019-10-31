@@ -25,6 +25,9 @@
 
 void ot_init (octree_turtle * t, octree_cell * start_cell, const char start_direction)
 {
+	assert( t );
+	assert( start_cell );
+	
 	t->current_cell = start_cell;
 	octree_cell_set (start_cell);
 	t->flags = start_direction & (char) 0x03;
@@ -34,7 +37,10 @@ void ot_init (octree_turtle * t, octree_cell * start_cell, const char start_dire
 
 void ot_destroy (octree_turtle * t)
 {
-	node_free_chain (t->cell_stack);
+	assert( t );
+	
+	if ( t->cell_stack )
+		node_free_chain (t->cell_stack);
 	while (t->direction_stack)
 	{
 		_FREE (node_pop (&(t->direction_stack), t->direction_stack));

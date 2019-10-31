@@ -36,11 +36,13 @@
 
 int test_terrain( )
 {
-	_test_feature( "tiled_map", test_tiled_map );
-	_test_feature( "heightmap", test_heightmap );
-	_test_feature( "octree", test_octree );
+	int ret = 1;
 	
-	return 0;
+	if ( ! _test_feature( "tiled_map", test_tiled_map ) ) ret = 0;
+	if ( ! _test_feature( "heightmap", test_heightmap ) ) ret = 0;
+	if ( ! _test_feature( "octree", test_octree ) ) ret = 0;
+	
+	return ret;
 }
 
 
