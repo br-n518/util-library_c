@@ -29,7 +29,6 @@
 #include "../../util/graph.h"
 #include "../../util/vector_str.h"
 #include "../../util/grammar.h"
-#include "../../util/hash_e.h"
 
 // include before "test_*.h"
 #include "../test.h"
@@ -38,7 +37,6 @@
 #include "test_grammar.h"
 #include "test_graph.h"
 #include "test_hash.h"
-#include "test_hash_e.h"
 #include "test_ini_doc.h"
 #include "test_node.h"
 #include "test_strbuff.h"
@@ -53,7 +51,6 @@ int test_util( )
 	_test_feature( "grammar",	test_grammar	);
 	_test_feature( "graph",		test_graph		);
 	_test_feature( "hash",		test_hash		);
-	_test_feature( "hash_e",	test_hash_e		);
 	_test_feature( "ini_doc",	test_ini_doc	);
 	_test_feature( "node",		test_node		);
 	_test_feature( "strbuff",	test_strbuff	);

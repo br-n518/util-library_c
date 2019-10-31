@@ -9,7 +9,6 @@ PCG_SRC=src/pcg/*.c
 SRC=$(UTIL_SRC) $(TERRAIN_SRC) $(PCG_SRC)
 
 # OUT FILE
-
 SHARED_EXT=.so
 EXEC_EXT=.out
 

@@ -8,7 +8,7 @@
 - Binary sort tree (**btree.h**)
 - Grammar string evolver (**grammar.h**)
 - Double-linked graph nodes (**graph.h**)
-- Hash table (**hash.h**) and less-memory version (**hash_e.h**)
+- Hash table for storing data by string key (**hash.h**)
 - Continuous string buffer (**strbuff.h**)
 - Vector string for mutability (**vector_str.h**)
 

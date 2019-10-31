@@ -6,7 +6,6 @@
 #include "grammar.h"
 #include "graph.h"
 #include "hash.h"
-#include "hash_e.h"
 #include "node.h"
 #include "strbuff.h"
 #include "vector_str.h"

@@ -51,7 +51,7 @@ int assertive( const char *id, const int condition )
  * @param func Test function to call. Must take no args and return char.
  * @returns Returns nothing, but the pointer @p func must return char.
  */
-void _test_feature ( const char *id, int (*func)(void) )
+int _test_feature ( const char *id, int (*func)(void) )
 {
 	int res = func();
 
@@ -64,6 +64,8 @@ void _test_feature ( const char *id, int (*func)(void) )
 #	ifndef NDEBUG
 		fflush( stdout );
 #	endif
+	
+	return res;
 }
 
 

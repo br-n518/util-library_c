@@ -2,7 +2,7 @@
 int test_ini_doc()
 {
 	
-	struct ini_doc *ddoc = malloc( sizeof(*ddoc) );
+	struct ini_doc *ddoc = _MALLOC( sizeof(*ddoc) );
 	ini_doc_init( ddoc );
 	
 	char ret = ini_doc_load( ddoc, "test/test.ini" );
@@ -24,12 +24,13 @@ int test_ini_doc()
 			}
 		}
 		
-		ini_doc_destroy( ddoc );
 		
-		return ret;
 	}
 	
-	return 0;
+	ini_doc_destroy( ddoc );
+	_FREE( ddoc );
+	
+	return ret;
 }
 
 
