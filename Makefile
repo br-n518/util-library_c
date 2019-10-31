@@ -81,8 +81,7 @@ deploy: bin/$(OUTPUT_SHARED)
 
 TEST_SRC=rand.o src/test/test_main.c $(SRC)
 TEST_LDFLAGS=$(LDFLAGS)
-test: bin/test$(EXEC_EXT)
-bin/test$(EXEC_EXT): $(TEST_SRC)
+test: $(TEST_SRC)
 	# BUILD TEST
 	$(CC) $(CFLAGS) -o bin/test$(EXEC_EXT) $(TEST_SRC) $(TEST_LDFLAGS)
 
