@@ -62,14 +62,20 @@ void hm_destroy( heightmap *map ) {
 
 int hm_elevation_at( heightmap *map, const int x, const int y ) {
 	assert( map );
-	assert( x < map->hm_size && y < map->hm_size );
+	assert( x >= 0 );
+	assert( y >= 0 );
+	assert( x < map->hm_size );
+	assert( y < map->hm_size );
 	
 	return map->elevation[ HM_IDX(x, y, map->hm_size) ];
 }
 
 char hm_flags_at( heightmap *map, const int x, const int y ) {
 	assert( map );
-	assert( x < map->hm_size && y < map->hm_size );
+	assert( x >= 0 );
+	assert( y >= 0 );
+	assert( x < map->hm_size );
+	assert( y < map->hm_size );
 	
 	return map->flags[ HM_IDX(x, y, map->hm_size) ];
 }
@@ -81,7 +87,10 @@ char hm_flags_at( heightmap *map, const int x, const int y ) {
 
 void hm_set_elevation( heightmap *map, const int x, const int y, const int elev ) {
 	assert( map );
-	assert( x < map->hm_size && y < map->hm_size );
+	assert( x >= 0 );
+	assert( y >= 0 );
+	assert( x < map->hm_size );
+	assert( y < map->hm_size );
 	
 	map->elevation[ HM_IDX(x, y, map->hm_size) ] = elev;
 }
@@ -93,21 +102,30 @@ void hm_set_elevation( heightmap *map, const int x, const int y, const int elev 
 
 void hm_set_flags( heightmap *map, const int x, const int y, const char flags ) {
 	assert( map );
-	assert( x < map->hm_size && y < map->hm_size );
+	assert( x >= 0 );
+	assert( y >= 0 );
+	assert( x < map->hm_size );
+	assert( y < map->hm_size );
 	
 	map->flags[ HM_IDX(x, y, map->hm_size) ] = flags;
 }
 
 void hm_add_flags( heightmap *map, const int x, const int y, const char flags ) {
 	assert( map );
-	assert( x < map->hm_size && y < map->hm_size );
+	assert( x >= 0 );
+	assert( y >= 0 );
+	assert( x < map->hm_size );
+	assert( y < map->hm_size );
 	
 	map->flags[ HM_IDX(x, y, map->hm_size) ] |= flags;
 }
 
 void hm_remove_flags( heightmap *map, const int x, const int y, const char flags ) {
 	assert( map );
-	assert( x < map->hm_size && y < map->hm_size );
+	assert( x >= 0 );
+	assert( y >= 0 );
+	assert( x < map->hm_size );
+	assert( y < map->hm_size );
 	
 	map->flags[ HM_IDX(x, y, map->hm_size) ] &= ~flags;
 }

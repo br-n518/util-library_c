@@ -21,13 +21,13 @@ Value was: 'a'
 
 |tiled_map| SUCCESS!
 [ hmap_elev ] SUCCESS!
-[ hmap_flags ] FAILED (T_T)
+[ hmap_flags ] SUCCESS!
 [ hmap_flags2 ] SUCCESS!
 [ hmap_flags3 ] SUCCESS!
-[ hmap_flags4 ] FAILED (T_T)
-|heightmap| FAILED (T_T)
+[ hmap_flags4 ] SUCCESS!
+|heightmap| SUCCESS!
 |octree| SUCCESS!
-|test_terrain| FAILED (T_T)
+|test_terrain| SUCCESS!
 
 |dsquare_hmap| FAILED (T_T)
 |octree_turtle| SUCCESS!
