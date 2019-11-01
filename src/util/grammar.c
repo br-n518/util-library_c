@@ -23,26 +23,36 @@
 #include "grammar.h"
 
 // hidden function
-rule_t* create_grammar_rule( const char *from, const char *to ) {
+rule_t* create_grammar_rule( const char *from, const char *to )
+{
+	assert( from );
+	assert( to );
+	
 	rule_t *ret = _MALLOC( sizeof(*ret) );
 	strcpy( ret->from, from );
 	strcpy( ret->to, to );
 	return ret;
 }
 
-void push_grammar_rule( node_t **list, const char *from, const char *to ) {
-	rule_t *r = create_grammar_rule( from, to );
-	node_push_back( list, r );
+void push_grammar_rule( node_t **list, const char *from, const char *to )
+{
+	assert( list );
+	
+	node_push_back( list, create_grammar_rule( from, to ) );
 }
 
 
 
-void destroy_grammar( node_t *list ) {
+void destroy_grammar( node_t *list )
+{
+	assert( list );
+	
 	node_free_chain_data( list, _FREE );
 }
 
 
-char* create_grammar_str( const char *init_str, node_t *rules, const int iterations ) {
+char* create_grammar_str( const char *init_str, node_t *rules, const int iterations )
+{
 	assert( init_str );
 	assert( rules );
 	assert( iterations > 0 );
@@ -58,27 +68,34 @@ char* create_grammar_str( const char *init_str, node_t *rules, const int iterati
 	rule_t *curr_rule;
 	
 	// loop for each iteration
-	for ( int i = 0; i < iterations; i++ ) {
+	for ( int i = 0; i < iterations; i++ )
+	{
 		// point to head
 		curr = rules;
 		
-			idx = 0;
 		// loop rules
-		while ( curr ) {
+		while ( curr )
+		{
+			// search whole string, per rule
+			idx = 0;
 			// get rule data
 			curr_rule = (rule_t*) curr->data;
 			// run the rule, adjusting idx
-			while ( 1 ) {
+			while ( 1 )
+			{
 				// get next index
 				idx = vs_index_of_s_idx( &vs, curr_rule->from, idx );
 				
-				if ( idx >= 0 ) {
+				if ( idx >= 0 )
+				{
 					// replace string
 					vs_replace_idx( &vs, curr_rule->from, curr_rule->to, idx );
 					
 					// forward index by length of new substring
 					idx += strlen( curr_rule->to );
-				} else {
+				}
+				else
+				{
 					// 'from' string not found, break and get next rule
 					break;
 				}
