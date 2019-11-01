@@ -65,7 +65,7 @@ char* create_grammar_str( const char *init_str, node_t *rules, const int iterati
 	
 	//const int rule_count = node_count( rules );
 	
-	int idx;
+	int idx, to_len;
 	node_t *curr;
 	rule_t *curr_rule;
 	
@@ -82,25 +82,15 @@ char* create_grammar_str( const char *init_str, node_t *rules, const int iterati
 			idx = 0;
 			// get rule data
 			curr_rule = (rule_t*) curr->data;
+			to_len = strlen( curr_rule->to );
 			// run the rule, adjusting idx
-			while ( 1 )
+			while ( (idx = vs_index_of_s_idx( &vs, curr_rule->from, idx )) >= 0 )
 			{
-				// get next index
-				idx = vs_index_of_s_idx( &vs, curr_rule->from, idx );
+				// replace string
+				vs_replace_idx( &vs, curr_rule->from, curr_rule->to, idx );
 				
-				if ( idx >= 0 )
-				{
-					// replace string
-					vs_replace_idx( &vs, curr_rule->from, curr_rule->to, idx );
-					
-					// forward index by length of new substring
-					idx += strlen( curr_rule->to );
-				}
-				else
-				{
-					// 'from' string not found, break and get next rule
-					break;
-				}
+				// forward index by length of new substring
+				idx += to_len;
 			}
 			
 			curr = curr->next;

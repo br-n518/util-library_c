@@ -108,6 +108,11 @@ int test_vector_str() {
 				goto CLABEL_test_vec_str_end;
 			}
 			
+			assertive("vs_index_of_s", vs_index_of_s(&s, "YC") == 5 );
+			assertive("vs_index_of_s_idx 1", vs_index_of_s_idx( &s, "XX", 2) == 2);
+			assertive("vs_index_of_s_idx 2", vs_index_of_s_idx( &s, "XX", 1) == 2);
+			assertive("vs_index_of_s_idx 3", vs_index_of_s_idx( &s, "XX", 3) == -1);
+			assertive("vs_index_of_s_idx 4", vs_index_of_s_idx( &s, "YY", 0) == 0);
 		}
 	}
 	

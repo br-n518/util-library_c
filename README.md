@@ -6,7 +6,7 @@
 - **godot.c**: interfaces the pcg tools to GDNative.
 
 ### util
-- **node.h**: Linear linked list ()
+- **node.h**: Linear linked list.
 - **btree.h**: Binary sort tree.
 - **grammar.h**: Grammar string evolver.
 - **graph.h**: Double-linked graph nodes.

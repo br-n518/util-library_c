@@ -36,6 +36,11 @@ Value was: 'a'
 [ vs_replace_idx 2 ] SUCCESS!
 [ vs_replace_idx 3 ] SUCCESS!
 [ vs_replace_idx 4 ] SUCCESS!
+[ vs_index_of_s ] SUCCESS!
+[ vs_index_of_s_idx 1 ] SUCCESS!
+[ vs_index_of_s_idx 2 ] SUCCESS!
+[ vs_index_of_s_idx 3 ] SUCCESS!
+[ vs_index_of_s_idx 4 ] SUCCESS!
 |vec_str| SUCCESS!
 [ xml_doc_open ] SUCCESS!
 |xml_doc| SUCCESS!

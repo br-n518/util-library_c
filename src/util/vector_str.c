@@ -270,33 +270,39 @@ int vs_index_of_s_idx( vector_str *s, const char *c, const int index )
 	{
 		vs_node *curr = s->head, *temp = 0;
 		int i = 0, ci = 0, clen = strlen(c);
-		
-		while ( i < index )
+		// get node at index
+		while ( i < index && curr )
 		{
 			curr = curr->next;
-			if ( !curr )
-				return -1;
 			i++;
 		}
+		// loop nodes
 		while ( curr )
 		{
+			// if string match
 			if ( curr->data == c[ci] )
 			{
 				ci++;
 			}
+			// if char matched, get next node
 			if ( ci > 0 ) temp = curr->next;
 			while ( temp ) {
+				// continue checking by char
 				if ( temp->data == c[ci] )
 				{
+					// get next node, increment
 					temp = temp->next;
 					ci++;
+					// check if matched until end of string
 					if ( ci == clen )
 						return i;
 				} else {
+					// string didn't match, reset ci and temp
 					ci = 0;
 					temp = 0;
 				}
 			}
+			// get next node to search from
 			i++;
 			curr = curr->next;
 		}
