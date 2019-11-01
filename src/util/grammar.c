@@ -29,14 +29,16 @@ rule_t* create_grammar_rule( const char *from, const char *to )
 	assert( to );
 	
 	rule_t *ret = _MALLOC( sizeof(*ret) );
-	strcpy( ret->from, from );
-	strcpy( ret->to, to );
+	strncpy( ret->from, from, GRAMMAR_STRING_BUFFER_SIZE );
+	strncpy( ret->to, to, GRAMMAR_STRING_BUFFER_SIZE );
 	return ret;
 }
 
 void push_grammar_rule( node_t **list, const char *from, const char *to )
 {
 	assert( list );
+	assert( from );
+	assert( to );
 	
 	node_push_back( list, create_grammar_rule( from, to ) );
 }

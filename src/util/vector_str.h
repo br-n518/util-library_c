@@ -60,6 +60,7 @@ int vs_index_of_s_idx( vector_str *s, const char *c, const int index );
 int vs_length( vector_str *s );
 
 char* vs_cstr( vector_str *s );
+void vs_gets( vector_str *s, char *dest, const int max_chars );
 
 void vs_replace( vector_str *s, const char *from, const char *to );
 void vs_replace_idx( vector_str *s, const char *from, const char *to, const int index );

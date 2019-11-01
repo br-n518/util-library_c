@@ -1,4 +1,5 @@
 |btree| SUCCESS!
+[ push_grammar_rule ] SUCCESS!
 [ iter 1 ] FAILED (T_T)
 Value was: 'a'
 [ iter 2 ] FAILED (T_T)
@@ -25,6 +26,16 @@ Value was: 'a'
 [ sb_cstr ] SUCCESS!
 [ sb_strip_trailing ] SUCCESS!
 |strbuff| SUCCESS!
+[ vs_length, char_at, index_of_* ] SUCCESS!
+[ vs_insert ] SUCCESS!
+[ vs_replace mid ] SUCCESS!
+[ vs_replace empty ] SUCCESS!
+[ vs_replace full ] SUCCESS!
+[ vs_replace end ] SUCCESS!
+[ vs_replace_idx 1 ] SUCCESS!
+[ vs_replace_idx 2 ] SUCCESS!
+[ vs_replace_idx 3 ] SUCCESS!
+[ vs_replace_idx 4 ] SUCCESS!
 |vec_str| SUCCESS!
 [ xml_doc_open ] SUCCESS!
 |xml_doc| SUCCESS!

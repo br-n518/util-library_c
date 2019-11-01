@@ -8,6 +8,11 @@ int test_grammar()
 	push_grammar_rule( &rules, "b", "ab" );
 	push_grammar_rule( &rules, "ba", "c");
 	
+	if ( ! assertive("push_grammar_rule", rules && rules->data && ((rule_t*) rules->data) ))
+	{
+		ret = 0;
+	}
+	
 	char *s = create_grammar_str( "a", rules, 1 );
 	if ( ! assertive( "iter 1", strcmp( s, "ab") == 0 ) )
 	{

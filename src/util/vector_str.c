@@ -23,31 +23,43 @@
 #include "vector_str.h"
 
 
-void vs_init( vector_str *s) {
+void vs_init( vector_str *s)
+{
+	assert( s );
+	
 	s->head = 0;
 }
 
-vs_node* vs_node_create( const char c ) {
+vs_node* vs_node_create( const char c )
+{
 	vs_node *ret = _MALLOC( sizeof( *ret ) );
 	ret->data = c;
 	ret->next = 0;
 	return ret;
 }
 
-void vs_node_free( vs_node *n ) {
-	if ( n ) {
-		if ( n->next ) {
+void vs_node_free( vs_node *n )
+{
+	if ( n )
+	{
+		if ( n->next )
+		{
 			vs_node_free( n->next );
 		}
 		_FREE( n );
 	}
 }
 
-void vs_destroy( vector_str *s ) {
+void vs_destroy( vector_str *s )
+{
+	assert( s );
+	
 	vs_node_free( s->head );
 }
 
-void vs_set( vector_str *s, const char *src ) {
+void vs_set( vector_str *s, const char *src )
+{
+	assert( s );
 	vs_node_free( s->head );
 	s->head = 0;
 	int len = strlen( src );
@@ -55,58 +67,75 @@ void vs_set( vector_str *s, const char *src ) {
 		s->head = vs_node_create( src[0] );
 		vs_node *curr = s->head;
 		int i = 0;
-		while ( ++i < len ) {
+		while ( ++i < len )
+		{
 			curr->next = vs_node_create( src[i] );
 			curr = curr->next;
 		}
 	}
 }
 
-void vs_append( vector_str *s, const char *src ) {
-	if ( s->head ) {
+void vs_append( vector_str *s, const char *src )
+{
+	assert( s );
+	if ( s->head )
+	{
 		vs_node *curr = s->head;
 		while ( curr->next )
 			curr = curr->next;
 		int len = strlen(src);
-		for ( int i = 0; i < len; i++ ) {
+		for ( int i = 0; i < len; i++ )
+		{
 			curr->next = vs_node_create( src[i] );
 			curr = curr->next;
 		}
-	} else {
+	}
+	else
+	{
 		vs_set( s, src );
 	}
 }
 
-void vs_insert( vector_str *s, const char *src, const int index ) {
+void vs_insert( vector_str *s, const char *src, const int index )
+{
+	assert( s );
 	vs_node *a = s->head;
 	
-	if ( index > 0 ) {
+	if ( index > 0 )
+	{
 		int i = 1;
 	
-		while ( i < index ) {
-			if ( a->next ) {
+		while ( i < index )
+		{
+			if ( a->next )
+			{
 				i++;
 				a = a->next;
 			} else {
 				break;
 			}
 		}
-		if ( i == index ) {
+		if ( i == index )
+		{
 			vs_node *b = a->next;
 			int si = 0;
-			while ( src[si] ) {
+			while ( src[si] )
+			{
 				a->next = vs_node_create( src[si] );
 				a = a->next;
 				si++;
 			}
 			a->next = b;
 		}
-	} else {
+	}
+	else
+	{
 		s->head = vs_node_create( src[0] );
 		vs_node *b = a;
 		a = s->head;
 		int si = 1;
-		while ( src[si] ) {
+		while ( src[si] )
+		{
 			a->next = vs_node_create( src[si] );
 			a = a->next;
 			si++;
@@ -116,14 +145,20 @@ void vs_insert( vector_str *s, const char *src, const int index ) {
 }
 
 
-char vs_char_at( vector_str *s, const int index ) {
+char vs_char_at( vector_str *s, const int index )
+{
+	assert( s );
 	vs_node *curr = s->head;
 	int i = 0;
-	while ( i < index ) {
-		if ( curr->next ) {
+	while ( i < index )
+	{
+		if ( curr->next )
+		{
 			curr = curr->next;
 			i++;
-		} else {
+		}
+		else
+		{
 			// no next, index out of bounds
 			return '\0';
 		}
@@ -132,15 +167,22 @@ char vs_char_at( vector_str *s, const int index ) {
 }
 
 
-int vs_index_of_c( vector_str *s, const char c ) {
-	if ( s->head ) {
+int vs_index_of_c( vector_str *s, const char c )
+{
+	assert( s );
+	if ( s->head )
+	{
 		vs_node *curr = s->head;
 		int i = 0;
-		while ( curr->data != c ) {
-			if ( curr->next ) {
+		while ( curr->data != c )
+		{
+			if ( curr->next )
+			{
 				curr = curr->next;
 				i++;
-			} else {
+			}
+			else
+			{
 				return -1;
 			}
 		}
@@ -149,21 +191,30 @@ int vs_index_of_c( vector_str *s, const char c ) {
 	return -1;
 }
 
-int vs_index_of_s( vector_str *s, const char *c ) {
-	if ( s->head ) {
+int vs_index_of_s( vector_str *s, const char *c )
+{
+	assert( s );
+	if ( s->head )
+	{
 		vs_node *curr = s->head, *temp = 0;
 		int i = 0, ci = 0, clen = strlen(c);
-		while ( curr ) {
-			if ( curr->data == c[ci] ) {
+		while ( curr )
+		{
+			if ( curr->data == c[ci] )
+			{
 				ci++;
 			}
 			if ( ci > 0 ) temp = curr->next;
-			while ( temp ) {
-				if ( temp->data == c[ci] ) {
+			while ( temp )
+			{
+				if ( temp->data == c[ci] )
+				{
 					temp = temp->next;
 					ci++;
 					if ( ci == clen ) return i;
-				} else {
+				}
+				else
+				{
 					ci = 0;
 					temp = 0;
 				}
@@ -177,23 +228,30 @@ int vs_index_of_s( vector_str *s, const char *c ) {
 
 
 
-int vs_index_of_c_idx( vector_str *s, const char c, const int index ) {
+int vs_index_of_c_idx( vector_str *s, const char c, const int index )
+{
+	assert( s );
 	if ( s->head ) {
 		vs_node *curr = s->head;
 		int i = 0;
 		if ( !curr )
 			return -1;
-		while ( i < index ) {
+		while ( i < index )
+		{
 			curr = curr->next;
 			if ( !curr )
 				return -1;
 			i++;
 		}
-		while ( curr->data != c ) {
-			if ( curr->next ) {
+		while ( curr->data != c )
+		{
+			if ( curr->next )
+			{
 				curr = curr->next;
 				i++;
-			} else {
+			}
+			else
+			{
 				return -1;
 			}
 		}
@@ -203,27 +261,33 @@ int vs_index_of_c_idx( vector_str *s, const char c, const int index ) {
 }
 
 
-int vs_index_of_s_idx( vector_str *s, const char *c, const int index ) {
+int vs_index_of_s_idx( vector_str *s, const char *c, const int index )
+{
 	assert( s );
 	assert( c );
 	
-	if ( s->head ) {
+	if ( s->head )
+	{
 		vs_node *curr = s->head, *temp = 0;
 		int i = 0, ci = 0, clen = strlen(c);
 		
-		while ( i < index ) {
+		while ( i < index )
+		{
 			curr = curr->next;
 			if ( !curr )
 				return -1;
 			i++;
 		}
-		while ( curr ) {
-			if ( curr->data == c[ci] ) {
+		while ( curr )
+		{
+			if ( curr->data == c[ci] )
+			{
 				ci++;
 			}
 			if ( ci > 0 ) temp = curr->next;
 			while ( temp ) {
-				if ( temp->data == c[ci] ) {
+				if ( temp->data == c[ci] )
+				{
 					temp = temp->next;
 					ci++;
 					if ( ci == clen )
@@ -242,7 +306,9 @@ int vs_index_of_s_idx( vector_str *s, const char *c, const int index ) {
 
 
 
-int vs_length( vector_str *s ) {
+int vs_length( vector_str *s )
+{
+	assert( s );
 	vs_node *curr = s->head;
 	int i = 0;
 	while ( curr ) {
@@ -252,11 +318,14 @@ int vs_length( vector_str *s ) {
 	return i;
 }
 
-char* vs_cstr( vector_str *s ) {
+char* vs_cstr( vector_str *s )
+{
+	assert( s );
 	char *ret = _MALLOC( vs_length( s ) + 1 );
 	int i = 0;
 	vs_node *curr = s->head;
-	while ( curr ) {
+	while ( curr )
+	{
 		ret[i] = curr->data;
 		curr = curr->next;
 		i++;
@@ -267,15 +336,42 @@ char* vs_cstr( vector_str *s ) {
 
 
 
-void vs_replace( vector_str *s, const char *from, const char *to ) {
-	int flen = strlen( from );
+void vs_gets( vector_str *s, char *dest, const int max_chars )
+{
+	assert( s );
+	assert( dest );
+	assert( max_chars > 0 );
+	
+	vs_node *curr = s->head;
+	
+	int i = 0;
+	for ( ; i < max_chars && curr; i++ )
+	{
+		dest[i] = curr->data;
+		curr = curr->next;
+	}
+	
+	if ( i < max_chars)
+	{
+		dest[i] = '\0';
+	}
+}
+
+
+void vs_replace( vector_str *s, const char *from, const char *to )
+{
+	assert( s );
+	const int flen = strlen( from );
 	vs_node *curr = s->head, *prev = 0;
 	// search for 'from'
-	while ( curr ) {
-		if ( curr->data == from[0] ) {
+	while ( curr )
+	{
+		if ( curr->data == from[0] )
+		{
 			vs_node *check = curr;
 			int i = 0;
-			while ( ++i < flen ) {
+			while ( ++i < flen )
+			{
 				check = check->next;
 				if ( !( check && check->data == from[i] ) ) {
 					i = -1;
@@ -283,7 +379,8 @@ void vs_replace( vector_str *s, const char *from, const char *to ) {
 				}
 			}
 			// if all 'from' chars matched
-			if ( i == flen ) {
+			if ( i == flen )
+			{
 				// store tail
 				vs_node *tail = check->next;
 				// allow free, without freeing tail.
@@ -291,7 +388,8 @@ void vs_replace( vector_str *s, const char *from, const char *to ) {
 				// done with check pointer
 				check = 0;
 				// if curr is not head node
-				if ( prev ) {
+				if ( prev )
+				{
 					// clear 'from' string
 					vs_node_free( curr );
 					curr = 0;
@@ -299,18 +397,25 @@ void vs_replace( vector_str *s, const char *from, const char *to ) {
 					prev->next = 0;
 					// append replacement text 'to'
 					vs_append( s, to );
-				} else {
+				}
+				else
+				{
 					// curr is head node
 					// just set whole string
 					vs_set( s, to );
 				}
 				// apply tail
-				if ( s->head ) {
+				if ( s->head )
+				{
 					check = s->head;
 					while ( check->next )
+					{
 						check = check->next;
+					}
 					check->next = tail;
-				} else {
+				}
+				else
+				{
 					s->head = tail;
 				}
 				// done processing
@@ -324,43 +429,73 @@ void vs_replace( vector_str *s, const char *from, const char *to ) {
 
 
 
-void vs_replace_idx( vector_str *s, const char *from, const char *to, const int index ) {
+void vs_replace_idx( vector_str *s, const char *from, const char *to, const int index )
+{
+	assert( s );
+	assert( from );
+	assert( to );
+	
 	vs_node *curr = s->head, *prev = 0, *check;
 	
-	if ( !curr )
+	
+	const int flen = strlen( from );
+	
+	// check index, head pointer, and length of from-string
+	if ( index < 0 || !curr || flen <= 0 )
+	{
 		return;
+	}
 	
-	int flen = strlen( from );
+	// TODO search starts at index+1 instead of index
+	// get character at start index
 	int i = 0;
-	
-	while ( i < index ) {
+	while ( i < index && curr )
+	{
+		prev = curr;
 		curr = curr->next;
-		if ( !curr )
-			return;
 		i++;
 	}
+	
+	if ( !curr )
+	{
+		// index out of bounds
+		return;
+	}
+	
 	// search for 'from'
-	while ( curr ) {
-		if ( curr->data == from[0] ) {
+	while ( curr )
+	{
+		// found matching first char
+		if ( curr->data == from[0] )
+		{
 			check = curr;
+			// recycle i var
 			i = 0;
-			while ( ++i < flen ) {
+			// get end of from string
+			while ( ++i < flen )
+			{
 				check = check->next;
-				if ( !( check && check->data == from[i] ) ) {
+				if ( !( check && check->data == from[i] ) )
+				{
 					i = -1;
 					break;
 				}
 			}
 			// if all 'from' chars matched
-			if ( i == flen ) {
-				// store tail
+			if ( i == flen )
+			{
+				// 'curr' holds starting char (of 'from')
+				// 'check' holds tail char (of 'from')
+				
+				// store tail (may be null)
 				vs_node *tail = check->next;
-				// allow free, without freeing tail.
+				// allow free chain without freeing tail.
 				check->next = 0;
 				// done with check pointer
 				check = 0;
-				// if curr is not head node
-				if ( prev ) {
+				// if curr is not head node (then prev is set)
+				if ( prev )
+				{
 					// clear 'from' string
 					vs_node_free( curr );
 					curr = 0;
@@ -368,18 +503,26 @@ void vs_replace_idx( vector_str *s, const char *from, const char *to, const int 
 					prev->next = 0;
 					// append replacement text 'to'
 					vs_append( s, to );
-				} else {
+				}
+				else
+				{
 					// curr is head node
-					// just set whole string
+					// just set 'to' string to be whole vector_str
 					vs_set( s, to );
 				}
 				// apply tail
-				if ( s->head ) {
+				if ( s->head )
+				{
 					check = s->head;
+					// get tail of added 'to' string
 					while ( check->next )
 						check = check->next;
+					// apply tail
 					check->next = tail;
-				} else {
+				}
+				else
+				{
+					// no head ('to' string is empty, whole vector_str matched 'from' string)
 					s->head = tail;
 				}
 				// done processing
@@ -393,7 +536,11 @@ void vs_replace_idx( vector_str *s, const char *from, const char *to, const int 
 
 
 
-int vs_test( vector_str *s, const char *cstr ) {
+int vs_test( vector_str *s, const char *cstr )
+{
+	assert( s );
+	assert( cstr );
+	
 	char *p = vs_cstr( s );
 	int ret = ( strcmp( p, cstr ) == 0 );
 	_FREE( p );
