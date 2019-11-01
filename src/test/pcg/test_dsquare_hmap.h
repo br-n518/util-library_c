@@ -13,7 +13,6 @@ int test_dsquare_hmap()
 	
 	dsquare_hmap( &hmap, 2, 10, 9 );
 	
-	// TODO check results
 	if ( ! assertive("dsquare", hm_elevation_at(&hmap, 2, 2) ) )
 	{
 		ret = 0;

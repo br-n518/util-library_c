@@ -19,6 +19,10 @@ Value was: 'a'
 [ node_remove ] SUCCESS!
 [ node_pop head ] SUCCESS!
 |node| SUCCESS!
+[ sb_len ] SUCCESS!
+[ sb_reset ] SUCCESS!
+[ sb_setc, sb_getc ] SUCCESS!
+[ sb_cstr ] SUCCESS!
 [ sb_strip_trailing ] SUCCESS!
 |strbuff| SUCCESS!
 |vec_str| SUCCESS!
@@ -39,6 +43,7 @@ Value was: 'a'
 [ hm_init ] SUCCESS!
 [ dsquare ] SUCCESS!
 |dsquare_hmap| SUCCESS!
+[ ot_move_forward ] SUCCESS!
 |octree_turtle| SUCCESS!
 |split_tiled_map_drawer| SUCCESS!
 |test_pcg| SUCCESS!
