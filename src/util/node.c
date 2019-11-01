@@ -57,6 +57,8 @@ void node_free_chain_data( node_t *node, void (*data_free_func)(void*) ) {
 		node = next;
 		next = next->next;
 	}
+	if ( node->data )
+		data_free_func( node->data );
 	_FREE(node);
 }
 

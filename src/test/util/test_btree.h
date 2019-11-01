@@ -12,22 +12,21 @@ int test_btree() {
 	int data3 = 30;
 	int data4 = 40;
 	
-	btree *head = bt_alloc();
-	bt_init( head, key1, &data1 );
+	btree head;
+	bt_init( &head, key1, &data1 );
 	
 	//bt_put( head, key1, &data1 );
-	bt_put( head, key2, &data2 );
-	bt_put( head, key3, &data3 );
-	bt_put( head, key4, &data4 );
+	bt_put( &head, key2, &data2 );
+	bt_put( &head, key3, &data3 );
+	bt_put( &head, key4, &data4 );
 	
-	if ( bt_get_node(head, key3)->data == &data3 &&
-				bt_get_node(head, key4)->data == &data4 &&
-				bt_get_data(head, key1) == &data1) {
+	if ( bt_get_node(&head, key3)->data == &data3 &&
+				bt_get_node(&head, key4)->data == &data4 &&
+				bt_get_data(&head, key1) == &data1) {
 		
 		ret = 1;
 	}
-	bt_clear( head );
-	head = 0;
+	bt_clear( &head );
 	
 	return ret;
 }

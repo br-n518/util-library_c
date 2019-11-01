@@ -38,7 +38,6 @@ typedef struct btree {
 extern "C" {
 #endif
 
-btree* bt_alloc( );
 void bt_init(btree*, const int key, void *data);
 
 

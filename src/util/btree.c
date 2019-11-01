@@ -22,14 +22,10 @@
  */
 #include "btree.h"
 
-btree* bt_alloc() {
-	return _MALLOC( sizeof(btree) );
-}
-
 void bt_init( btree *tree, const int key, void *data ) {
 	assert( tree );
 	
-	memset( tree, 0, sizeof(btree) );
+	memset( tree, 0, sizeof(*tree) );
 	tree->key = key;
 	tree->data = data;
 }
@@ -44,14 +40,14 @@ void bt_put( btree *tree, const int key, void *data ) {
 			if ( tree->right ) {
 				bt_put( tree->right, key, data );
 			} else {
-				tree->right = bt_alloc();
+				tree->right = _MALLOC( sizeof( *tree ) );
 				bt_init( tree->right, key, data );
 			}
 		} else {
 			if ( tree->left ) {
 				bt_put( tree->left, key, data );
 			} else {
-				tree->left = bt_alloc();
+				tree->left = _MALLOC( sizeof( *tree ) );
 				bt_init( tree->left, key, data );
 			}
 		}
@@ -63,7 +59,7 @@ void* bt_get_data( btree *tree, const int key ) {
 	
 	btree *t = bt_get_node(tree, key);
 	if (t) return (void*) t->data;
-	return NULL;
+	return 0;
 }
 
 btree* bt_get_node( btree *tree, const int key ) {
@@ -81,19 +77,36 @@ btree* bt_get_node( btree *tree, const int key ) {
 		}
 	}
 	
-	return NULL;
+	return 0;
+}
+
+
+
+void bt_clear_node( btree *tree, void (*free_func) (void*) )
+{
+	assert( tree );
+	
+	if ( tree->right ) {
+		bt_clear_node( tree->right, free_func );
+	}
+	if ( tree->left ) {
+		bt_clear_node( tree->left, free_func );
+	}
+	if ( free_func && tree->data )
+		free_func( tree->data );
+	_FREE( tree );
 }
 
 void bt_clear( btree *tree ) {
 	assert( tree );
 	
 	if ( tree->right ) {
-		bt_clear( tree->right );
+		bt_clear_node( tree->right, 0 );
 	}
 	if ( tree->left ) {
-		bt_clear( tree->left );
+		bt_clear_node( tree->left, 0 );
 	}
-	_FREE( tree );
+	//_FREE( tree );
 }
 
 void bt_clear_free( btree *tree, void (*free_func) (void*) ) {
@@ -101,12 +114,13 @@ void bt_clear_free( btree *tree, void (*free_func) (void*) ) {
 	assert( free_func );
 	
 	if ( tree->right ) {
-		bt_clear_free( tree->right, free_func );
+		bt_clear_node( tree->right, free_func );
 	}
 	if ( tree->left ) {
-		bt_clear_free( tree->left, free_func );
+		bt_clear_node( tree->left, free_func );
 	}
-	free_func( tree->data );
-	_FREE( tree );
+	if ( tree->data )
+		free_func( tree->data );
+	//_FREE( tree );
 }
 

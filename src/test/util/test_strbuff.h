@@ -19,7 +19,7 @@ int test_strbuff_strip()
 		if ( strlen(s) != 4 )
 		{
 			printf("len = %d not 4\n", (int) strlen(s) );
-			free(s);
+			_FREE(s);
 			return 0;
 		}
 		
@@ -28,12 +28,12 @@ int test_strbuff_strip()
 		
 		sb_strip_trailing( &sb );
 		
-		free(s);
+		_FREE(s);
 		s = sb_cstr( &sb );
 		
 		if ( assertive( "sb_strip_trailing", strcmp("  rofl  rofl", s ) == 0) )
 		{
-			free(s);
+			_FREE(s);
 			s = 0;
 			
 			sb_clear(&sb);
@@ -47,13 +47,15 @@ int test_strbuff_strip()
 			sb_strip_trailing( &sb );
 			int l2 = sb_len( &sb );
 			
+			sb_clear( &sb );
+			
 			if ( l2 == l - 4 )
 			{
 				return 1;
 			}
 		}
 		
-		if (s) free(s);
+		if (s) _FREE(s);
 		
 	}
 	
@@ -88,10 +90,14 @@ int test_strbuff()
 			
 			sb_setc( &sb, 4, 'c' );
 			
+			sb_clear( &sb );
+			
 			return test_strbuff_strip();
 		}
 		
 	}
+	sb_clear( &sb );
+	
 	return 0;
 }
 

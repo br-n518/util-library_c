@@ -72,7 +72,7 @@ void ini_doc_destroy( struct ini_doc *doc )
 			if (temp_entry->data)
 			{
 				ht_clear_free( (hash_table*) temp_entry->data, _FREE );
-				//free( temp_entry->data ); // called at end of func, ht_clear_free
+				_FREE( temp_entry->data );
 				temp_entry->data = 0;
 			}
 			
@@ -84,7 +84,6 @@ void ini_doc_destroy( struct ini_doc *doc )
 	
 	// clear doc
 	ht_clear_free( &(doc->sections), _FREE );
-	//_FREE( doc );
 }
 
 
@@ -324,7 +323,7 @@ void ini_doc_parse( struct ini_doc *doc, const char *data )
 	const int DATA_LEN = strlen( data );
 	
 	strbuff sb;
-	sb_init( & sb );
+	sb_init( &sb );
 	
 	// data offset index, and parsing state enum
 	int offset_idx = 0;
@@ -490,7 +489,10 @@ void ini_doc_parse( struct ini_doc *doc, const char *data )
 				
 				// set value
 				// allocate c string for data
-				ht_set( section_ptr, key, key_len, sb_cstr( &sb ) );
+				if ( sb_len(&sb) > 0 )
+					ht_set( section_ptr, key, key_len, sb_cstr( &sb ) );
+				else
+					ht_set( section_ptr, key, key_len, 0 );
 				
 				_FREE( key );
 				key = 0;

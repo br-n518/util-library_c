@@ -98,8 +98,13 @@ void sb_clear( strbuff *sb )
 
 void sb_add_part( strbuff *sb )
 {
-	sb->curr->next = _MALLOC( sizeof(struct strbuff_part) );
-	sb->curr->next->next = 0;
+	assert( sb );
+	
+	if ( ! sb->curr->next )
+	{
+		sb->curr->next = _MALLOC( sizeof(struct strbuff_part) );
+		sb->curr->next->next = 0;
+	}
 }
 
 
