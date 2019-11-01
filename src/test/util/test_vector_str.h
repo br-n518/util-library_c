@@ -99,7 +99,7 @@ int test_vector_str() {
 			// search from index 0
 			vs_replace_idx( &s, "B", "Y", 5);
 			
-			if ( ! assertive("vs_replace_idx 4", vs_test( &s, "YYXXCYCB"))) //result YCB ???
+			if ( ! assertive("vs_replace_idx 4", vs_test( &s, "YYXXCYCB")))
 			{
 				char *cs = vs_cstr(&s);
 				puts( cs );

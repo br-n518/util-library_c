@@ -446,7 +446,6 @@ void vs_replace_idx( vector_str *s, const char *from, const char *to, const int 
 		return;
 	}
 	
-	// TODO search starts at index+1 instead of index
 	// get character at start index
 	int i = 0;
 	while ( i < index && curr )
