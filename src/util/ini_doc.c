@@ -114,7 +114,14 @@ void ini_doc_set( struct ini_doc *doc, const char *section, const char *key, con
 	int val_len = strlen(value) + 1;
 	char *duple = _MALLOC(val_len);
 	strncpy( duple, value, val_len );
-	ht_set( sect, key, strlen(key), duple );
+	
+	int key_len = strlen(key);
+	char *prev_val = ht_get(sect, key, key_len);
+	if ( prev_val )
+	{
+		_FREE( prev_val );
+	}
+	ht_set( sect, key, key_len, duple );
 }
 
 
@@ -125,7 +132,14 @@ void ini_doc_set_global( struct ini_doc *doc, const char *key, const char *value
 	int val_len = strlen(value) + 1;
 	char *duple = _MALLOC( val_len );
 	strncpy( duple, value, val_len );
-	ht_set( &(doc->globals), key, strlen(key), duple );
+	
+	int key_len = strlen(key);
+	char *prev_val = ht_get(&(doc->globals), key, key_len);
+	if ( prev_val )
+	{
+		_FREE( prev_val );
+	}
+	ht_set( &(doc->globals), key, key_len, duple );
 }
 
 
@@ -307,7 +321,7 @@ enum doc_parse_state
 };
 
 // ignore leading keyval pairs. Require a section header.
-// Poind sign of course is comment (ignore leading space, handle comments at end of line, but no preserve for any comments)
+// Pound sign of course is comment (ignore leading space, handle comments at end of line, but no preserve for any comments)
 /**
  * @brief 
  * @param doc 
@@ -417,7 +431,7 @@ void ini_doc_parse( struct ini_doc *doc, const char *data )
 								}
 								// free name array
 								_FREE( temp_c );
-								temp_c = 0;
+								//temp_c = 0;
 								state = 0;
 								// break FOR loop
 								goto CLABEL_line_finish;
@@ -487,12 +501,18 @@ void ini_doc_parse( struct ini_doc *doc, const char *data )
 			{
 				sb_strip_trailing( &sb );
 				
+				char *prev_val = ht_get( section_ptr, key, key_len );
+				if ( prev_val ) _FREE( prev_val );
 				// set value
 				// allocate c string for data
 				if ( sb_len(&sb) > 0 )
+				{
 					ht_set( section_ptr, key, key_len, sb_cstr( &sb ) );
+				}
 				else
+				{
 					ht_set( section_ptr, key, key_len, 0 );
+				}
 				
 				_FREE( key );
 				key = 0;
@@ -514,6 +534,10 @@ void ini_doc_parse( struct ini_doc *doc, const char *data )
 			state = 0;
 			
 			_FREE( curr_line );
+		}
+		else
+		{
+			sb_reset( &sb );
 		}
 	} //end while
 	// clean up memory

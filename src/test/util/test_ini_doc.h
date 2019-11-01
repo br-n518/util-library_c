@@ -1,7 +1,6 @@
 
 int test_ini_doc()
 {
-	
 	struct ini_doc *ddoc = _MALLOC( sizeof(*ddoc) );
 	ini_doc_init( ddoc );
 	
@@ -15,15 +14,15 @@ int test_ini_doc()
 		
 		ini_doc_save( ddoc, "test/result__test.ini" );
 		
-		ret = 0;
-		if ( strcmp( ini_doc_get(ddoc,"asdf","elephant"), "donphan" ) == 0 )
+		//ret = 0;
+		if ( ! assertive("ini_doc_get", strcmp( ini_doc_get(ddoc,"asdf","elephant"), "donphan" ) == 0 ) )
 		{
-			if ( strcmp( ini_doc_get_global(ddoc,"monkey"), "Mankey" ) == 0 )
-			{
-				ret = 1;
-			}
+			ret = 0;
 		}
-		
+		if ( ! assertive("ini_doc_get_global", strcmp( ini_doc_get_global(ddoc,"monkey"), "Mankey" ) == 0 ) )
+		{
+			ret = 0;
+		}
 		
 	}
 	

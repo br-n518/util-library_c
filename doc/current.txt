@@ -8,6 +8,8 @@ Value was: 'a'
 |grammar| FAILED (T_T)
 |graph| SUCCESS!
 |hash| SUCCESS!
+[ ini_doc_get ] SUCCESS!
+[ ini_doc_get_global ] SUCCESS!
 |ini_doc| SUCCESS!
 |node| SUCCESS!
 [ sb_strip_trailing ] SUCCESS!
