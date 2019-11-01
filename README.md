@@ -1,40 +1,44 @@
 
 # util_lib
 
-## src
-- **alloc.h** allows toggling malloc and godot_alloc.
-- **godot.c** interfaces the pcg tools to GDNative.
+### src
+- **alloc.h**: allows toggling malloc and godot_alloc.
+- **godot.c**: interfaces the pcg tools to GDNative.
 
 ### util
-- Linear linked list (**node.h**)
-- Binary sort tree (**btree.h**)
-- Grammar string evolver (**grammar.h**)
-- Double-linked graph nodes (**graph.h**)
-- Hash table for storing data by string key (**hash.h**)
-- Continuous string buffer (**strbuff.h**)
-- Vector string for mutability (**vector_str.h**)
+- **node.h**: Linear linked list ()
+- **btree.h**: Binary sort tree.
+- **grammar.h**: Grammar string evolver.
+- **graph.h**: Double-linked graph nodes.
+- **hash.h**: Hash table for storing data by string key.
+- **strbuff.h**: Continuous string buffer.
+- **vector_str.h**: Vector string for mutability.
 
-- INI file reader/writer (**ini_doc.h**)
-- XML file reader/writer (**xml_doc.h**)
+
+- **ini_doc.h**: INI file reader/writer.
+- **xml_doc.h**: XML file reader/writer.
 	- Comments are stripped and ignored.
 	- Text elements inside nodes are concatenated after  
 	stripping leading & trailing whitespace (per block of text).
 
 ### terrain
-- Tiled map (for 2D or flat-ground 3D) (**tiled_map.h**)
-- Heightmap (for 3D terrain) (**heightmap.h**)
-- Octree (start with a large cube, then divide to 8 cubes.  
-	Repeat the process, creating the octal tree) (**octree.h**)
+- **tiled_map.h**: Tiled map (for 2D or flat-ground 3D).
+- **heightmap.h**: Heightmap (for 3D terrain).
+- **octree.h**: Start with a large cube, then divide to 8 cubes.  
+	Repeat the process, creating the octal tree (until size==1).
 
 ### pcg
-- Diamond square over heightmap. (**dsquare_hmap.h**)
-- Octree "turtle" drawer. (**octree_turtle.h**)
-- Tiled map binary split algorithm. (**split_tiled_map_drawer.h**)
+- **dsquare_hmap.h**: Diamond square over heightmap.
+- **octree_turtle.h**: Octree "turtle" drawer.
+- **split_tiled_map_drawer.h**: Tiled map binary split algorithm.
 
 ### rand
-- C++ &lt;random&gt; library wrapper for C (**rand.h**)
+- **rand.h**: C++ &lt;random&gt; library wrapper for C.
 
 ### gdnative
 - Macros and headers to simplify godot_headers usage.
+	- **godot_macros.h**: Macros to reduce code when using GDNative API.
+	- **godot_sub_native.h**: Include by modules needing GDNative API struct.
+	- **godot_native.h**: Define GDNative API struct and init functions.
 
 
