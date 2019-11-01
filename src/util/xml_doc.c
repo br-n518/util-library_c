@@ -301,6 +301,7 @@ void xml_doc_free( struct xml_doc *doc )
 	}
 	doc->root_node->child_nodes = 0;
 	xml_node_free( doc->root_node, 0 );
+	_FREE( doc );
 }
 
 
