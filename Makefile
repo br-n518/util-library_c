@@ -30,7 +30,7 @@ GDFLAGS=$(CFLAGS) -I"godot_headers" -D"GODOT"
 # GODOT PROJECT
 DEPLOY=godot_project/lib/$(OUTPUT_SHARED)
 
-.PHONY: all clean test shared build_shared godot build_godot deploy
+.PHONY: all clean test test_quiet shared build_shared godot build_godot deploy
 
 
 
@@ -84,6 +84,7 @@ test: $(TEST_SRC)
 	# BUILD TEST
 	$(CC) $(CFLAGS) -o bin/test$(EXEC_EXT) $(TEST_SRC) $(TEST_LDFLAGS)
 
-
+test_quiet: $(TEST_SRC)
+	$(CC) $(CFLAGS) -D"NDEBUG" -o bin/test$(EXEC_EXT) $(TEST_SRC) $(TEST_LDFLAGS)
 
 

@@ -55,15 +55,8 @@ int _test_feature ( const char *id, int (*func)(void) )
 {
 	int res = func();
 
-#	ifndef NDEBUG
-		fflush( stdout );
-#	endif
-
 	printf("|%s| %s\n", id, res ? "SUCCESS!" : "FAILED (T_T)" );
-
-#	ifndef NDEBUG
-		fflush( stdout );
-#	endif
+	fflush( stdout );
 	
 	return res;
 }
