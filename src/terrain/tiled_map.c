@@ -22,7 +22,7 @@
  */
 #include "tiled_map.h"
 
-struct rect create_rect(int x, int y, int w, int h) {
+struct rect create_rect(const int x, const int y, const int w, const int h) {
 	struct rect r;
 	r.x = x;
 	r.y = y;
@@ -31,7 +31,11 @@ struct rect create_rect(int x, int y, int w, int h) {
 	return r;
 }
 
-void map_draw_rect(tiled_map *map, struct rect *r, char value, char mask) {
+void map_draw_rect(tiled_map *map, struct rect *r, const char value, const char mask)
+{
+	assert( map );
+	assert( r );
+	
 	int xx, yy, i = (map->width * map->height) - 1;
 	for (yy = r->y + r->h-1; yy >= r->y; yy--) {
 		for (xx = r->x + r->w-1; xx >= r->x; xx--) {
@@ -42,7 +46,11 @@ void map_draw_rect(tiled_map *map, struct rect *r, char value, char mask) {
 	}
 }
 
-tiled_map* init_tiled_map(int width, int height) {
+tiled_map* create_tiled_map(const int width, const int height)
+{
+	assert( width > 0 );
+	assert( height > 0 );
+	
 	tiled_map *map = _MALLOC(sizeof(tiled_map));
 	map->tiles = _MALLOC(width * height);
 	for (int i = (width * height) - 1; i >= 0; i--) {
@@ -54,21 +62,30 @@ tiled_map* init_tiled_map(int width, int height) {
 }
 
 
-void free_tiled_map(tiled_map *map) {
+void free_tiled_map(tiled_map *map)
+{
+	assert( map );
+	
 	_FREE(map->tiles);
 	_FREE(map);
 }
 
 
 
-void set_tile(tiled_map *map, int x, int y, char value) {
+void set_tile(tiled_map *map, const int x, const int y, const char value)
+{
+	assert( map );
+	
 	if (x >= 0 && x < map->width && y >= 0 && y < map->height) {
 		map->tiles[(map->width * y) + x] = value;
 	}
 }
 
 
-char get_tile(tiled_map *map, int x, int y) {
+char get_tile(tiled_map *map, const int x, const int y)
+{
+	assert( map );
+	
 	if (x >= 0 && x < map->width && y >= 0 && y < map->height) {
 		return map->tiles[(map->width * y) + x];
 	}

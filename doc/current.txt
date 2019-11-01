@@ -11,6 +11,13 @@ Value was: 'a'
 [ ini_doc_get ] SUCCESS!
 [ ini_doc_get_global ] SUCCESS!
 |ini_doc| SUCCESS!
+[ node_copy_chain ] SUCCESS!
+[ node_count ] SUCCESS!
+[ node_insert_after ] SUCCESS!
+[ node_has ] SUCCESS!
+[ node_pop ] SUCCESS!
+[ node_remove ] SUCCESS!
+[ node_pop head ] SUCCESS!
 |node| SUCCESS!
 [ sb_strip_trailing ] SUCCESS!
 |strbuff| SUCCESS!
@@ -29,8 +36,10 @@ Value was: 'a'
 |octree| SUCCESS!
 |test_terrain| SUCCESS!
 
-|dsquare_hmap| FAILED (T_T)
+[ hm_init ] SUCCESS!
+[ dsquare ] SUCCESS!
+|dsquare_hmap| SUCCESS!
 |octree_turtle| SUCCESS!
-|split_tiled_map_drawer| FAILED (T_T)
-|test_pcg| FAILED (T_T)
+|split_tiled_map_drawer| SUCCESS!
+|test_pcg| SUCCESS!
 

@@ -1,8 +1,8 @@
-==17644== Memcheck, a memory error detector
-==17644== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
-==17644== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
-==17644== Command: ./test.out
-==17644== 
+==4731== Memcheck, a memory error detector
+==4731== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==4731== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==4731== Command: ./test.out
+==4731== 
 |btree| SUCCESS!
 [ iter 1 ] FAILED (T_T)
 Value was: 'a'
@@ -16,6 +16,13 @@ Value was: 'a'
 [ ini_doc_get ] SUCCESS!
 [ ini_doc_get_global ] SUCCESS!
 |ini_doc| SUCCESS!
+[ node_copy_chain ] SUCCESS!
+[ node_count ] SUCCESS!
+[ node_insert_after ] SUCCESS!
+[ node_has ] SUCCESS!
+[ node_pop ] SUCCESS!
+[ node_remove ] SUCCESS!
+[ node_pop head ] SUCCESS!
 |node| SUCCESS!
 [ sb_strip_trailing ] SUCCESS!
 |strbuff| SUCCESS!
@@ -34,17 +41,19 @@ Value was: 'a'
 |octree| SUCCESS!
 |test_terrain| SUCCESS!
 
-|dsquare_hmap| FAILED (T_T)
+[ hm_init ] SUCCESS!
+[ dsquare ] SUCCESS!
+|dsquare_hmap| SUCCESS!
 |octree_turtle| SUCCESS!
-|split_tiled_map_drawer| FAILED (T_T)
-|test_pcg| FAILED (T_T)
+|split_tiled_map_drawer| SUCCESS!
+|test_pcg| SUCCESS!
 
-==17644== 
-==17644== HEAP SUMMARY:
-==17644==     in use at exit: 0 bytes in 0 blocks
-==17644==   total heap usage: 46,406 allocs, 46,406 frees, 6,412,033 bytes allocated
-==17644== 
-==17644== All heap blocks were freed -- no leaks are possible
-==17644== 
-==17644== For counts of detected and suppressed errors, rerun with: -v
-==17644== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==4731== 
+==4731== HEAP SUMMARY:
+==4731==     in use at exit: 0 bytes in 0 blocks
+==4731==   total heap usage: 46,694 allocs, 46,694 frees, 6,427,513 bytes allocated
+==4731== 
+==4731== All heap blocks were freed -- no leaks are possible
+==4731== 
+==4731== For counts of detected and suppressed errors, rerun with: -v
+==4731== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

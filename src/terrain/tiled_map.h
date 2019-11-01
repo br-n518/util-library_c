@@ -23,6 +23,8 @@
 #ifndef TILED_MAP_H_
 #define TILED_MAP_H_
 
+#include <assert.h>
+
 #include "../alloc.h"
 
 
@@ -45,18 +47,18 @@ extern "C" {
 
 
 
-struct rect create_rect(int x, int y, int w, int h);
+struct rect create_rect(const int x, const int y, const int w, const int h);
 
 // draw rect, but only overwrite tiles matching "mask" value
-void map_draw_rect(tiled_map *map, struct rect *r, char value, char mask);
+void map_draw_rect(tiled_map *map, struct rect *r, const char value, const char mask);
 
 // initial value for tiles: 0
-tiled_map* init_tiled_map(int width, int height);
+tiled_map* create_tiled_map(const int width, const int height);
 void free_tiled_map(tiled_map *map);
 
 
-void set_tile(tiled_map *map, int x, int y, char value);
-char get_tile(tiled_map *map, int x, int y);
+void set_tile(tiled_map *map, const int x, const int y, const char value);
+char get_tile(tiled_map *map, const int x, const int y);
 
 #ifdef __cplusplus
 }
