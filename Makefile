@@ -82,7 +82,7 @@ TEST_SRC=rand.o src/test/test_main.c $(SRC)
 TEST_LDFLAGS=$(LDFLAGS)
 test: $(TEST_SRC)
 	# BUILD TEST
-	$(CC) $(CFLAGS) -o bin/test$(EXEC_EXT) $(TEST_SRC) $(TEST_LDFLAGS)
+	$(CC) $(CFLAGS) -ggdb -o bin/test$(EXEC_EXT) $(TEST_SRC) $(TEST_LDFLAGS)
 
 test_quiet: $(TEST_SRC)
 	$(CC) $(CFLAGS) -D"NDEBUG" -o bin/test$(EXEC_EXT) $(TEST_SRC) $(TEST_LDFLAGS)

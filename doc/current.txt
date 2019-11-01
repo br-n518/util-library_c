@@ -1,11 +1,11 @@
 |btree| SUCCESS!
 [ push_grammar_rule ] SUCCESS!
 [ iter 1 ] FAILED (T_T)
-Value was: 'a'
+Value was: 'aa'
 [ iter 2 ] FAILED (T_T)
-Value was: 'a'
+Value was: 'aa'
 [ iter 3 ] FAILED (T_T)
-Value was: 'a'
+Value was: 'aa'
 |grammar| FAILED (T_T)
 |graph| SUCCESS!
 |hash| SUCCESS!
@@ -19,6 +19,7 @@ Value was: 'a'
 [ node_pop ] SUCCESS!
 [ node_remove ] SUCCESS!
 [ node_pop head ] SUCCESS!
+[ node_pop head final ] SUCCESS!
 |node| SUCCESS!
 [ sb_len ] SUCCESS!
 [ sb_reset ] SUCCESS!

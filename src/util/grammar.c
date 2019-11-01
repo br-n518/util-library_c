@@ -59,41 +59,44 @@ char* create_grammar_str( const char *init_str, node_t *rules, const int iterati
 	assert( rules );
 	assert( iterations > 0 );
 	
+	// string buffer
 	vector_str vs;
 	vs_init( &vs );
 	vs_set( &vs, init_str );
 	
-	//const int rule_count = node_count( rules );
-	
+	// index, length of 'to' string
 	int idx, to_len;
-	node_t *curr;
+	
+	// node and rule pointers
+	node_t *curr_node;
 	rule_t *curr_rule;
 	
 	// loop for each iteration
 	for ( int i = 0; i < iterations; i++ )
 	{
 		// point to head
-		curr = rules;
+		curr_node = rules;
 		
 		// loop rules
-		while ( curr )
+		while ( curr_node )
 		{
-			// search whole string, per rule
-			idx = 0;
 			// get rule data
-			curr_rule = (rule_t*) curr->data;
+			curr_rule = (rule_t*) curr_node->data;
 			to_len = strlen( curr_rule->to );
+			// get first index
+			idx = vs_index_of_s_idx( &vs, curr_rule->from, 0 );
 			// run the rule, adjusting idx
-			while ( (idx = vs_index_of_s_idx( &vs, curr_rule->from, idx )) >= 0 )
+			while ( idx >= 0 )
 			{
 				// replace string
 				vs_replace_idx( &vs, curr_rule->from, curr_rule->to, idx );
-				
 				// forward index by length of new substring
 				idx += to_len;
+				// get next
+				idx = vs_index_of_s_idx( &vs, curr_rule->from, idx );
 			}
-			
-			curr = curr->next;
+			// next rule
+			curr_node = curr_node->next;
 		}
 	}
 	

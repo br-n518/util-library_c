@@ -9,7 +9,7 @@ int test_grammar()
 	push_grammar_rule( &rules, "ba", "c");
 	
 	// check rules
-	if ( ! assertive("push_grammar_rule", rules && rules->data && ((rule_t*) rules->data) && node_count(rules) == 3 ))
+	if ( ! assertive("push_grammar_rule", rules && rules->data && ((rule_t*) rules->data)->from[0] == 'a' && node_count(rules) == 3 ))
 	{
 		ret = 0;
 	}
