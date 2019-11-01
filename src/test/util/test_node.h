@@ -55,12 +55,17 @@ int test_node()
 	}
 	p = (int*) node_pop( &head, head );
 		
-	if ( ! assertive("node_pop head", !(head->next) && p == &data1 && *p == data1 ) )
+	if ( ! assertive("node_pop head", !(head->next) && p == &data1 ) )
 	{
 		ret = 0;
 	}
 	
-	node_pop(&head, head);
+	p = (int*) node_pop(&head, head);
+	
+	if ( ! assertive("node_pop head final", !head && p == &data4 ) )
+	{
+		ret = 0;
+	}
 	
 	return ret;
 }
