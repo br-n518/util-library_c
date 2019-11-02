@@ -1,16 +1,5 @@
 
 
-
-
-// NOTES:
-// create_grammar_str is iterating the nodes. The find and/or replace isn't connecting.
-// gdb shows what's needed
-
-// need to learn to skip sections in gdb
-// time to learn me a gdb for great good
-
-
-
 int test_grammar()
 {
 	int ret = 1;
