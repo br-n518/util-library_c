@@ -46,8 +46,12 @@ unsigned int ENEMY_COUNTER; //can't initialize...
 // draw a binary tree split map to given tiled_map
 void tmd_split_dungeon(tiled_map *map, unsigned int seed);
 
-unsigned int tmd_get_start_x();
-unsigned int tmd_get_start_y();
+int tmd_get_start_x();
+int tmd_get_start_y();
+
+#ifdef GODOT
+godot_variant tmd_get_start(void *data, godot_array *args); //returns Vector2 (godot_vector2)
+#endif
 
 #ifdef __cplusplus
 }

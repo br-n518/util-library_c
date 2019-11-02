@@ -52,15 +52,15 @@ void tmd_free_node(bsp_node *node) {
 }
 
 
-unsigned int start_x = 0, start_y = 0;
+int start_x = 0, start_y = 0;
 unsigned char start_tile_placed = 0;
 void tmd_do_split(tiled_map *map, bsp_node *node);
 
-unsigned int tmd_get_start_x() {
+int tmd_get_start_x() {
 	return start_x;
 }
 
-unsigned int tmd_get_start_y() {
+int tmd_get_start_y() {
 	return start_y;
 }
 
@@ -174,5 +174,19 @@ void tmd_do_split(tiled_map *map, bsp_node *node) {
 	
 }
 
+
+#ifdef GODOT
+godot_variant tmd_get_start(void *data, godot_array *args)
+{
+	// declare
+	godot_variant ret;
+	godot_vector2 v;
+	// init
+	api->godot_vector2_new( &v, tmd_get_start_x(), tmd_get_start_y() ); 
+	api->godot_variant_new_vector2( &ret, &v );
+	// return
+	return ret;
+}
+#endif
 
 
