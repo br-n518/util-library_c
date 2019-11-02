@@ -1,4 +1,16 @@
 
+
+
+
+// NOTES:
+// create_grammar_str is iterating the nodes. The find and/or replace isn't connecting.
+// gdb shows what's needed
+
+// need to learn to skip sections in gdb
+// time to learn me a gdb for great good
+
+
+
 int test_grammar()
 {
 	int ret = 1;
@@ -15,6 +27,9 @@ int test_grammar()
 	}
 	
 	// run grammar procedure (1 iteration)
+	// "a" : a -> b : "b"
+	// "b" : b -> ab : "ab"
+	// "ab" : ba -> c : "ab"
 	char *s = create_grammar_str( "a", rules, 1 );
 	if ( ! assertive( "iter 1", strcmp( s, "ab") == 0 ) )
 	{
@@ -26,8 +41,11 @@ int test_grammar()
 	_FREE(s);
 	
 	// run grammar procedure (2 iterations)
+	// "ab" : a -> b : "bb"
+	// "bb" : b -> ab : "abab"
+	// "abab" : ba -> c : "acb"
 	s = create_grammar_str( "a", rules, 2 );
-	if ( ! assertive( "iter 2", strcmp( s, "aca") == 0 ) )
+	if ( ! assertive( "iter 2", strcmp( s, "acb") == 0 ) )
 	{
 #ifndef NDEBUG
 		printf("Value was: '%s'\n", s);
@@ -37,6 +55,9 @@ int test_grammar()
 	_FREE(s);
 	
 	// run grammar procedure (3 iterations)
+	// "acb" : a -> b : "bcb"
+	// "bcb" : b -> ab : "abcab"
+	// "abcab" : ba -> c : "abcab"
 	s = create_grammar_str( "a", rules, 3 );
 	if ( ! assertive( "iter 3", strcmp( s, "abcab") == 0 ) )
 	{

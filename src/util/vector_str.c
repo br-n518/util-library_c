@@ -63,7 +63,8 @@ void vs_set( vector_str *s, const char *src )
 	vs_node_free( s->head );
 	s->head = 0;
 	int len = strlen( src );
-	if ( len > 0 ) {
+	if ( len > 0 )
+	{
 		s->head = vs_node_create( src[0] );
 		vs_node *curr = s->head;
 		int i = 0;
@@ -111,7 +112,9 @@ void vs_insert( vector_str *s, const char *src, const int index )
 			{
 				i++;
 				a = a->next;
-			} else {
+			}
+			else
+			{
 				break;
 			}
 		}
@@ -170,6 +173,7 @@ char vs_char_at( vector_str *s, const int index )
 int vs_index_of_c( vector_str *s, const char c )
 {
 	assert( s );
+	
 	if ( s->head )
 	{
 		vs_node *curr = s->head;
@@ -194,31 +198,51 @@ int vs_index_of_c( vector_str *s, const char c )
 int vs_index_of_s( vector_str *s, const char *c )
 {
 	assert( s );
+	assert( c );
+	
 	if ( s->head )
 	{
 		vs_node *curr = s->head, *temp = 0;
-		int i = 0, ci = 0, clen = strlen(c);
+		int i = 0, ci = 0;
+		const int clen = strlen(c);
 		while ( curr )
 		{
 			if ( curr->data == c[ci] )
 			{
 				ci++;
-			}
-			if ( ci > 0 ) temp = curr->next;
-			while ( temp )
-			{
-				if ( temp->data == c[ci] )
+				temp = curr->next;
+				
+				while ( ci < clen && temp )
 				{
-					temp = temp->next;
-					ci++;
-					if ( ci == clen ) return i;
+					if ( temp->data == c[ci] )
+					{
+						ci++;
+						temp = temp->next;
+					}
+					else
+					{
+						ci = 0;
+						break;
+					}
 				}
-				else
-				{
-					ci = 0;
-					temp = 0;
-				}
+				if ( ci == clen )
+					return i;
 			}
+			//~ if ( ci > 0 ) temp = curr->next;
+			//~ while ( temp )
+			//~ {
+				//~ if ( temp->data == c[ci] )
+				//~ {
+					//~ temp = temp->next;
+					//~ ci++;
+					//~ if ( ci == clen ) return i;
+				//~ }
+				//~ else
+				//~ {
+					//~ ci = 0;
+					//~ temp = 0;
+				//~ }
+			//~ }
 			i++;
 			curr = curr->next;
 		}
@@ -234,28 +258,19 @@ int vs_index_of_c_idx( vector_str *s, const char c, const int index )
 	if ( s->head ) {
 		vs_node *curr = s->head;
 		int i = 0;
-		if ( !curr )
-			return -1;
 		while ( i < index )
 		{
-			curr = curr->next;
-			if ( !curr )
+			if ( !(curr = curr->next) )
 				return -1;
 			i++;
 		}
-		while ( curr->data != c )
+		while ( curr && curr->data != c )
 		{
-			if ( curr->next )
-			{
-				curr = curr->next;
-				i++;
-			}
-			else
-			{
-				return -1;
-			}
+			curr = curr->next;
+			i++;
 		}
-		return i;
+		if ( curr && curr->data == c )
+			return i;
 	}
 	return -1;
 }
@@ -269,37 +284,39 @@ int vs_index_of_s_idx( vector_str *s, const char *c, const int index )
 	if ( s->head )
 	{
 		vs_node *curr = s->head, *temp = 0;
-		int i = 0, ci = 0, clen = strlen(c);
+		int i = 0, ci = 0;
+		const int clen = strlen(c);
 		// get node at index
 		while ( i < index && curr )
 		{
 			curr = curr->next;
 			i++;
 		}
-		// loop nodes
+		// loop nodes (if curr is null, then index out of bounds)
 		while ( curr )
 		{
-			// if string match
+			// if chars match
 			if ( curr->data == c[ci] )
 			{
 				ci++;
-			}
-			// if char matched, get next node
-			if ( ci > 0 ) temp = curr->next;
-			while ( temp ) {
-				// continue checking by char
-				if ( temp->data == c[ci] )
+				temp = curr->next;
+				
+				while ( ci < clen && temp )
 				{
-					// get next node, increment
-					temp = temp->next;
-					ci++;
-					// check if matched until end of string
-					if ( ci == clen )
-						return i;
-				} else {
-					// string didn't match, reset ci and temp
-					ci = 0;
-					temp = 0;
+					if ( temp->data == c[ci] )
+					{
+						ci++;
+						temp = temp->next;
+					}
+					else
+					{
+						ci = 0;
+						break;
+					}
+				}
+				if ( ci == clen )
+				{
+					return i;
 				}
 			}
 			// get next node to search from
@@ -317,7 +334,8 @@ int vs_length( vector_str *s )
 	assert( s );
 	vs_node *curr = s->head;
 	int i = 0;
-	while ( curr ) {
+	while ( curr )
+	{
 		i++;
 		curr = curr->next;
 	}
@@ -379,7 +397,8 @@ void vs_replace( vector_str *s, const char *from, const char *to )
 			while ( ++i < flen )
 			{
 				check = check->next;
-				if ( !( check && check->data == from[i] ) ) {
+				if ( !( check && check->data == from[i] ) )
+				{
 					i = -1;
 					break;
 				}

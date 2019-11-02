@@ -1,12 +1,9 @@
 |btree| SUCCESS!
 [ push_grammar_rule ] SUCCESS!
-[ iter 1 ] FAILED (T_T)
-Value was: 'aa'
-[ iter 2 ] FAILED (T_T)
-Value was: 'aa'
-[ iter 3 ] FAILED (T_T)
-Value was: 'aa'
-|grammar| FAILED (T_T)
+[ iter 1 ] SUCCESS!
+[ iter 2 ] SUCCESS!
+[ iter 3 ] SUCCESS!
+|grammar| SUCCESS!
 |graph| SUCCESS!
 |hash| SUCCESS!
 [ ini_doc_get ] SUCCESS!
@@ -45,7 +42,7 @@ Value was: 'aa'
 |vec_str| SUCCESS!
 [ xml_doc_open ] SUCCESS!
 |xml_doc| SUCCESS!
-|test_util| FAILED (T_T)
+|test_util| SUCCESS!
 
 |tiled_map| SUCCESS!
 [ hmap_elev ] SUCCESS!
