@@ -197,7 +197,7 @@ godot_variant dungeon_split_tiled_map(void *data, godot_array *args) {
 			api->godot_array_operator_index_const(args, 2));
 	
 	// create random map
-	tiled_map *m = init_tiled_map(width, height);
+	tiled_map *m = create_tiled_map(width, height);
 	tmd_split_dungeon( m, seed );
 	
 	// variables
