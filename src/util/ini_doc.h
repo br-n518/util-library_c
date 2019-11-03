@@ -38,8 +38,13 @@
 // void* data is to be a char* null terminated
 // API needs a function to free all the memory.
 
+/**
+ * @brief INI style document reader/writer struct.
+ * 
+ * 
+ */
 struct ini_doc {
-	hash_table sections, globals;
+	hash_table sections, globals; /**< Table of INI sections. */ /**< INI key-val pairs at head of file, before any section headers. */
 };
 
 

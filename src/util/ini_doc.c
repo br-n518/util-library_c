@@ -23,7 +23,7 @@
 #include "ini_doc.h"
 
 /**
- * @brief Allocate and initialize a new document.
+ * @brief Allocate and initialize a new INI document.
  * @returns Allocated pointer.
  * 
  * 
@@ -35,7 +35,7 @@ void ini_doc_init( struct ini_doc *doc )
 }
 
 /**
- * @brief Deallocate a ini_doc document.
+ * @brief Deallocate an ini_doc document.
  * @param doc The document to destroy.
  * 
  * 
@@ -91,11 +91,11 @@ void ini_doc_destroy( struct ini_doc *doc )
 
 
 /**
- * @brief 
- * @param doc 
- * @param section 
- * @param key 
- * @param value 
+ * @brief Set the value for a key under a given section name.
+ * @param doc ini_doc to modify.
+ * @param section Section to store value in.
+ * @param key Key name of key-val pair.
+ * @param value Value string of key-val pair.
  * 
  * 
  */

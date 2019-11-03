@@ -35,10 +35,7 @@
 
 #ifndef STRBUFF_PARTITION_SIZE
 /**
- * @brief Size of strbuff memory blocks.
- * Can be defined at compile time before including strbuff.h .
- * 
- * 
+ * @brief Size of strbuff memory blocks. Can be defined at compile time before including strbuff.h
  */
 #	define STRBUFF_PARTITION_SIZE 32
 #endif
@@ -59,7 +56,7 @@ struct strbuff_part {
 typedef struct strbuff {
 	struct strbuff_part head; /**< Head of string chain. */
 	struct strbuff_part *curr; /**< Current tail of chain. */
-	int put_pos; /**< Position in @p curr to place next character. @see sb_putc() */
+	int put_pos; /**< Position in @p curr to place next character. @see sb_putc */
 } strbuff;
 
 

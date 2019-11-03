@@ -34,8 +34,13 @@ typedef struct vs_node {
 } vs_node;
 
 
+/**
+ * @brief Store a string as single-character linked-list nodes. For mutability.
+ * 
+ * 
+ */
 typedef struct vector_str {
-	vs_node *head;
+	vs_node *head; /**< Head pointer for character linked list. */
 } vector_str;
 
 #ifdef __cplusplus

@@ -24,6 +24,13 @@
 
 
 
+/**
+ * @brief 
+ * @param data 
+ * @returns 
+ * 
+ * 
+ */
 node_t * node_create( void *data ) {
 	node_t *ret = _MALLOC(sizeof(*ret));
 	ret->next = 0;
@@ -33,6 +40,12 @@ node_t * node_create( void *data ) {
 
 
 
+/**
+ * @brief 
+ * @param node 
+ * 
+ * 
+ */
 void node_free_chain( node_t *node ) {
 	assert( node );
 	
@@ -45,6 +58,13 @@ void node_free_chain( node_t *node ) {
 	_FREE(node);
 }
 
+/**
+ * @brief 
+ * @param node 
+ * @param data_free_func 
+ * 
+ * 
+ */
 void node_free_chain_data( node_t *node, void (*data_free_func)(void*) ) {
 	assert( node );
 	assert( data_free_func );
@@ -62,6 +82,13 @@ void node_free_chain_data( node_t *node, void (*data_free_func)(void*) ) {
 	_FREE(node);
 }
 
+/**
+ * @brief 
+ * @param head 
+ * @returns 
+ * 
+ * 
+ */
 node_t* node_copy_chain( node_t *head ) {
 	assert( head );
 	
@@ -76,30 +103,53 @@ node_t* node_copy_chain( node_t *head ) {
 	return ret;
 }
 
-void* node_pop( node_t **head, node_t *node ) {
+/**
+ * @brief Find and pop the given node @p node from chain.
+ * @param head Node chain head pointer.
+ * @param node Node to remove. Can be head node.
+ * @returns Returns the popped data, or zero for node not found in chain.
+ * 
+ * 
+ */
+void* node_pop( node_t **head, node_t *node )
+{
 	assert( head );
 	assert( (*head) );
 	assert( node );
 	
-	node_t *curr;
-	void *ret = node->data;
-	//node->data = 0;
-	if ( (*head) == node ) {
+	void *ret = 0;
+	
+	// if popping head node
+	if ( (*head) == node )
+	{
 		(*head) = (*head)->next;
-	} else {
-		curr = (*head);
-		while ( curr->next && curr->next != node ) {
+	}
+	// find node
+	else
+	{
+		node_t *curr = (*head);
+		while ( curr->next && curr->next != node )
+		{
 			curr = curr->next;
 		}
-		if ( curr->next == node ) {
+		if ( curr->next == node )
+		{
+			ret = node->data;
 			curr->next = node->next;
+			_FREE(node);
 		}
 	}
 	
-	_FREE(node);
 	return ret;
 }
 
+/**
+ * @brief Insert single node (or node chain) after the given node @p base.
+ * @param base Base node for insertion.
+ * @param node Node to insert after @p base. May be a single node or chain of nodes.
+ * 
+ * 
+ */
 void node_insert_after( node_t *base, node_t *node ) {
 	assert( base );
 	assert( node );
@@ -115,6 +165,13 @@ void node_insert_after( node_t *base, node_t *node ) {
 	base->next = node;
 }
 
+/**
+ * @brief Push data to the end (tail) of a node chain.
+ * @param head Node chain head pointer.
+ * @param data Data pointer.
+ * 
+ * 
+ */
 void node_push_back( node_t **head, void *data ) {
 	assert( head );
 	assert( data );
@@ -128,6 +185,13 @@ void node_push_back( node_t **head, void *data ) {
 	}
 }
 
+/**
+ * @brief Push data to the beginning (head) of a node chain.
+ * @param head Node chain head pointer.
+ * @param data Data pointer.
+ * 
+ * 
+ */
 void node_push_front( node_t **head, void *data ) {
 	assert( head );
 	assert( data );
@@ -141,6 +205,14 @@ void node_push_front( node_t **head, void *data ) {
 	}
 }
 
+/**
+ * @brief Check if a node chain has a data pointer.
+ * @param node Node chain head to search.
+ * @param data Data pointer value to search for.
+ * @returns Returns non-zero for data found. Otherwise return zero.
+ * 
+ * 
+ */
 int node_has( node_t *node, const void *data ) {
 	while ( node ) {
 		if ( node->data == data ) return 1;
@@ -149,6 +221,13 @@ int node_has( node_t *node, const void *data ) {
 	return 0;
 }
 
+/**
+ * @brief Remove a node by data pointer.
+ * @param head Head of node chain to search.
+ * @param data The data pointer to match, then remove node.
+ * 
+ * 
+ */
 void node_remove( node_t **head, const void *data ) {
 	node_t *node = *head, *prev = 0;
 	while ( node ) {
@@ -172,6 +251,13 @@ void node_remove( node_t **head, const void *data ) {
 	}
 }
 
+/**
+ * @brief Count number of nodes in a chain.
+ * @param head Node chain to count.
+ * @returns Returns 0 for empty chain, or 1 for each node in chain.
+ * 
+ * 
+ */
 int node_count( node_t *head ) {
 	if ( head ) {
 		int ret = 1; // 1 for head node

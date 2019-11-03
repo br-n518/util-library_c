@@ -27,9 +27,14 @@
 
 #include "../alloc.h"
 
+/**
+ * @brief Linear linked list node.
+ * 
+ * 
+ */
 typedef struct node_t {
-	void *data;
-	struct node_t *next;
+	void *data; /**< Data pointer for this node. */
+	struct node_t *next; /**< Pointer to next node in chain. */
 } node_t;
 
 
@@ -47,9 +52,6 @@ void node_free_chain_data( node_t *node, void (*data_free_func)(void*) );
 // returns data removed, sets head to NULL if last node popped
 void* node_pop( node_t **head, node_t *node );
 
-/**
- * @brief Insert single node (or node chain) after the given node @p base
- */
 void node_insert_after( node_t *base, node_t *node );
 
 // front is faster

@@ -23,6 +23,12 @@
 #include "vector_str.h"
 
 
+/**
+ * @brief Initialize a vector_str.
+ * @param s The vector_str to initialize.
+ * 
+ * 
+ */
 void vs_init( vector_str *s)
 {
 	assert( s );
@@ -50,13 +56,27 @@ void vs_node_free( vs_node *n )
 	}
 }
 
+/**
+ * @brief Destroy a vector_str object, freeing internal memory.
+ * @param s The vector_str to free.
+ * 
+ * 
+ */
 void vs_destroy( vector_str *s )
 {
 	assert( s );
 	
 	vs_node_free( s->head );
+	s->head = 0;
 }
 
+/**
+ * @brief Set the contents of a vector_str.
+ * @param s The vector_str to modify.
+ * @param src The new string for the vector_str.
+ * 
+ * 
+ */
 void vs_set( vector_str *s, const char *src )
 {
 	assert( s );
@@ -76,6 +96,13 @@ void vs_set( vector_str *s, const char *src )
 	}
 }
 
+/**
+ * @brief Append a string to a vector_str.
+ * @param s The vector_str to modify.
+ * @param src The string to append to end of vector_str @p s.
+ * 
+ * 
+ */
 void vs_append( vector_str *s, const char *src )
 {
 	assert( s );
@@ -97,6 +124,14 @@ void vs_append( vector_str *s, const char *src )
 	}
 }
 
+/**
+ * @brief Insert a string into a vector_str.
+ * @param s The vector_str to modify.
+ * @param src The string to insert.
+ * @param index Index for where to insert string @p src.
+ * 
+ * 
+ */
 void vs_insert( vector_str *s, const char *src, const int index )
 {
 	assert( s );
@@ -148,6 +183,14 @@ void vs_insert( vector_str *s, const char *src, const int index )
 }
 
 
+/**
+ * @brief Get a character at given index.
+ * @param s The vector_str to modify.
+ * @param index Index to check.
+ * @returns Returns null char if index out of bounds.
+ * 
+ * 
+ */
 char vs_char_at( vector_str *s, const int index )
 {
 	assert( s );
@@ -170,6 +213,14 @@ char vs_char_at( vector_str *s, const int index )
 }
 
 
+/**
+ * @brief Get the index of first matching char found.
+ * @param s The vector_str to modify.
+ * @param c The char to search for.
+ * @returns Returns the index of found character, or -1 for no match.
+ * 
+ * 
+ */
 int vs_index_of_c( vector_str *s, const char c )
 {
 	assert( s );
@@ -195,6 +246,14 @@ int vs_index_of_c( vector_str *s, const char c )
 	return -1;
 }
 
+/**
+ * @brief Get the index of first matching string found.
+ * @param s The vector_str to modify.
+ * @param c The character string to search for.
+ * @returns Returns the index found, or -1 for no match.
+ * 
+ * 
+ */
 int vs_index_of_s( vector_str *s, const char *c )
 {
 	assert( s );
@@ -228,21 +287,6 @@ int vs_index_of_s( vector_str *s, const char *c )
 				if ( ci == clen )
 					return i;
 			}
-			//~ if ( ci > 0 ) temp = curr->next;
-			//~ while ( temp )
-			//~ {
-				//~ if ( temp->data == c[ci] )
-				//~ {
-					//~ temp = temp->next;
-					//~ ci++;
-					//~ if ( ci == clen ) return i;
-				//~ }
-				//~ else
-				//~ {
-					//~ ci = 0;
-					//~ temp = 0;
-				//~ }
-			//~ }
 			i++;
 			curr = curr->next;
 		}
@@ -252,6 +296,15 @@ int vs_index_of_s( vector_str *s, const char *c )
 
 
 
+/**
+ * @brief Get the index of first matching char found, beginning search from given index.
+ * @param s The vector_str to modify.
+ * @param c The char to search for.
+ * @param index Index to start search from.
+ * @returns Returns the index found, or -1 for no match.
+ * 
+ * 
+ */
 int vs_index_of_c_idx( vector_str *s, const char c, const int index )
 {
 	assert( s );
@@ -276,6 +329,15 @@ int vs_index_of_c_idx( vector_str *s, const char c, const int index )
 }
 
 
+/**
+ * @brief Get the index of first matching string found, beginning search from given index.
+ * @param s The vector_str to search.
+ * @param c The char string to search for.
+ * @param index Index to start search from.
+ * @returns Returns the index found, or -1 for no match.
+ * 
+ * 
+ */
 int vs_index_of_s_idx( vector_str *s, const char *c, const int index )
 {
 	assert( s );
@@ -329,6 +391,13 @@ int vs_index_of_s_idx( vector_str *s, const char *c, const int index )
 
 
 
+/**
+ * @brief Get the length of a vector_str.
+ * @param s The vector_str to process.
+ * @returns Returns the length of the vector_str.
+ * 
+ * 
+ */
 int vs_length( vector_str *s )
 {
 	assert( s );
@@ -342,6 +411,13 @@ int vs_length( vector_str *s )
 	return i;
 }
 
+/**
+ * @brief Get a vector_str as a C-style character string.
+ * @param s The vector_str to copy.
+ * @returns A null-terminated character string. Use _FREE when done.
+ * @see vs_gets
+ * 
+ */
 char* vs_cstr( vector_str *s )
 {
 	assert( s );
@@ -360,6 +436,15 @@ char* vs_cstr( vector_str *s )
 
 
 
+/**
+ * @brief Copy the contents of a vector_str to a char buffer.
+ * @param s The vector_str to copy data from.
+ * @param dest The char buffer to write to.
+ * @param max_chars Max length of the char buffer @p dest.
+ * @note If @p max_chars not reached, append a null char to buffer.
+ * @see vs_cstr
+ * 
+ */
 void vs_gets( vector_str *s, char *dest, const int max_chars )
 {
 	assert( s );
@@ -382,6 +467,14 @@ void vs_gets( vector_str *s, char *dest, const int max_chars )
 }
 
 
+/**
+ * @brief 
+ * @param s The vector_str to modify.
+ * @param from 
+ * @param to 
+ * 
+ * 
+ */
 void vs_replace( vector_str *s, const char *from, const char *to )
 {
 	assert( s );
@@ -454,6 +547,15 @@ void vs_replace( vector_str *s, const char *from, const char *to )
 
 
 
+/**
+ * @brief Replace part of a vector_str, beginning search from given index.
+ * @param s The vector_str to modify.
+ * @param from String to search for and replace (if found).
+ * @param to Replacement string.
+ * @param index Index to start search from.
+ * 
+ * 
+ */
 void vs_replace_idx( vector_str *s, const char *from, const char *to, const int index )
 {
 	assert( s );
@@ -560,6 +662,14 @@ void vs_replace_idx( vector_str *s, const char *from, const char *to, const int 
 
 
 
+/**
+ * @brief Check if a vector_str matches a char string. Returns non-zero for a match.
+ * @param s The vector_str to test.
+ * @param cstr The char string to test.
+ * @returns Zero for no match, non-zero for matching string.
+ * 
+ * 
+ */
 int vs_test( vector_str *s, const char *cstr )
 {
 	assert( s );

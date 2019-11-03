@@ -27,9 +27,9 @@
 
 /**
  * @brief Reset buffer for re-use. Existing memory will be left allocated for later.
- * @param sb @struct strbuff object to operate on.
+ * @param sb strbuff object to operate on.
  * @note Use sb_clear to free the memory too.
- * @see sb_clear()
+ * @see sb_clear
  */
 void sb_reset( strbuff *sb )
 {
@@ -41,9 +41,10 @@ void sb_reset( strbuff *sb )
 
 /**
  * @brief Initialize strbuff. This will lose any existing daisy chain memory.
- * @param sb @struct strbuff object to operate on.
- * @note To reset a strbuff, use sb_reset(). Only use sb_init() for a new strbuff.
- * @see sb_reset(), sb_clear()
+ * @param sb strbuff object to operate on.
+ * @note To reset a strbuff, use sb_reset. Only use sb_init for a new strbuff.
+ * @see sb_reset
+ * @see sb_clear
  */
 void sb_init( strbuff *sb )
 {
@@ -67,8 +68,9 @@ void sbpart_free( struct strbuff_part *sbp )
 
 /**
  * @brief Clear the strbuff's data and free the pointer itself.
- * @param sb @struct strbuff object to operate on.
- * @see sb_clear(), sb_reset()
+ * @param sb strbuff object to operate on.
+ * @see sb_clear
+ * @see sb_reset
  * 
  */
 void sb_free( strbuff *sb )
@@ -81,8 +83,9 @@ void sb_free( strbuff *sb )
 
 /**
  * @brief Clear the strbuff's memory blocks and reinitialize.
- * @param sb @struct strbuff object to operate on.
- * @see sb_reset(), sb_free()
+ * @param sb strbuff object to operate on.
+ * @see sb_reset
+ * @see sb_free
  * 
  */
 void sb_clear( strbuff *sb )
@@ -126,7 +129,7 @@ void sb_check( strbuff *sb )
 
 /**
  * @brief Get length of @struct strbuff.
- * @param sb @struct strbuff object to operate on.
+ * @param sb strbuff object to operate on.
  * @returns String length.
  * 
  * 
@@ -150,11 +153,11 @@ int sb_len( strbuff *sb )
 
 /**
  * @brief Set a character value by index.
- * @param sb @struct strbuff object to operate on.
- * @param index 
- * @param ch 
- * 
- * 
+ * @param sb strbuff object to operate on.
+ * @param index Target index to find.
+ * @param ch New value for char at given index (if found).
+ * @warning see todo
+ * @todo Need to more clearly define: What happens with index OOB?
  */
 void sb_setc( strbuff *sb, const int index, const char ch )
 {
@@ -195,7 +198,7 @@ void sb_setc( strbuff *sb, const int index, const char ch )
 
 /**
  * @brief Append a character to the end of the @struct strbuff.
- * @param sb @struct strbuff object to operate on.
+ * @param sb strbuff object to operate on.
  * @param ch Character to add.
  * 
  * 
@@ -212,7 +215,7 @@ void sb_putc( strbuff *sb, const char ch )
 
 /**
  * @brief Get a character by index.
- * @param sb @struct strbuff object to operate on.
+ * @param sb strbuff object to operate on.
  * @param index String index.
  * @returns Returns the character at the index, or returns 0 for out of bounds index.
  * 
@@ -243,12 +246,12 @@ char sb_getc( strbuff *sb, const int index )
 
 
 /**
- * @brief 
- * @param sb @struct strbuff object to operate on.
- * @param dest 
- * @param max_chars 
- * @returns 
- * 
+ * @brief Copy the contents of a strbuff to a char buffer.
+ * @param sb strbuff object to copy from.
+ * @param dest Char buffer to write to.
+ * @param max_chars Max length of buffer @p dest.
+ * @returns Returns the length of string written to buffer.
+ * @see sb_cstr
  * 
  */
 int sb_gets( strbuff *sb, char *dest, const int max_chars )
@@ -283,8 +286,8 @@ int sb_gets( strbuff *sb, char *dest, const int max_chars )
 
 
 /**
- * @brief Append a string to the @struct strbuff @p sb .
- * @param sb @struct strbuff object to operate on.
+ * @brief Append a string to the strbuff @p sb .
+ * @param sb strbuff object to operate on.
  * @param src String to copy.
  * @param src_len Length of copy string.
  * 
@@ -302,8 +305,8 @@ void sb_puts( strbuff *sb, const char *src, const int src_len )
 
 /**
  * @brief Concatenate @p cat to end of @p sb.
- * @param sb @struct strbuff object to operate on.
- * @param cat @struct strbuff to append.
+ * @param sb strbuff object to operate on.
+ * @param cat strbuff to append.
  * 
  * 
  */
@@ -329,10 +332,10 @@ void sb_cat( strbuff *sb, strbuff *cat )
 
 
 /**
- * @brief Allocate a string containing the strbuff's current data.
- * @param sb @struct strbuff object to operate on.
- * @returns An allocated character string (null-terminated).
- * 
+ * @brief Get a strbuff as a C-style character string.
+ * @param sb strbuff object to operate on.
+ * @returns A null-terminated character string. Use _FREE when done.
+ * @see sb_gets
  * 
  */
 char* sb_cstr( strbuff *sb )
@@ -356,7 +359,7 @@ char* sb_cstr( strbuff *sb )
 
 /**
  * @brief Strip trailing space from the end of @p sb.
- * @param sb @struct strbuff object to operate on.
+ * @param sb strbuff object to operate on.
  * 
  * 
  */
@@ -405,7 +408,7 @@ void sb_strip_trailing( strbuff *sb )
 
 /**
  * @brief Search a string (@p data) from starting index (@p from_idx) until a newline is found.
- * @param dest_buffer @struct strbuff object to operate on.
+ * @param dest_buffer strbuff object to operate on.
  * @param data Data string to search through.
  * @param data_len Length of data string (@p data)
  * @param from_idx Index to begin search from.
@@ -429,16 +432,20 @@ int sb_get_next_line( strbuff *dest_buffer, const char *data, const int data_len
 			case '\v':
 				break;
 			case '\r':
+				// CARRIAGE RETURN
 				if ( i+1 < data_len )
 				{
+					// CR AND LF (windows)
 					if ( data[i+1] == '\n')
 					{
 						if (i+2 < data_len) return i+2; // windows
 					}
+					// NO LINE FEED
 					else return i+1; // mac
 				}
 				break;
 			case '\n':
+				// LINE FEED
 				return i+1; // linux
 			default:
 				sb_putc( dest_buffer, data[i] );
