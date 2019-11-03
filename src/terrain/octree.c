@@ -23,12 +23,7 @@
 #include "octree.h"
 
 
-/**
- * @brief 
- * @param c 
- * 
- * 
- */
+// hidden function
 void octree_assign_neighbors( octree_cell *c ) {
 	assert( c );
 	assert( c->flags & OCTREE_CELL_SPLIT );
@@ -360,9 +355,9 @@ void octree_assign_neighbors( octree_cell *c ) {
 
 
 /**
- * @brief 
- * @param g 
- * @param size 
+ * @brief Initialize an octree.
+ * @param g octree object to initialize.
+ * @param size Size of octree to create. Must be at least 2. Should be a power of base 2 for best results (e.g. 2, 4, 8, 16, 32, etc.).
  * 
  * 
  */
@@ -386,8 +381,8 @@ void octree_init( octree *g, const int size ) {
 
 
 /**
- * @brief 
- * @param c 
+ * @brief Free an octree_cell and all of its sub cells.
+ * @param c Cell to start from, freeing self and children recursively.
  * 
  * 
  */
@@ -408,9 +403,10 @@ void free_octree_cell( octree_cell *c ) {
 
 
 /**
- * @brief 
- * @param g 
- * 
+ * @brief Destroy an octree (free cells).
+ * @param g octree object to destroy. octree pointer @p g is not freed.
+ * @see octree_init
+ * @see free_octree_cell
  * 
  */
 void octree_destroy( octree *g ) {
@@ -424,10 +420,9 @@ void octree_destroy( octree *g ) {
 
 
 /**
- * @brief 
- * @param c 
- * 
- * 
+ * @brief "Set" an octree_cell, marking it as empty space within octree.
+ * @param c octree_cell object to mark.
+ * @see octree_get
  */
 void octree_cell_set( octree_cell *c ) {
 	if ( c ) {
@@ -444,14 +439,12 @@ void octree_cell_set( octree_cell *c ) {
 
 
 /**
- * @brief 
- * @param g 
- * @param x 
- * @param y 
- * @param z 
- * @returns 
- * 
- * 
+ * @brief Get the nearest cell to given coordinates. No cells are split.
+ * @param g octree to search.
+ * @param x X position of desired cell.
+ * @param y Y position of desired cell.
+ * @param z Z position of desired cell.
+ * @returns Returns an octree_cell if coordinates are within bounds of octree. Otherwise return null.
  */
 octree_cell* octree_get( octree *g, const int x, const int y, const int z ) {
 	assert( g );
@@ -482,10 +475,10 @@ octree_cell* octree_get( octree *g, const int x, const int y, const int z ) {
 
 
 /**
- * @brief 
- * @param c 
- * 
- * 
+ * @brief Split an octree_cell once (if not already split and size at least 2).
+ * @param c The octree_cell to split.
+ * @see octree_cell_split_n
+ * @see octree_cell_split_to
  */
 void octree_cell_split( octree_cell *c ) {
 	assert( c );
@@ -533,10 +526,11 @@ void octree_cell_split( octree_cell *c ) {
 
 
 /**
- * @brief 
- * @param c 
- * @param n 
- * 
+ * @brief Split an octree_cell @p n number of times. Stops splitting if size is less than 2.
+ * @param c octree_cell object to split.
+ * @param n Number of times to split octree_cell @p c.
+ * @see octree_cell_split
+ * @see octree_cell_split_to
  * 
  */
 void octree_cell_split_n( octree_cell *c, const int n ) {
@@ -557,10 +551,11 @@ void octree_cell_split_n( octree_cell *c, const int n ) {
 
 
 /**
- * @brief 
- * @param c 
- * @param target_size 
- * 
+ * @brief Split an octree_cell until split cell size matches @p target_size.
+ * @param c octree_cell object to begin split from.
+ * @param target_size Final size to split cells to.
+ * @see octree_cell_split
+ * @see octree_cell_split_n
  * 
  */
 void octree_cell_split_to( octree_cell *c, const int target_size ) {
@@ -579,14 +574,12 @@ void octree_cell_split_to( octree_cell *c, const int target_size ) {
 
 
 /**
- * @brief 
- * @param g 
- * @param x 
- * @param y 
- * @param z 
- * @returns 
- * 
- * 
+ * @brief Minimally split octree until cell with exact coordinates is found.
+ * @param g The octree object to cut.
+ * @param x X position of desired point.
+ * @param y Y position of desired point.
+ * @param z Z position of desired point.
+ * @returns Returns the octree_cell object that resulted.
  */
 octree_cell* octree_cut_point( octree *g, const int x, const int y, const int z ) {
 	assert( g );
@@ -614,10 +607,10 @@ octree_cell* octree_cut_point( octree *g, const int x, const int y, const int z 
 #ifdef GODOT
 
 /**
- * @brief 
- * @param m 
- * 
- * 
+ * @brief Initialize an octree_mesh for use with "rendering".
+ * @param m octree_mesh object to initialize.
+ * @see octree_mesh_destroy
+ * @see octree_cell_render
  */
 void octree_mesh_init( octree_mesh *m ) {
 	assert( m );
@@ -626,10 +619,10 @@ void octree_mesh_init( octree_mesh *m ) {
 	api->godot_pool_vector2_array_new( &(m->uvs) );
 }
 /**
- * @brief 
- * @param m 
- * 
- * 
+ * @brief Destroy an octree_mesh.
+ * @param m octree_mesh object to destroy.
+ * @see octree_mesh_init
+ * @see octree_cell_render
  */
 void octree_mesh_destroy( octree_mesh *m ) {
 	assert( m );
@@ -641,12 +634,13 @@ void octree_mesh_destroy( octree_mesh *m ) {
 
 
 /**
- * @brief 
- * @param c 
- * @param floors 
- * @param walls 
- * @param ceilings 
- * 
+ * @brief Render octree_cell as points and UVs into separate octree_mesh objects.
+ * @param c octree_cell object to render.
+ * @param floors octree_mesh object for floor faces.
+ * @param walls octree_mesh object for wall faces.
+ * @param ceilings octree_mesh object for ceiling faces.
+ * @see octree_mesh_init
+ * @see octree_mesh_destroy
  * 
  */
 void octree_cell_render( octree_cell *c, octree_mesh *floors, octree_mesh *walls, octree_mesh *ceilings  ) {

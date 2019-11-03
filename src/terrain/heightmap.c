@@ -39,9 +39,9 @@
 
 
 /**
- * @brief 
- * @param map 
- * @param size 
+ * @brief Initialize a heightmap object.
+ * @param map heightmap object to initialize.
+ * @param size Size of heightmap object. Must be at least 2.
  * 
  * 
  */
@@ -65,8 +65,8 @@ void hm_init( heightmap *map, const int size ) {
 }
 
 /**
- * @brief 
- * @param map 
+ * @brief Free contents of heightmap.
+ * @param map heightmap to destroy.
  * 
  * 
  */
@@ -83,12 +83,11 @@ void hm_destroy( heightmap *map ) {
 
 
 /**
- * @brief 
- * @param map 
- * @param x 
- * @param y 
- * @returns 
- * 
+ * @brief Get elevation at given coordinates in heightmap.
+ * @param map heightmap to use.
+ * @param x X coordinate.
+ * @param y Y coordinate.
+ * @returns The elevation found at given coordinates.
  * 
  */
 int hm_get_elevation( heightmap *map, const int x, const int y ) {
@@ -102,11 +101,11 @@ int hm_get_elevation( heightmap *map, const int x, const int y ) {
 }
 
 /**
- * @brief 
- * @param map 
- * @param x 
- * @param y 
- * @returns 
+ * @brief Get applied flags for given coordinates.
+ * @param map heightmap to use.
+ * @param x X coordinate.
+ * @param y Y coordinate.
+ * @returns Returns bit flags for given coordinates.
  * 
  * 
  */
@@ -126,11 +125,11 @@ char hm_get_flags( heightmap *map, const int x, const int y ) {
 
 
 /**
- * @brief 
- * @param map 
- * @param x 
- * @param y 
- * @param elev 
+ * @brief Set elevation at given coordinates.
+ * @param map heightmap to modify.
+ * @param x X coordinate.
+ * @param y Y coordinate.
+ * @param elev New elevation.
  * 
  * 
  */
@@ -150,7 +149,7 @@ void hm_set_elevation( heightmap *map, const int x, const int y, const int elev 
 
 
 /**
- * @brief 
+ * @brief Set bit flags for coordinate.
  * @param map 
  * @param x 
  * @param y 
@@ -169,11 +168,11 @@ void hm_set_flags( heightmap *map, const int x, const int y, const char flags ) 
 }
 
 /**
- * @brief 
- * @param map 
- * @param x 
- * @param y 
- * @param flags 
+ * @brief Add bit flags for coordinate.
+ * @param map heightmap to modify.
+ * @param x X coordinate.
+ * @param y Y coordinate.
+ * @param flags New bit flags to bitwise OR in.
  * 
  * 
  */
@@ -188,11 +187,11 @@ void hm_add_flags( heightmap *map, const int x, const int y, const char flags ) 
 }
 
 /**
- * @brief 
- * @param map 
- * @param x 
- * @param y 
- * @param flags 
+ * @brief Remove selected bit flags from coordinate.
+ * @param map heightmap to modify.
+ * @param x X coordinate.
+ * @param y Y coordinate.
+ * @param flags Bits to be removed from flag.
  * 
  * 
  */
