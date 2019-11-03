@@ -44,8 +44,8 @@ extern "C" {
 void hm_init( heightmap *map, const int size );
 void hm_destroy( heightmap *map );
 
-int hm_elevation_at( heightmap *map, const int x, const int y );
-char hm_flags_at( heightmap *map, const int x, const int y );
+int hm_get_elevation( heightmap *map, const int x, const int y );
+char hm_get_flags( heightmap *map, const int x, const int y );
 
 void hm_set_elevation( heightmap *map, const int x, const int y, const int elev );
 void hm_set_flags( heightmap *map, const int x, const int y, const char flags );

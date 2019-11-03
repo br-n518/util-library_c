@@ -11,41 +11,62 @@ int test_heightmap()
 	hm_set_elevation( &hmap, half_size, half_size, 4 );
 	hm_set_flags( &hmap, half_size, half_size, 0xAE );
 	
-	if ( ! assertive("hmap_elev", hm_elevation_at(&hmap, half_size, half_size) == 4 ) )
+	if ( ! assertive("hmap_elev", hm_get_elevation(&hmap, half_size, half_size) == 4 ) )
 	{
-		printf("elev: %d\n", hm_elevation_at(&hmap, half_size, half_size) );
+		printf("elev: %d\n", hm_get_elevation(&hmap, half_size, half_size) );
 		ret = 0;
 	}
 	
-	if ( ! assertive("hmap_flags", hm_flags_at(&hmap, half_size, half_size) == (char) 0xAE))
+	// typecast (char) to prevent default type (int) causing false negatives.
+	if ( ! assertive("hmap_flags", hm_get_flags(&hmap, half_size, half_size) == (char) 0xAE))
 	{
-		printf("flags: %d\n", hm_flags_at(&hmap, half_size, half_size) );
+		printf("flags: %d\n", hm_get_flags(&hmap, half_size, half_size) );
 		ret = 0;
 	}
 	
-	if ( ! assertive("hmap_flags2", hm_flags_at(&hmap, half_size-1, half_size) != (char) 0xAE))
+	if ( ! assertive("hmap_flags2", hm_get_flags(&hmap, half_size-1, half_size) != (char) 0xAE))
 	{
-		printf("flags: %d\n", hm_flags_at(&hmap, half_size, half_size) );
+		printf("flags: %d\n", hm_get_flags(&hmap, half_size, half_size) );
 		ret = 0;
 	}
 	
 	hm_remove_flags( &hmap, half_size, half_size, 0xA0);
 	
-	if ( ! assertive("hmap_flags3", hm_flags_at(&hmap, half_size, half_size) == (char) 0x0E))
+	if ( ! assertive("hmap_flags3", hm_get_flags(&hmap, half_size, half_size) == (char) 0x0E))
 	{
-		printf("flags: %d\n", hm_flags_at(&hmap, half_size, half_size) );
+		printf("flags: %d\n", hm_get_flags(&hmap, half_size, half_size) );
 		ret = 0;
 	}
 	
 	hm_add_flags( &hmap, half_size, half_size, 0xE1);
 	
-	if ( ! assertive("hmap_flags4", hm_flags_at(&hmap, half_size, half_size) == (char) 0xEF))
+	if ( ! assertive("hmap_flags4", hm_get_flags(&hmap, half_size, half_size) == (char) 0xEF))
 	{
-		printf("flags: %d\n", hm_flags_at(&hmap, half_size, half_size) );
+		printf("flags: %d\n", hm_get_flags(&hmap, half_size, half_size) );
 		ret = 0;
 	}
 	
-	// TODO test boundaries
+	// test boundaries
+	hm_set_elevation( &hmap, 0, 0, 2 );
+	if ( ! assertive( "hm_set_elevation 0,0", hm_get_elevation( &hmap, 0,0) == 2))
+	{
+		ret = 0;
+	}
+	hm_set_elevation( &hmap, 0, hmap_size, 2 );
+	if ( ! assertive( "hm_set_elevation 0,size", hm_get_elevation( &hmap, 0,hmap_size) == 2 ))
+	{
+		ret = 0;
+	}
+	hm_set_elevation( &hmap, hmap_size, 0, 2 );
+	if ( ! assertive( "hm_set_elevation size,0", hm_get_elevation( &hmap, hmap_size,0) == 2 ))
+	{
+		ret = 0;
+	}
+	hm_set_elevation( &hmap, hmap_size, hmap_size, 2 );
+	if ( ! assertive( "hm_set_elevation size,size", hm_get_elevation( &hmap, hmap_size,hmap_size) == 2 ))
+	{
+		ret = 0;
+	}
 	
 	hm_destroy( &hmap );
 	

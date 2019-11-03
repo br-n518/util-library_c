@@ -36,10 +36,10 @@ void dsquare( heightmap *map, const int x, const int y, const int size, const ch
 	
 	// get center
 	int center = (
-			hm_elevation_at( map, x, y ) +
-			hm_elevation_at( map, x+size, y ) +
-			hm_elevation_at( map, x, y+size ) +
-			hm_elevation_at( map, x+size, y+size )
+			hm_get_elevation( map, x, y ) +
+			hm_get_elevation( map, x+size, y ) +
+			hm_get_elevation( map, x, y+size ) +
+			hm_get_elevation( map, x+size, y+size )
 			);
 	
 	center = (center >> 2) + 1 + (int) (R_ranlux_get() % roughness);
@@ -50,40 +50,40 @@ void dsquare( heightmap *map, const int x, const int y, const int size, const ch
 	// SQUARE STEP
 	int a;
 	// NORTH
-	if ( hm_elevation_at( map, x + half_size, y ) == 0 ) {
+	if ( hm_get_elevation( map, x + half_size, y ) == 0 ) {
 		a = (
-				hm_elevation_at( map, x, y ) + //NW
-				hm_elevation_at( map, x + size, y ) + //NE
+				hm_get_elevation( map, x, y ) + //NW
+				hm_get_elevation( map, x + size, y ) + //NE
 				center + center
 				);
 		a = (a >> 2) + (int) (R_ranlux_get() % roughness);
 		hm_set_elevation( map, x + half_size, y, a + 1 );
 	}
 	// EAST
-	if ( hm_elevation_at( map, x + size, y + half_size ) == 0 ) {
+	if ( hm_get_elevation( map, x + size, y + half_size ) == 0 ) {
 		a = (
-				hm_elevation_at( map, x + size, y + size ) + //SE
-				hm_elevation_at( map, x + size, y ) + //NE
+				hm_get_elevation( map, x + size, y + size ) + //SE
+				hm_get_elevation( map, x + size, y ) + //NE
 				center + center
 				);
 		a = (a >> 2) + (int) (R_ranlux_get() % roughness);
 		hm_set_elevation( map, x + size, y + half_size, a + 1 );
 	}
 	// SOUTH
-	if ( hm_elevation_at( map, x + half_size, y + size ) == 0 ) {
+	if ( hm_get_elevation( map, x + half_size, y + size ) == 0 ) {
 		a = (
-				hm_elevation_at( map, x, y + size ) + //SW
-				hm_elevation_at( map,  x + size, y + size ) + //SE
+				hm_get_elevation( map, x, y + size ) + //SW
+				hm_get_elevation( map,  x + size, y + size ) + //SE
 				center + center
 				);
 		a = (a >> 2) + (int) (R_ranlux_get() % roughness);
 		hm_set_elevation( map, x + half_size, y + size, a + 1 );
 	}
 	// WEST
-	if ( hm_elevation_at( map, x, y + half_size ) == 0 ) {
+	if ( hm_get_elevation( map, x, y + half_size ) == 0 ) {
 		a = (
-				hm_elevation_at( map, x, y ) + //NW
-				hm_elevation_at( map, x, y + size ) + //SW
+				hm_get_elevation( map, x, y ) + //NW
+				hm_get_elevation( map, x, y + size ) + //SW
 				center + center
 				);
 		a = (a >> 2) + (int) (R_ranlux_get() % roughness);

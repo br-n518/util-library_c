@@ -60,7 +60,7 @@ void hm_destroy( heightmap *map ) {
 
 
 
-int hm_elevation_at( heightmap *map, const int x, const int y ) {
+int hm_get_elevation( heightmap *map, const int x, const int y ) {
 	assert( map );
 	assert( x >= 0 );
 	assert( y >= 0 );
@@ -70,7 +70,7 @@ int hm_elevation_at( heightmap *map, const int x, const int y ) {
 	return map->elevation[ HM_IDX(x, y, map->hm_size) ];
 }
 
-char hm_flags_at( heightmap *map, const int x, const int y ) {
+char hm_get_flags( heightmap *map, const int x, const int y ) {
 	assert( map );
 	assert( x >= 0 );
 	assert( y >= 0 );

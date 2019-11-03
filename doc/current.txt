@@ -50,6 +50,10 @@
 [ hmap_flags2 ] SUCCESS!
 [ hmap_flags3 ] SUCCESS!
 [ hmap_flags4 ] SUCCESS!
+[ hm_set_elevation 0,0 ] SUCCESS!
+[ hm_set_elevation 0,size ] SUCCESS!
+[ hm_set_elevation size,0 ] SUCCESS!
+[ hm_set_elevation size,size ] SUCCESS!
 |heightmap| SUCCESS!
 |octree| SUCCESS!
 |test_terrain| SUCCESS!

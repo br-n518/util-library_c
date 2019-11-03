@@ -6,14 +6,14 @@ int test_dsquare_hmap()
 	heightmap hmap;
 	hm_init( &hmap, 32 );
 	
-	if ( ! assertive("hm_init", hm_elevation_at(&hmap, 2, 2) == 0 ) )
+	if ( ! assertive("hm_init", hm_get_elevation(&hmap, 2, 2) == 0 ) )
 	{
 		ret = 0;
 	}
 	
 	dsquare_hmap( &hmap, 2, 10, 9 );
 	
-	if ( ! assertive("dsquare", hm_elevation_at(&hmap, 2, 2) ) )
+	if ( ! assertive("dsquare", hm_get_elevation(&hmap, 2, 2) != 0 ) )
 	{
 		ret = 0;
 	}

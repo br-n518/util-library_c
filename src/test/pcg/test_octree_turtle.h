@@ -13,8 +13,6 @@ int test_octree_turtle()
 	
 	ot_move_forward( &turtle, 2 );
 	
-	// TODO check coordinates
-	
 	octree_cell *cell = octree_get(&o, 16, 16, 16);
 	
 	if ( ! assertive("ot_move_forward", ! (cell->flags & OCTREE_CELL_SOLID ||
