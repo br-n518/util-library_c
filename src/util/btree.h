@@ -41,7 +41,7 @@ extern "C" {
 void bt_init(btree*, const int key, void *data);
 
 
-void bt_put(btree *t, const int key, void *data);
+void* bt_put(btree *t, const int key, void *data);
 
 void* bt_get_data(btree *t, const int key);
 btree* bt_get_node(btree *t, const int key);

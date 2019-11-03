@@ -51,6 +51,8 @@ void* bt_put( btree *tree, const int key, void *data )
 {
 	assert( tree );
 	
+	void *ret = 0;
+	
 	if ( tree->key == key )
 	{
 		ret = tree->data;
@@ -61,7 +63,7 @@ void* bt_put( btree *tree, const int key, void *data )
 		if ( tree->right )
 		{
 			// return result of traversal
-			return bt_put( tree->right, key, data );
+			ret = bt_put( tree->right, key, data );
 		}
 		else
 		{
@@ -75,7 +77,7 @@ void* bt_put( btree *tree, const int key, void *data )
 		if ( tree->left )
 		{
 			// return result of traversal
-			return bt_put( tree->left, key, data );
+			ret = bt_put( tree->left, key, data );
 		}
 		else
 		{
@@ -85,7 +87,7 @@ void* bt_put( btree *tree, const int key, void *data )
 		}
 	}
 	
-	return 0;
+	return ret;
 }
 
 /**
