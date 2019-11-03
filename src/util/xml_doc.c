@@ -43,7 +43,7 @@ char xml_check_xml( const char *buff, const int i )
 /** 
  * @brief Check a filename string for valid XML extension at end.
  * @param fname Filename string to check for valid extension.
- * @param len Length of string \p fname.
+ * @param len Length of string @p fname.
  * @returns Returns zero for non-xml filename. Returns 1 otherwise.
  * 
  * 
@@ -64,10 +64,10 @@ char xml_check_filename( const char *fname, const int len )
 
 
 /**
- * @brief Create and initialize a new @struct xml_doc.
- * @returns A new \struct xml_doc as an allocated pointer.
+ * @brief Create and initialize a new xml_doc.
+ * @returns A new xml_doc as an allocated pointer.
  * @warning Returns an allocated pointer.
- * @see xml_doc_free()
+ * @see xml_doc_free
  * 
  * 
  */
@@ -83,11 +83,11 @@ struct xml_doc* xml_doc_create()
 
 
 /**
- * @brief Create and initialize a new @struct xml_node.
+ * @brief Create and initialize a new xml_node.
  * @param name Tagname of created node.
  * @returns A new xml_node as an allocated pointer.
  * @warning Returns an allocated pointer.
- * @see xml_node_free()
+ * @see xml_node_free
  * 
  * 
  */
@@ -105,7 +105,7 @@ struct xml_node* xml_node_create( const char *name )
 
 
 /**
- * @brief Create and initialize a new @struct xml_attribute.
+ * @brief Create and initialize a new xml_attribute.
  * @param name Name of attribute.
  * @param value Text value of attribute.
  * @returns A new xml_attribute as an allocated pointer.
@@ -131,11 +131,10 @@ struct xml_attribute* xml_attribute_create( const char *name, const char *value 
 
 
 /**
- * @brief Create and initialize a new @struct xml_text.
- * @param t @struct xml_text object to modify.
- * @param value New value for \struct xml_text.
+ * @brief Initialize a new xml_text. Also used to set again the xml_text string.
+ * @param t The xml_text object to modify.
+ * @param value New value for xml_text.
  * @see xml_text_free
- * 
  * 
  */
 void xml_text_create( struct xml_text *t, const char *value )
@@ -158,6 +157,13 @@ void xml_text_create( struct xml_text *t, const char *value )
 }
 
 
+/**
+ * @brief Append text to an xml_text object.
+ * @param t The xml_text object to modify.
+ * @param value String to append.
+ * 
+ * 
+ */
 void xml_text_append ( struct xml_text *t, const char *value )
 {
 	assert( t );
@@ -190,10 +196,8 @@ void xml_text_append ( struct xml_text *t, const char *value )
 
 
 /**
- * @brief Free internal data of @struct xml_text.
- * @param t Pointer to @struct xml_text for which the internal character string is deallocated.
- * @warning Pointer argument is NOT deallocated. Only the internal character string for @struct xml_text is deallocated.
- * 
+ * @brief Free internal data of xml_text.
+ * @param t Pointer to xml_text for which the internal character string is freed.
  * 
  */
 void xml_text_free( struct xml_text *t )
@@ -210,8 +214,8 @@ void xml_text_free( struct xml_text *t )
 
 
 /**
- * @brief Free internal data and free pointer.
- * @param attr 
+ * @brief Free internal data and free pointer for xml_attribute object.
+ * @param attr Attribute object to free.
  * 
  * 
  */
@@ -226,7 +230,7 @@ void xml_attribute_free( struct xml_attribute *attr )
 
 
 /**
- * @brief Free internal data and free pointer (free() prototype proxy).
+ * @brief Free internal data and free pointer. Used for function pointers accepting (void*).
  * @param a Void pointer to be cast as (struct xml_attribute*).
  * @note This function matches the prototype for free(), for use as function pointer.
  * 
@@ -241,8 +245,8 @@ void xml_attribute_proxy_free( void *a )
 
 /**
  * @brief Free internal data and free pointer.
- * @param node 
- * @param connect_children 
+ * @param node Node object to destroy.
+ * @param connect_children Whether to connect children to parent (non-zero), or free all children too (zero).
  * 
  * 
  */
@@ -283,8 +287,8 @@ void xml_node_free( struct xml_node *node, const char connect_children )
 
 
 /**
- * @brief Free internal data and free pointer.
- * @param doc
+ * @brief Free internal data and free pointer for xml_doc object.
+ * @param doc xml_doc object to destroy.
  * 
  * 
  */
@@ -306,10 +310,11 @@ void xml_doc_free( struct xml_doc *doc )
 
 
 /**
- * @brief Create a @struct xml_doc object from file.
+ * @brief Create a xml_doc object from file.
  * @param fname Filename of XML file to read.
- * @returns @struct xml_doc allocated object.
- * @see xml_doc_save(), xml_doc_parse()
+ * @returns xml_doc allocated object.
+ * @see xml_doc_save
+ * @see xml_doc_parse
  * 
  * 
  */
@@ -811,11 +816,13 @@ void xml_docparse_tag( struct xml_docparse_state *state, const char *tag, const 
 
 
 /**
- * @brief Parse XML data (as string) into objects.
+ * @brief Parse XML data (from string) into representative xml_doc.
  * @param buffer Character string to read data from.
  * @param buff_len Length of character data.
  * @returns xml_doc allocated object.
- * 
+ * @note XML comments are recognized, but stripped and ignored.
+ * @note XML text data (plain text inside xml_node tags) is concatenated after each block of text is stripped of leading and trailing whitespace.
+ * @note Indentation and all extra whitespace is stripped.
  * 
  */
 struct xml_doc* xml_doc_parse( const char *x_data, const size_t x_data_len, const char strict_formatting_bool )
@@ -1058,9 +1065,11 @@ void xml_write_document( struct xml_doc *doc, FILE *file, const char include_pro
 
 
 /**
- * @brief Save a xml_doc to file. Filename must be set on @struct xml_doc.
- * @param doc 
- * @see xml_doc, xml_doc_open
+ * @brief Save an xml_doc to file.
+ * @param doc xml_doc object to save.
+ * @param fname Name of file to save to. File will be overwritten.
+ * @see xml_doc
+ * @see xml_doc_open
  * 
  * 
  */
@@ -1127,15 +1136,17 @@ void xml_doc_save_sans_prolog( struct xml_doc *doc, const char *fname )
 
 
 /**
- * @brief 
- * @param node 
- * @param name 
- * @param value 
- * 
+ * @brief Set a new or existing attribute on xml_node.
+ * @param node xml_node object to add attribute to.
+ * @param name Name of attribute (a.k.a. "key").
+ * @param value String value of attribute.
+ * @note @p value must not be null.
  * 
  */
 void xml_node_set_attr( struct xml_node *node, const char *name, const char *value ) {
-	assert( node ); assert( name ); assert( value );
+	assert( node );
+	assert( name );
+	assert( value );
 	
 	struct xml_attribute *attr = xml_node_get_attr( node, name );
 	if ( !attr ) {
@@ -1151,9 +1162,9 @@ void xml_node_set_attr( struct xml_node *node, const char *name, const char *val
 
 
 /**
- * @brief 
- * @param node 
- * @param attr 
+ * @brief Apply an existing xml_attribute to an xml_node. The xml_attribute is not copied.
+ * @param node xml_node object to add attribute to.
+ * @param attr The xml_attribute object to add. The xml_attribute pointer is stored, not copied.
  * 
  * 
  */
@@ -1172,11 +1183,11 @@ void xml_node_apply_attr( struct xml_node *node, struct xml_attribute *attr ) {
 
 
 /**
- * @brief 
- * @param node 
- * @param name 
- * @returns 
- * 
+ * @brief Get an xml_attribute from xml_node by name (if exists).
+ * @param node The xml_node to search.
+ * @param name Name of the xml_attribute to find.
+ * @returns If an attribute with matching name is found, return the xml_attribute pointer. Else return null.
+ * @see ht_get
  * 
  */
 struct xml_attribute* xml_node_get_attr( struct xml_node *node, const char *name ) {
@@ -1188,10 +1199,12 @@ struct xml_attribute* xml_node_get_attr( struct xml_node *node, const char *name
 
 
 /**
- * @brief 
- * @param node 
- * @param name 
- * @returns 
+ * @brief Get the value of an xml_attribute from an xml_node.
+ * @param node The xml_node to search.
+ * @param name The xml_attribute name to search for.
+ * @returns If a matching attribute name is found, return the xml_text value.
+ * @warning Don't free the returned xml_text pointer. Use xml_text_free.
+ * @see xml_text_free
  * 
  * 
  */
@@ -1204,15 +1217,21 @@ struct xml_text* xml_node_get_attr_value( struct xml_node *node, const char *nam
 
 
 /**
- * @brief 
- * @param parent 
- * @param child 
- * 
+ * @brief Add a node to another as a child node.
+ * @param parent Parent xml_node to receive child node.
+ * @param child Child xml_node to add.
+ * @see node_push_back
  * 
  */
 void xml_node_add_child( struct xml_node *parent, struct xml_node *child ) {
 	assert( parent );
 	assert( child );
+	
+	// check if node already has a parent
+	if ( child->parent_node )
+	{
+		node_remove( &(child->parent_node->child_nodes), child );
+	}
 	
 	child->parent_node = parent;
 	node_push_back( &(parent->child_nodes), child );
@@ -1221,10 +1240,10 @@ void xml_node_add_child( struct xml_node *parent, struct xml_node *child ) {
 
 
 /**
- * @brief 
- * @param parent 
- * @param child 
- * @param idx 
+ * @brief Add a child node at a given idx. If the idx is out of bounds, add to nearest side.
+ * @param parent Parent node to receive child node.
+ * @param child xml_node to add as child.
+ * @param idx The index to insert at (starting at 0). Negative values start from end of children list.
  * 
  * 
  */
@@ -1233,6 +1252,13 @@ void xml_node_insert_child_at( struct xml_node *parent, struct xml_node *child, 
 	assert( parent );
 	assert( child );
 	// idx < 0 means from right side
+	
+	// check if node already has a parent
+	if ( child->parent_node )
+	{
+		node_remove( &(child->parent_node->child_nodes), child );
+		child->parent_node = 0;
+	}
 	
 	node_t *n;
 	
@@ -1282,6 +1308,13 @@ void xml_node_insert_child_at( struct xml_node *parent, struct xml_node *child, 
 
 
 
+/**
+ * @brief Set text on an xml_node
+ * @param node xml_node to modify.
+ * @param new_text New text value: replaces previous text on xml_node.
+ * @see xml_node_append_text
+ * 
+ */
 void xml_node_set_text( struct xml_node *node, const char *new_text )
 {
 	assert( node );
@@ -1291,6 +1324,13 @@ void xml_node_set_text( struct xml_node *node, const char *new_text )
 }
 
 
+/**
+ * @brief Append text to an xml_node's text body.
+ * @param node xml_node to modify.
+ * @param text Text to concatenate.
+ * @see xml_node_set_text
+ * 
+ */
 void xml_node_append_text( struct xml_node *node, const char *text )
 {
 	assert( node );

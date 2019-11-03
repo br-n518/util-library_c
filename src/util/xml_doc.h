@@ -36,24 +36,20 @@
 
 /**
  * @brief Max length for XML node names, attribute names, encoding string, and XML filename.
- * 
  */
 #define XML_STRING_BUFFER_SIZE 256
 /**
  * @brief Max length for XML attribute values.
- * 
  */
 #define XML_LARGE_STRING_BUFFER_SIZE 2048
 /**
- * @brief Connect child nodes to parent node in xml_node_free().
- * @see xml_node_free()
- * 
+ * @brief Connect child nodes to parent node in xml_node_free.
+ * @see xml_node_free
  */
 #define XML_NODE_CONNECT_CHILDREN 1
 /**
- * @brief Delete all child nodes recursively then free the given node in xml_node_free().
- * @see xml_node_free()
- * 
+ * @brief Delete all child nodes recursively then free the given node in xml_node_free.
+ * @see xml_node_free
  */
 #define XML_NODE_DELETE_CHILDREN 0
 
@@ -63,11 +59,10 @@
 
 
 /**
- * @brief Represents an XML text element.
- * This object isn't allocated, but used to store an allocated string.
- * @see create_xml_text(), free_xml_text()
- * @warning The other xml_* structs behave differently from xml_text.
- * They're returned as allocated pointers, while xml_text is created in-place.
+ * @brief Represents an XML text element. This object isn't allocated, but used to store an allocated string.
+ * @see create_xml_text
+ * @see free_xml_text
+ * @warning The other xml_* structs behave differently from xml_text, because xml_text is referenced by data, not pointer.
  * 
  */
 struct xml_text {
@@ -76,7 +71,8 @@ struct xml_text {
 };
 /**
  * @brief Represents an XML attribute element.
- * @see xml_attribute_create(), xml_attribute_free()
+ * @see xml_attribute_create
+ * @see xml_attribute_free
  * 
  */
 struct xml_attribute {
@@ -85,7 +81,9 @@ struct xml_attribute {
 };
 /**
  * @brief Represents an XML node element.
- * @see xml_node_create(), xml_node_free(), @struct xml_doc
+ * @see xml_node_create
+ * @see xml_node_free
+ * @see xml_doc
  * 
  */
 struct xml_node {
@@ -97,7 +95,8 @@ struct xml_node {
 };
 /**
  * @brief Represents an XML document.
- * @see xml_doc_create(), xml_doc_free()
+ * @see xml_doc_create
+ * @see xml_doc_free
  * 
  */
 struct xml_doc {
