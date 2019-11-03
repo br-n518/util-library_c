@@ -30,30 +30,33 @@ GDFLAGS=$(CFLAGS) -I"godot_headers" -D"GODOT"
 # GODOT PROJECT
 DEPLOY=godot_project/lib/$(OUTPUT_SHARED)
 
-.PHONY: all clean test test_quiet shared build_shared godot build_godot deploy
 
 
-
+.PHONY: shared
 shared: clean build_shared rand.o
 	# LINK
 	$(CC) -shared -o bin/$(OUTPUT_SHARED) *.o $(LDFLAGS)
 
 
 
+.PHONY: godot
 godot: clean build_godot rand.o
 	# LINK
 	$(CC) -shared -o bin/$(OUTPUT_SHARED) *.o $(LDFLAGS)
 
 
 
+.PHONY: all
 all: clean shared
 
 
 
+.PHONY: build_shared
 build_shared: $(SRC)
 	# COMPILE
 	$(CC) -c -fPIC $(CFLAGS) $(SRC)
 
+.PHONY: build_godot
 build_godot: $(SRC)
 	# COMPILE
 	$(CC) -c -fPIC $(GDFLAGS) $(GDSRC)
@@ -65,13 +68,14 @@ rand.o: src/rand/rand.cpp
 	$(CXX) -c -fPIC $(CXXFLAGS) src/rand/rand.cpp
 
 
-
+.PHONY: clean
 clean:
 	# CLEAN
 	rm -f *.o
 
 
 
+.PHONY: deploy
 deploy: bin/$(OUTPUT_SHARED)
 	# DEPLOY
 	cp bin/$(OUTPUT_SHARED) $(DEPLOY)
@@ -80,10 +84,13 @@ deploy: bin/$(OUTPUT_SHARED)
 
 TEST_SRC=rand.o src/test/test_main.c $(SRC)
 TEST_LDFLAGS=$(LDFLAGS)
+
+.PHONY: test
 test: $(TEST_SRC)
 	# BUILD TEST
 	$(CC) $(CFLAGS) -ggdb -o bin/test$(EXEC_EXT) $(TEST_SRC) $(TEST_LDFLAGS)
 
+.PHONY: test_quiet
 test_quiet: $(TEST_SRC)
 	$(CC) $(CFLAGS) -D"NDEBUG" -o bin/test$(EXEC_EXT) $(TEST_SRC) $(TEST_LDFLAGS)
 
