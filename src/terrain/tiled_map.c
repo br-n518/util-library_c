@@ -31,6 +31,16 @@ struct rect create_rect(const int x, const int y, const int w, const int h) {
 	return r;
 }
 
+/**
+ * @brief Fill the tiled_map area given by rect @p r using @p value to change tiles matching @p mask.
+ * @param map tiled_map to modify.
+ * @param r rect for area to modify.
+ * @param value New value for matching tiles.
+ * @param mask Tile value mask. Only tiles matching @p mask will be changed.
+ * @see set_tile
+ * @see get_tile
+ * 
+ */
 void map_draw_rect(tiled_map *map, struct rect *r, const char value, const char mask)
 {
 	assert( map );

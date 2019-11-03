@@ -24,11 +24,27 @@
 
 
 // macro
+/**
+ * @brief 
+ * @param x 
+ * @param y 
+ * @param w 
+ * @returns 
+ * 
+ * 
+ */
 #define HM_IDX(x,y,w) ((y*w)+x)
 
 
 
 
+/**
+ * @brief 
+ * @param map 
+ * @param size 
+ * 
+ * 
+ */
 void hm_init( heightmap *map, const int size ) {
 	assert( map );
 	assert( size >= 2 );
@@ -48,6 +64,12 @@ void hm_init( heightmap *map, const int size ) {
 	}
 }
 
+/**
+ * @brief 
+ * @param map 
+ * 
+ * 
+ */
 void hm_destroy( heightmap *map ) {
 	assert( map );
 	
@@ -60,6 +82,15 @@ void hm_destroy( heightmap *map ) {
 
 
 
+/**
+ * @brief 
+ * @param map 
+ * @param x 
+ * @param y 
+ * @returns 
+ * 
+ * 
+ */
 int hm_get_elevation( heightmap *map, const int x, const int y ) {
 	assert( map );
 	assert( x >= 0 );
@@ -70,6 +101,15 @@ int hm_get_elevation( heightmap *map, const int x, const int y ) {
 	return map->elevation[ HM_IDX(x, y, map->hm_size) ];
 }
 
+/**
+ * @brief 
+ * @param map 
+ * @param x 
+ * @param y 
+ * @returns 
+ * 
+ * 
+ */
 char hm_get_flags( heightmap *map, const int x, const int y ) {
 	assert( map );
 	assert( x >= 0 );
@@ -85,6 +125,15 @@ char hm_get_flags( heightmap *map, const int x, const int y ) {
 
 
 
+/**
+ * @brief 
+ * @param map 
+ * @param x 
+ * @param y 
+ * @param elev 
+ * 
+ * 
+ */
 void hm_set_elevation( heightmap *map, const int x, const int y, const int elev ) {
 	assert( map );
 	assert( x >= 0 );
@@ -100,6 +149,15 @@ void hm_set_elevation( heightmap *map, const int x, const int y, const int elev 
 
 
 
+/**
+ * @brief 
+ * @param map 
+ * @param x 
+ * @param y 
+ * @param flags 
+ * 
+ * 
+ */
 void hm_set_flags( heightmap *map, const int x, const int y, const char flags ) {
 	assert( map );
 	assert( x >= 0 );
@@ -110,6 +168,15 @@ void hm_set_flags( heightmap *map, const int x, const int y, const char flags ) 
 	map->flags[ HM_IDX(x, y, map->hm_size) ] = flags;
 }
 
+/**
+ * @brief 
+ * @param map 
+ * @param x 
+ * @param y 
+ * @param flags 
+ * 
+ * 
+ */
 void hm_add_flags( heightmap *map, const int x, const int y, const char flags ) {
 	assert( map );
 	assert( x >= 0 );
@@ -120,6 +187,15 @@ void hm_add_flags( heightmap *map, const int x, const int y, const char flags ) 
 	map->flags[ HM_IDX(x, y, map->hm_size) ] |= flags;
 }
 
+/**
+ * @brief 
+ * @param map 
+ * @param x 
+ * @param y 
+ * @param flags 
+ * 
+ * 
+ */
 void hm_remove_flags( heightmap *map, const int x, const int y, const char flags ) {
 	assert( map );
 	assert( x >= 0 );

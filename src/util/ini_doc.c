@@ -125,6 +125,14 @@ void ini_doc_set( struct ini_doc *doc, const char *section, const char *key, con
 }
 
 
+/**
+ * @brief Set the value for a key under the global section.
+ * @param doc ini_doc to modify.
+ * @param key Key of key-val pair.
+ * @param value Value of key-val pair.
+ * 
+ * 
+ */
 void ini_doc_set_global( struct ini_doc *doc, const char *key, const char *value )
 {
 	assert( doc ); assert( key ); assert( value );
@@ -144,11 +152,11 @@ void ini_doc_set_global( struct ini_doc *doc, const char *key, const char *value
 
 
 /**
- * @brief 
- * @param doc 
- * @param section 
- * @param key 
- * @returns 
+ * @brief Get a key-val's value from given section name.
+ * @param doc ini_doc to search.
+ * @param section Section to look under.
+ * @param key Key to find.
+ * @returns Returns the char string at given section and key, or null for not found.
  * 
  * 
  */
@@ -166,10 +174,10 @@ char* ini_doc_get( struct ini_doc *doc, const char *section, const char *key )
 
 
 /**
- * @brief 
- * @param doc 
- * @param key 
- * @returns 
+ * @brief Get a key-val's value from the global section.
+ * @param doc ini_doc to search.
+ * @param key Key to find.
+ * @returns Returns the char string value of given key, or zero for not found.
  * 
  * 
  */
@@ -182,10 +190,10 @@ char* ini_doc_get_global( struct ini_doc *doc, const char *key )
 
 
 /**
- * @brief 
- * @param doc 
- * @param section 
- * @returns 
+ * @brief Get the hash_table representing section name.
+ * @param doc ini_doc to search.
+ * @param section Section name of hash_table to get.
+ * @returns Returns a hash_table pointer to internal section table.
  * 
  * 
  */
@@ -222,14 +230,7 @@ void ini_doc_write_keyvals( hash_table *table, FILE *file )
 
 
 
-/**
- * @brief 
- * @param doc 
- * @param section 
- * @param file 
- * 
- * 
- */
+
 void ini_doc_write_section( struct ini_doc *doc, const char *section, FILE *file )
 {
 	assert( doc ); assert( section ); assert( file );
@@ -251,10 +252,11 @@ void ini_doc_write_globals( struct ini_doc *doc, FILE *file )
 
 
 /**
- * @brief 
- * @param doc 
- * @param filename 
- * 
+ * @brief Save an ini_doc as a file.
+ * @param doc ini_doc to save.
+ * @param filename Filename of destination file.
+ * @see ini_doc_load
+ * @see ini_doc_parse
  * 
  */
 void ini_doc_save( struct ini_doc *doc, const char *filename )
@@ -323,9 +325,12 @@ enum doc_parse_state
 // ignore leading keyval pairs. Require a section header.
 // Pound sign of course is comment (ignore leading space, handle comments at end of line, but no preserve for any comments)
 /**
- * @brief 
- * @param doc 
- * @param data 
+ * @brief Parse a character string as INI file data.
+ * @param doc ini_doc object to receive data.
+ * @param data Char string to parse sections and key-val pairs from.
+ * @see ini_doc_load
+ * @note Comments begin with the pound sign (#). Comments can be on own line or following a section/key-val.
+ * @note Comments are stripped and ignored.
  * 
  * 
  */
@@ -545,10 +550,12 @@ void ini_doc_parse( struct ini_doc *doc, const char *data )
 }
 
 /**
- * @brief 
- * @param dest
- * @param filename 
- * 
+ * @brief Open and parse an INI file.
+ * @param dest ini_doc to use for data storage.
+ * @param filename Name of file to open.
+ * @returns Returns zero if file not found. Returns 1 otherwise.
+ * @see ini_doc_parse
+ * @see ini_doc_save
  * 
  */
 char ini_doc_load( struct ini_doc *dest, const char *filename )

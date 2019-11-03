@@ -22,6 +22,15 @@
  */
 #include "graph.h"
 
+/**
+ * @brief Create a new graph_node with given data pointer.
+ * @param data Data to be stored in graph_node.
+ * @returns Returns an allocated graph_node.
+ * @see graph_node_destroy
+ * @see graph_node_destroy_all
+ * 
+ * 
+ */
 graph_node* graph_node_create( void *data ) {
 	graph_node *ret = _MALLOC( sizeof(graph_node) );
 	ret->nbors = NULL;
@@ -30,6 +39,13 @@ graph_node* graph_node_create( void *data ) {
 }
 
 
+/**
+ * @brief Destroy a single graph_node and remove it from graph.
+ * @param g graph_node to free.
+ * @returns Returns the data pointer stored by destroyed graph_node.
+ * @see graph_node_destroy_all
+ * 
+ */
 void* graph_node_destroy( graph_node *g ) {
 	assert( g );
 	
@@ -39,6 +55,7 @@ void* graph_node_destroy( graph_node *g ) {
 	_FREE( g );
 	return data;
 }
+
 
 
 node_t* _graph_node_destroy_all( graph_node *g, void (*free_func)(void*), node_t *visited ) {
@@ -59,6 +76,14 @@ node_t* _graph_node_destroy_all( graph_node *g, void (*free_func)(void*), node_t
 	return visited;
 }
 
+/**
+ * @brief Destroy graph_node and all connected graph_nodes.
+ * @param g Any node in graph network to be destroyed.
+ * @param free_func Function used to free data pointers on nodes.
+ * @see graph_node_destroy
+ * 
+ * 
+ */
 void graph_node_destroy_all( graph_node *g, void (*free_func)(void*) ) {
 	assert( g );
 	
@@ -68,6 +93,14 @@ void graph_node_destroy_all( graph_node *g, void (*free_func)(void*) ) {
 
 
 
+/**
+ * @brief Link two graph_nodes together, making them neighbors of each other.
+ * @param a A graph_node object
+ * @param b Another graph_node object.
+ * @see graph_node_unlink
+ * @see graph_node_unlink_all
+ * 
+ */
 void graph_node_link( graph_node *a, graph_node *b ) {
 	if ( ! node_has( a->nbors, b ) ) {
 		node_push_front( &(a->nbors), b );
@@ -77,11 +110,26 @@ void graph_node_link( graph_node *a, graph_node *b ) {
 	}
 }
 
+/**
+ * @brief 
+ * @param a 
+ * @param b 
+ * @see graph_node_link
+ * @see graph_node_unlink_all
+ * 
+ */
 void graph_node_unlink( graph_node *a, graph_node *b ) {
 	node_remove( &(a->nbors), b );
 	node_remove( &(b->nbors), a );
 }
 
+/**
+ * @brief Unlink a node from all of its connected neighbors.
+ * @param g The graph_node object to be "orphaned".
+ * @see graph_node_link
+ * @see graph_node_unlink
+ * 
+ */
 void graph_node_unlink_all( graph_node *g ) {
 	assert( g );
 	
@@ -96,6 +144,13 @@ void graph_node_unlink_all( graph_node *g ) {
 
 
 
+/**
+ * @brief Get count of neighbors for given graph_node.
+ * @param g The node to check.
+ * @returns Returns the number of connected neighbors.
+ * 
+ * 
+ */
 int graph_node_neighbor_count( const graph_node *g ) {
 	return node_count( g->nbors );
 }
@@ -128,6 +183,14 @@ int _graph_node_find_path( graph_node *a, graph_node *b, node_t *visited ) {
 	return 0;
 }
 
+/**
+ * @brief Check if a graph_node has a connected path to another graph_node.
+ * @param a Starting point.
+ * @param b Ending point.
+ * @returns Returns 1 if a path was found (OR if @p a and @p b are identical). Returns zero for no path found.
+ * 
+ * 
+ */
 int graph_node_has_path( graph_node *a, graph_node *b ) {
 	assert( a );
 	assert( b );

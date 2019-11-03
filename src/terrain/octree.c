@@ -23,6 +23,12 @@
 #include "octree.h"
 
 
+/**
+ * @brief 
+ * @param c 
+ * 
+ * 
+ */
 void octree_assign_neighbors( octree_cell *c ) {
 	assert( c );
 	assert( c->flags & OCTREE_CELL_SPLIT );
@@ -341,9 +347,8 @@ void octree_assign_neighbors( octree_cell *c ) {
 				}
 				
 				break;
-			
-		}
-	}
+		} //end switch
+	} //end for
 } // end assign_neighbors
 
 
@@ -354,6 +359,13 @@ void octree_assign_neighbors( octree_cell *c ) {
 
 
 
+/**
+ * @brief 
+ * @param g 
+ * @param size 
+ * 
+ * 
+ */
 void octree_init( octree *g, const int size ) {
 	assert( g );
 	assert( size >= 2 );
@@ -373,6 +385,12 @@ void octree_init( octree *g, const int size ) {
 
 
 
+/**
+ * @brief 
+ * @param c 
+ * 
+ * 
+ */
 void free_octree_cell( octree_cell *c ) {
 	assert( c );
 	
@@ -389,6 +407,12 @@ void free_octree_cell( octree_cell *c ) {
 
 
 
+/**
+ * @brief 
+ * @param g 
+ * 
+ * 
+ */
 void octree_destroy( octree *g ) {
 	assert( g );
 	
@@ -399,6 +423,12 @@ void octree_destroy( octree *g ) {
 
 
 
+/**
+ * @brief 
+ * @param c 
+ * 
+ * 
+ */
 void octree_cell_set( octree_cell *c ) {
 	if ( c ) {
 		if ( !( c->flags & OCTREE_CELL_SPLIT ) ) {
@@ -413,6 +443,16 @@ void octree_cell_set( octree_cell *c ) {
 
 
 
+/**
+ * @brief 
+ * @param g 
+ * @param x 
+ * @param y 
+ * @param z 
+ * @returns 
+ * 
+ * 
+ */
 octree_cell* octree_get( octree *g, const int x, const int y, const int z ) {
 	assert( g );
 	
@@ -441,6 +481,12 @@ octree_cell* octree_get( octree *g, const int x, const int y, const int z ) {
 
 
 
+/**
+ * @brief 
+ * @param c 
+ * 
+ * 
+ */
 void octree_cell_split( octree_cell *c ) {
 	assert( c );
 	
@@ -486,6 +532,13 @@ void octree_cell_split( octree_cell *c ) {
 
 
 
+/**
+ * @brief 
+ * @param c 
+ * @param n 
+ * 
+ * 
+ */
 void octree_cell_split_n( octree_cell *c, const int n ) {
 	assert( c );
 	
@@ -503,6 +556,13 @@ void octree_cell_split_n( octree_cell *c, const int n ) {
 
 
 
+/**
+ * @brief 
+ * @param c 
+ * @param target_size 
+ * 
+ * 
+ */
 void octree_cell_split_to( octree_cell *c, const int target_size ) {
 	assert( c );
 	assert( target_size > 0 );
@@ -518,6 +578,16 @@ void octree_cell_split_to( octree_cell *c, const int target_size ) {
 
 
 
+/**
+ * @brief 
+ * @param g 
+ * @param x 
+ * @param y 
+ * @param z 
+ * @returns 
+ * 
+ * 
+ */
 octree_cell* octree_cut_point( octree *g, const int x, const int y, const int z ) {
 	assert( g );
 	
@@ -543,12 +613,24 @@ octree_cell* octree_cut_point( octree *g, const int x, const int y, const int z 
 // GODOT functions
 #ifdef GODOT
 
+/**
+ * @brief 
+ * @param m 
+ * 
+ * 
+ */
 void octree_mesh_init( octree_mesh *m ) {
 	assert( m );
 	
 	api->godot_pool_vector3_array_new( &(m->verts) );
 	api->godot_pool_vector2_array_new( &(m->uvs) );
 }
+/**
+ * @brief 
+ * @param m 
+ * 
+ * 
+ */
 void octree_mesh_destroy( octree_mesh *m ) {
 	assert( m );
 	
@@ -558,6 +640,15 @@ void octree_mesh_destroy( octree_mesh *m ) {
 
 
 
+/**
+ * @brief 
+ * @param c 
+ * @param floors 
+ * @param walls 
+ * @param ceilings 
+ * 
+ * 
+ */
 void octree_cell_render( octree_cell *c, octree_mesh *floors, octree_mesh *walls, octree_mesh *ceilings  ) {
 	assert( c );
 	assert( floors && walls && ceilings );

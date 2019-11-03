@@ -25,9 +25,9 @@
 
 
 /**
- * @brief 
- * @param data 
- * @returns 
+ * @brief Create a new node.
+ * @param data Data pointer for node.
+ * @returns Returns an allocated node with stored data pointer.
  * 
  * 
  */
@@ -41,8 +41,8 @@ node_t * node_create( void *data ) {
 
 
 /**
- * @brief 
- * @param node 
+ * @brief Free a chain of nodes.
+ * @param node Head node to free.
  * 
  * 
  */
@@ -59,9 +59,9 @@ void node_free_chain( node_t *node ) {
 }
 
 /**
- * @brief 
- * @param node 
- * @param data_free_func 
+ * @brief Free a chain of nodes, using @p data_free_func to free data pointers.
+ * @param node Head node to free.
+ * @param data_free_func Free function for stored data pointers.
  * 
  * 
  */
@@ -83,9 +83,9 @@ void node_free_chain_data( node_t *node, void (*data_free_func)(void*) ) {
 }
 
 /**
- * @brief 
- * @param head 
- * @returns 
+ * @brief Copy a node chain.
+ * @param head Head node to copy.
+ * @returns Returns an allocated chain (shallow-copy).
  * 
  * 
  */

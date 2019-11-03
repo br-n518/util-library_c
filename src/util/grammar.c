@@ -34,6 +34,14 @@ rule_t* create_grammar_rule( const char *from, const char *to )
 	return ret;
 }
 
+/**
+ * @brief Push a new conversion rule to grammar rule list.
+ * @param list List of rule_t objects to push to.
+ * @param from String to search for when running grammar.
+ * @param to Replacement string for each occurrence of @p from.
+ * @see destroy_grammar
+ * @see create_grammar_str
+ */
 void push_grammar_rule( node_t **list, const char *from, const char *to )
 {
 	assert( list );
@@ -45,6 +53,12 @@ void push_grammar_rule( node_t **list, const char *from, const char *to )
 
 
 
+/**
+ * @brief Destroy a grammar rule list.
+ * @param list rule_t object list to free.
+ * @see push_grammar_rule
+ * @note User should set node_t head pointer to null afterwards.
+ */
 void destroy_grammar( node_t *list )
 {
 	assert( list );
@@ -53,6 +67,17 @@ void destroy_grammar( node_t *list )
 }
 
 
+/**
+ * @brief Manipulate @p init_str by given @p rules.
+ * @param init_str Initial string for running grammar.
+ * @param rules node_t list of rule_t objects for describing grammar.
+ * @param iterations Number of times to run entire rule list.
+ * @returns Returns an allocated string after running grammar rules.
+ * @see push_grammar_rule
+ * @see destroy_grammar_str
+ * @note Rules are processed in series, not in parallel.
+ * @note Use macro _FREE on returned string when finished.
+ */
 char* create_grammar_str( const char *init_str, node_t *rules, const int iterations )
 {
 	assert( init_str );

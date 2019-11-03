@@ -216,7 +216,7 @@ void ot_str_routine (octree_turtle * t, const char *s)
 			default:
 				break;
 			case '\0':
-				return;
+				return; //RETURN
 			case 'D':
 				ot_move_down (t, 1);
 				break;

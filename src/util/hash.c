@@ -22,6 +22,13 @@
  */
 #include "hash.h"
 
+/**
+ * @brief Convert a string to an integer hash value.
+ * @param p String to hash.
+ * @param p_len Length of string @p p.
+ * @returns A hash value representing string @p p.
+ * 
+ */
 int _hash(const char *p, const int p_len) {
 	assert( p != 0 );
 	assert( p_len > 0 );
@@ -41,15 +48,16 @@ int _hash(const char *p, const int p_len) {
 
 /**
  * @brief Set data for hash table.
- * 
- * Set a void pointer as the data stored in hash table.
- * Hash table won't make a copy, but @b free_hash_table will free the pointer data.
- * This can be problematic if a deep delete is needed. (Delete dependencies before free_hash_table call)
  * @param ht Hash table pointer.
  * @param key String used to create hash.
  * @param key_len Length of string @p key.
  * @param v Variable pointer to assign.
  * @see free_hash_table
+ * @see ht_get
+ * 
+ * Set a void pointer as the data stored in hash table.
+ * Hash table won't make a copy, but @b free_hash_table will free the pointer data.
+ * This can be problematic if a deep delete is needed. (Delete dependencies before free_hash_table call)
  */
 void ht_set(hash_table *ht, const char *key, const int key_len, void *data) {
 	assert( ht );
@@ -91,6 +99,15 @@ void ht_set(hash_table *ht, const char *key, const int key_len, void *data) {
 
 
 
+/**
+ * @brief Get the data stored in table by given key.
+ * @param ht hash_table object to search.
+ * @param key Key string to search for.
+ * @param key_len Length of key string @p key.
+ * @returns The data pointer found, or null if no match.
+ * @see ht_set
+ * 
+ */
 void* ht_get(hash_table *ht, const char *key, const int key_len) {
 	assert( ht );
 	assert( key );
@@ -115,6 +132,14 @@ void* ht_get(hash_table *ht, const char *key, const int key_len) {
 
 
 
+/**
+ * @brief Get a hash_table_entry by index. Useful for iterating all contents.
+ * @param ht hash_table object to search.
+ * @param idx Index of hash_table_entry to get.
+ * @returns Returns a pointer to internal hash_table_entry.
+ * @see ht_get
+ * 
+ */
 struct hash_table_entry* ht_get_idx( hash_table *ht, const int idx ) {
 	assert( idx >= 0 );
 	assert( idx < HASH_TABLE_SIZE );
@@ -130,8 +155,9 @@ struct hash_table_entry* ht_get_idx( hash_table *ht, const int idx ) {
  * @param ht Hash table pointer.
  * @param key String used to create hash.
  * @param key_len Length of string @p key.
- * @return data value stored, or 0 if not found.
- * @see free_variant
+ * @returns Returns the data value stored, or 0 if not found.
+ * @see ht_remove
+ * 
  */
 void* ht_unset( hash_table *ht, const char *key, const int key_len ) {
 	assert( ht );
@@ -189,8 +215,8 @@ void* ht_unset( hash_table *ht, const char *key, const int key_len ) {
 
 /**
  * @brief Return value based on if hash_table contains a matching key. Case-sensitive comparison.
- * @return 1 if hash_table contains data at @p key. 0 otherwise.
- * @see strncmp
+ * @return Returns 1 if hash_table contains data at @p key. Returns zero otherwise.
+ * 
  */
 int ht_has( hash_table *ht, const char *key, const int key_len ) {
 	assert( ht != 0 );
@@ -211,6 +237,13 @@ int ht_has( hash_table *ht, const char *key, const int key_len ) {
 
 
 
+/**
+ * @brief Initialize a hash_table.
+ * @param ht hash_table object to initialize.
+ * @see ht_clear
+ * @see ht_clear_free
+ * 
+ */
 void ht_init( hash_table *ht ) {
 	assert( ht );
 	
@@ -219,6 +252,14 @@ void ht_init( hash_table *ht ) {
 
 
 
+/**
+ * @brief Clear a hash_table and free memory.
+ * @param ht hash_table object to clear.
+ * @note Data pointers aren't free. For that use ht_clear_free.
+ * @see ht_clear_free
+ * 
+ * 
+ */
 void ht_clear( hash_table *ht ) {
 	assert( ht );
 	
@@ -240,6 +281,13 @@ void ht_clear( hash_table *ht ) {
 	}
 }
 
+/**
+ * @brief Clear a hash_table and free all data.
+ * @param ht hash_table to clear.
+ * @param free_func Function pointer to be used on stored data pointers.
+ * @see ht_clear
+ * 
+ */
 void ht_clear_free( hash_table *ht, void (*free_func) (void*) ) {
 	assert( ht );
 	assert( free_func );
@@ -273,6 +321,14 @@ void ht_clear_free( hash_table *ht, void (*free_func) (void*) ) {
 }
 
 
+/**
+ * @brief Remove a value from hash_table.
+ * @param ht hash_table to search.
+ * @param data Data pointer to search for.
+ * @returns Returns the data pointer removed, or zero if no match.
+ * @see ht_unset
+ * 
+ */
 void* ht_remove( hash_table *ht, void *data ) {
 	assert( ht );
 	assert( data );
