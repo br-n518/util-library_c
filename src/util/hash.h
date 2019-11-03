@@ -64,14 +64,13 @@ extern "C" {
  */
 int _hash(const char *key, const int key_len);
 
-
-void ht_set( hash_table*, const char*, const int key_len, void* );
-void* ht_get( hash_table*, const char*, const int );
+void ht_set( hash_table*, const char *key, const int key_len, void *data );
+void* ht_get( hash_table*, const char *key, const int key_len );
 struct hash_table_entry* ht_get_idx( hash_table *ht, const int idx );
 
-void* ht_unset( hash_table*, const char*, const int );
+void* ht_unset( hash_table*, const char *key, const int key_len );
 
-int ht_has( hash_table*, const char*, const int );
+int ht_has( hash_table*, const char *key, const int key_len );
 
 void ht_init( hash_table *ht );
 
@@ -79,7 +78,7 @@ void ht_init( hash_table *ht );
 void ht_clear( hash_table* );
 void ht_clear_free( hash_table*, void (*free_func) (void*) );
 
-void* ht_remove( hash_table*, void* );
+void* ht_remove( hash_table*, void *data );
 
 #ifdef __cplusplus
 }

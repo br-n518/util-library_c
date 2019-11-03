@@ -273,9 +273,9 @@ void ht_clear_free( hash_table *ht, void (*free_func) (void*) ) {
 }
 
 
-void* ht_remove( hash_table *ht, void *e ) {
+void* ht_remove( hash_table *ht, void *data ) {
 	assert( ht );
-	assert( e );
+	assert( data );
 	
 	struct hash_table_entry *hte, *prev;
 	for (int i = 0; i < HASH_TABLE_SIZE; i++) {
@@ -283,7 +283,7 @@ void* ht_remove( hash_table *ht, void *e ) {
 		if ( hte->key[0] != '\0' ) {
 			prev = 0;
 			while ( hte != 0 ) {
-				if ( hte->data == e ) {
+				if ( hte->data == data ) {
 					// if first node in list
 					if ( prev == 0 ) {
 						if ( hte->next ) {
@@ -305,7 +305,7 @@ void* ht_remove( hash_table *ht, void *e ) {
 						prev->next = hte->next;
 						_FREE( hte );
 					}
-					return e;
+					return data;
 				}
 				hte = hte->next;
 				prev = hte;

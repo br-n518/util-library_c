@@ -154,7 +154,6 @@ void xml_text_create( struct xml_text *t, const char *value )
 		t->text_len = len;
 		t->text = _MALLOC( len + 1 );
 		strcpy( t->text, value );
-		//t->text[len] = '\0';
 	}
 }
 
@@ -1161,7 +1160,13 @@ void xml_node_set_attr( struct xml_node *node, const char *name, const char *val
 void xml_node_apply_attr( struct xml_node *node, struct xml_attribute *attr ) {
 	assert( node ); assert( attr );
 	
+	struct xml_attribute *prev = xml_node_get_attr( node, attr->name );
 	ht_set( &(node->attributes), attr->name, strlen(attr->name), attr);
+	
+	if (prev)
+	{
+		xml_attribute_free(prev);
+	}
 }
 
 
@@ -1274,6 +1279,26 @@ void xml_node_insert_child_at( struct xml_node *parent, struct xml_node *child, 
 		parent->child_nodes = node_create(child);
 	}
 }
+
+
+
+void xml_node_set_text( struct xml_node *node, const char *new_text )
+{
+	assert( node );
+	assert( new_text );
+	
+	xml_text_create( &(node->text_body), new_text );
+}
+
+
+void xml_node_append_text( struct xml_node *node, const char *text )
+{
+	assert( node );
+	assert( text );
+	
+	xml_text_append( &(node->text_body), text );
+}
+
 
 
 

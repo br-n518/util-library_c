@@ -120,7 +120,6 @@ struct xml_node*		 xml_node_create		( const char *name ); // strings are copied
 struct xml_attribute* xml_attribute_create( const char *name, const char *value );
 
 void xml_text_create ( struct xml_text *t, const char *value );
-
 void xml_text_append ( struct xml_text *t, const char *value );
 
 void xml_text_free		( struct xml_text* );
@@ -147,11 +146,10 @@ void xml_node_add_child			( struct xml_node*, struct xml_node* );
 void xml_node_insert_child_at	( struct xml_node*, struct xml_node*, int idx );
 
 
+void xml_node_set_text( struct xml_node *node, const char *new_text );
+void xml_node_append_text( struct xml_node *node, const char *text );
 
 
-//void xml_node_insert_child_after( struct xml_node*, struct xml_node *child_node, struct xml_node *ref_child );
-//struct xml_node* xml_node_remove_child_at( struct xml_node*, const int );
-//struct xml_node* xml_node_remove_child_by_name( struct xml_node*, const char *name, const int max_removals ); //0 remove for no limit
 
 
 
