@@ -123,6 +123,8 @@ void* node_pop( node_t **head, node_t *node )
 	if ( (*head) == node )
 	{
 		(*head) = (*head)->next;
+		ret = node->data;
+		_FREE(node);
 	}
 	// find node
 	else
