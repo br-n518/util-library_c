@@ -268,12 +268,19 @@ godot_variant ns_ini_doc_to_string(godot_object *p_instance, void *p_method_data
 	
 	char *cstr = ini_doc_to_string(doc);
 	
-	// parse string
-	api->godot_string_parse_utf8(&gd_str, cstr);
-	_FREE(cstr);
-	
 	godot_variant ret;
-	api->godot_variant_new_string( &ret, &gd_str );
+	if ( cstr )
+	{
+		// parse string
+		api->godot_string_parse_utf8(&gd_str, cstr);
+		_FREE(cstr);
+		
+		api->godot_variant_new_string( &ret, &gd_str );
+	}
+	else
+	{
+		api->godot_variant_new_nil(&ret);
+	}
 	api->godot_string_destroy( &gd_str );
 	
 	return ret;
