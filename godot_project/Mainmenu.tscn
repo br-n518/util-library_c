@@ -9,6 +9,7 @@ func _ready():
 	var doc:INI_DOC = INI_DOC.new()
 	doc.set_global(\"asdf\", \"jupiter\")
 	doc.set(\"solarsystem\", \"mars\", \"red\")
+	# save to parent directory to keep Godot project clean
 	doc.save(\"../testfile.ini\")
 
 func _on_tiledmap_pressed():
