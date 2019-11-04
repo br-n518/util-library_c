@@ -223,7 +223,7 @@ godot_variant ns_ini_doc_save(godot_object *p_instance, void *p_method_data, voi
 		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
 		api->godot_string_destroy(&fname_str);
 		
-		// call ini_doc_load
+		// call ini_doc_save
 		ini_doc_save( doc,
 				api->godot_char_string_get_data(&cs_fname) );
 		
@@ -247,7 +247,7 @@ godot_variant ns_ini_doc_parse(godot_object *p_instance, void *p_method_data, vo
 		godot_char_string cs_data = api->godot_string_ascii(&data_str);
 		api->godot_string_destroy(&data_str);
 		
-		// call ini_doc_load
+		// call ini_doc_parse
 		ini_doc_parse( doc,
 				api->godot_char_string_get_data(&cs_data) );
 		
@@ -257,6 +257,27 @@ godot_variant ns_ini_doc_parse(godot_object *p_instance, void *p_method_data, vo
 	GD_RETURN_NIL()
 }
 
+
+godot_variant ns_ini_doc_to_string(godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args)
+{
+	// get object
+	struct ini_doc *doc = (struct ini_doc*) p_user_data;
+	
+	godot_string gd_str;
+	api->godot_string_new( &gd_str );
+	
+	char *cstr = ini_doc_to_string(doc);
+	
+	// parse string
+	api->godot_string_parse_utf8(&gd_str, cstr);
+	_FREE(cstr);
+	
+	godot_variant ret;
+	api->godot_variant_new_string( &ret, &gd_str );
+	api->godot_string_destroy( &gd_str );
+	
+	return ret;
+}
 
 
 void GDN_EXPORT godot_nativescript_init(void *p_handle)
@@ -294,4 +315,6 @@ void GDN_EXPORT godot_nativescript_init(void *p_handle)
 	method.method = &ns_ini_doc_parse;
 	nativescript_api->godot_nativescript_register_method(p_handle, "ini_doc", "parse", attributes, method);
 	
+	method.method = &ns_ini_doc_to_string;
+	nativescript_api->godot_nativescript_register_method(p_handle, "ini_doc", "to_string", attributes, method);
 }

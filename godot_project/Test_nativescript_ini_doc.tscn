@@ -19,6 +19,9 @@ func _ready():
 	doc.open(\"../testfile.ini\")
 	print(doc.get(\"solarsystem\", \"mars\"))
 	print(doc.get_global(\"asdf\"))
+	
+	print(\"Whole file:\")
+	print(doc.to_string())
 "
 
 [node name="Node" type="Node"]

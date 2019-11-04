@@ -206,9 +206,9 @@ hash_table* ini_doc_get_section( struct ini_doc *doc, const char *section, const
 
 
 
-void ini_doc_write_keyvals( hash_table *table, FILE *file )
+void ini_doc_write_keyvals( hash_table *table, strbuff *sb )
 {
-	assert( table ); assert( file );
+	assert( table ); assert( sb );
 	
 	struct hash_table_entry *hte;
 	
@@ -217,11 +217,18 @@ void ini_doc_write_keyvals( hash_table *table, FILE *file )
 		hte = ht_get_idx( table, i );
 		if ( hte->key[0] )
 		{
-			fprintf( file, "%s=%s\n", hte->key, (char*) hte->data );
+			sb_puts( sb, hte->key, strlen(hte->key) );
+			sb_putc( sb, '=' );
+			sb_puts( sb, (char*) hte->data, strlen((char*)hte->data) );
+			sb_putc( sb, '\n' );
+			//fprintf( file, "%s=%s\n", hte->key, (char*) hte->data );
 			hte = hte->next;
 			while ( hte )
 			{
-				fprintf( file, "%s=%s\n", hte->key, (char*) hte->data );
+				sb_puts( sb, hte->key, strlen(hte->key) );
+				sb_putc( sb, '=' );
+				sb_puts( sb, (char*) hte->data, strlen((char*)hte->data) );
+				sb_putc( sb, '\n' );
 				hte = hte->next;
 			}
 		}
@@ -231,22 +238,28 @@ void ini_doc_write_keyvals( hash_table *table, FILE *file )
 
 
 
-void ini_doc_write_section( struct ini_doc *doc, const char *section, FILE *file )
+void ini_doc_write_section( struct ini_doc *doc, const char *section, strbuff *sb )
 {
-	assert( doc ); assert( section ); assert( file );
+	assert( doc ); assert( section ); assert( sb );
 	
-	fprintf(file, "[%s]\n", section);
+	int sect_len = strlen(section);
 	
-	ini_doc_write_keyvals( ini_doc_get_section( doc, section, strlen(section) ), file );
+	//fprintf(file, "[%s]\n", section);
+	sb_putc( sb, '[' );
+	sb_puts( sb, section, sect_len );
+	sb_putc( sb, ']' );
+	sb_putc( sb, '\n' );
+	
+	ini_doc_write_keyvals( ini_doc_get_section( doc, section, sect_len ), sb );
 }
 
 
 
-void ini_doc_write_globals( struct ini_doc *doc, FILE *file )
+void ini_doc_write_globals( struct ini_doc *doc, strbuff *sb )
 {
-	assert( doc ); assert( file );
+	assert( doc ); assert( sb );
 	
-	ini_doc_write_keyvals( &(doc->globals), file );
+	ini_doc_write_keyvals( &(doc->globals), sb );
 }
 
 
@@ -265,9 +278,11 @@ void ini_doc_save( struct ini_doc *doc, const char *filename )
 	
 	FILE *file = fopen(filename, "w");
 	if ( file )
-	{
+	{	
+		strbuff buffer;
+		sb_init( &buffer );
 		// write global section
-		ini_doc_write_globals( doc, file );
+		ini_doc_write_globals( doc, &buffer );
 		
 		// loop through sections
 		struct hash_table_entry *temp_entry;
@@ -277,19 +292,23 @@ void ini_doc_save( struct ini_doc *doc, const char *filename )
 			temp_entry = ht_get_idx( &(doc->sections), i );
 			if ( temp_entry->key[0] != '\0' )
 			{
-				ini_doc_write_section( doc, temp_entry->key, file );
+				ini_doc_write_section( doc, temp_entry->key, &buffer );
 				
 				temp_entry = temp_entry->next;
 				while (temp_entry)
 				{
-					ini_doc_write_section( doc, temp_entry->key, file );
+					ini_doc_write_section( doc, temp_entry->key, &buffer );
 					temp_entry = temp_entry->next;
 				}
 			}
 		}
+		char *cstr = sb_cstr( &buffer );
+		sb_clear( &buffer );
 		
+		fputs(cstr, file);
 		fclose( file );
 		
+		_FREE(cstr);
 	}
 	else
 	{
@@ -592,6 +611,46 @@ char ini_doc_load( struct ini_doc *dest, const char *filename )
 		return 1;
 	}
 	return 0;
+}
+
+/**
+ * @brief Convert ini_doc into a C string.
+ * @param doc Document to be converted.
+ * @returns Returns an allocated string. Use _FREE to deallocate.
+ * 
+ * 
+ */
+char* ini_doc_to_string( struct ini_doc *doc )
+{
+	assert( doc );
+	
+	strbuff buffer;
+	sb_init( &buffer );
+	// write global section
+	ini_doc_write_globals( doc, &buffer );
+	
+	// loop through sections
+	struct hash_table_entry *temp_entry;
+	for ( int i = 0; i < HASH_TABLE_SIZE; i++ )
+	{
+		// get section
+		temp_entry = ht_get_idx( &(doc->sections), i );
+		if ( temp_entry->key[0] != '\0' )
+		{
+			ini_doc_write_section( doc, temp_entry->key, &buffer );
+			
+			temp_entry = temp_entry->next;
+			while (temp_entry)
+			{
+				ini_doc_write_section( doc, temp_entry->key, &buffer );
+				temp_entry = temp_entry->next;
+			}
+		}
+	}
+	char *cstr = sb_cstr( &buffer );
+	sb_clear( &buffer );
+	
+	return cstr;
 }
 
 

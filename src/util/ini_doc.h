@@ -68,6 +68,8 @@ void ini_doc_save( struct ini_doc *doc, const char *filename );
 void ini_doc_parse( struct ini_doc *doc, const char *data );
 char ini_doc_load( struct ini_doc *dest, const char *filename );
 
+char* ini_doc_to_string( struct ini_doc *doc );
+
 #ifdef __cplusplus
 }
 #endif
