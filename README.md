@@ -58,10 +58,12 @@ MSYS isn't much help: just use CMD with MinGW in PATH.
 
     make
 
-### Godot build
+### Godot build (GDNative)
 
+    # Build
     make godot
-    make deploy  #copy to godot_project/lib/ for testing
+    # Copy to godot_project folder
+    make deploy
 
 ### ini_doc NativeScript Class
 
@@ -71,7 +73,7 @@ MSYS isn't much help: just use CMD with MinGW in PATH.
 Now create `ini_doc.tres` to point to `ini_doc.so`/`ini_doc.dll`  
 and create `ini_doc.gdns` for referencing the "ini_doc" class name.
 
-Example usage:
+##### Example usage:
 
     const INI_DOC = preload("res://lib/ini_doc.gdns")
     
@@ -82,5 +84,14 @@ Example usage:
 
 Currently ini_doc class does not support Godot path prefixes (res, user, and sys://).
 
-
+##### ns_ini_doc functions
+    set( section, key, value )
+    get( section, key ) -> String
+    
+    set_global( key, value )
+    get_global( key ) -> String
+    
+    open( filename )
+    save( filename )
+    parse( file_data )
 
