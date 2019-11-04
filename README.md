@@ -68,8 +68,8 @@ MSYS isn't much help: just use CMD with MinGW in PATH.
     make ns_ini_doc
     cp bin/ini_doc.so godot_project/lib/
 
-Now make "`ini_doc.tres`" to point to `ini_doc.so` (`ini_doc.dll`)
-and `ini_doc.gdns` for referencing the "ini_doc" class name.
+Now create `ini_doc.tres` to point to `ini_doc.so`/`ini_doc.dll`  
+and create `ini_doc.gdns` for referencing the "ini_doc" class name.
 
 Example usage:
 
