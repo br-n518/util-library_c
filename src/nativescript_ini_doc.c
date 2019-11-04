@@ -178,7 +178,7 @@ godot_variant ns_ini_doc_set_global(godot_object *p_instance, void *p_method_dat
 }
 
 
-godot_variant ns_ini_doc_load(godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args)
+godot_variant ns_ini_doc_open(godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args)
 {
 	struct ini_doc *doc = (struct ini_doc*) p_user_data;
 	
@@ -288,8 +288,8 @@ void GDN_EXPORT godot_nativescript_init(void *p_handle)
 	method.method = &ns_ini_doc_save;
 	nativescript_api->godot_nativescript_register_method(p_handle, "ini_doc", "save", attributes, method);
 	
-	method.method = &ns_ini_doc_load;
-	nativescript_api->godot_nativescript_register_method(p_handle, "ini_doc", "load", attributes, method);
+	method.method = &ns_ini_doc_open;
+	nativescript_api->godot_nativescript_register_method(p_handle, "ini_doc", "open", attributes, method);
 	
 	method.method = &ns_ini_doc_parse;
 	nativescript_api->godot_nativescript_register_method(p_handle, "ini_doc", "parse", attributes, method);

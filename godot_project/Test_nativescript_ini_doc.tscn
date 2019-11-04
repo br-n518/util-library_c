@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node
+
+
+const INI_DOC = preload(\"res://lib/ini_doc.gdns\")
+
+func _ready():
+	var doc:INI_DOC = INI_DOC.new()
+	doc.set_global(\"asdf\", \"jupiter\")
+	doc.set(\"solarsystem\", \"mars\", \"red\")
+	# save to parent directory to keep Godot project clean
+	doc.save(\"../testfile.ini\")
+	
+	# optional
+	doc = INI_DOC.new()
+	
+	doc.open(\"../testfile.ini\")
+	print(doc.get(\"solarsystem\", \"mars\"))
+	print(doc.get_global(\"asdf\"))
+"
+
+[node name="Node" type="Node"]
+script = SubResource( 1 )
