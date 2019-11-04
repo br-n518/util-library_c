@@ -51,7 +51,7 @@
 - make
 
 On Linux these can be easily installed from repository.  
-For Windows, MinGW (Minimalist GNU for Windows) includes all the above tools.  
+For Windows, MinGW (*Minimalist GNU for Windows*) includes all the above tools.  
 MSYS isn't much help: just use CMD with MinGW in PATH.
 
 ### stdlib.h malloc
