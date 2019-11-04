@@ -18,9 +18,9 @@
 
 - **ini_doc.h**: INI file reader/writer.
 - **xml_doc.h**: XML file reader/writer.
-	- Comments are stripped and ignored.
-	- Text elements inside nodes are concatenated after  
-	stripping leading & trailing whitespace (per block of text).
+	- Comments are stripped and ignored. ini_doc comments can be at the end of any line.
+	- Text elements inside XML nodes are concatenated after stripping  
+	leading & trailing whitespace (per block of node-separated text).
 
 ### terrain
 - **tiled_map.h**: Tiled map (for 2D or flat-ground 3D).
@@ -29,9 +29,9 @@
 	Repeat the process, creating the octal tree (until size==1).
 
 ### pcg
+- **split_tiled_map_drawer.h**: Tiled map binary split algorithm.
 - **dsquare_hmap.h**: Diamond square over heightmap.
 - **octree_turtle.h**: Octree "turtle" drawer.
-- **split_tiled_map_drawer.h**: Tiled map binary split algorithm.
 
 ### rand
 - **rand.h**: C++ &lt;random&gt; library wrapper for C.
