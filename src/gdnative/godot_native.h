@@ -35,10 +35,8 @@ const godot_gdnative_ext_nativescript_api_struct *nativescript_api = NULL;
 void GDN_EXPORT godot_nativescript_init(void *p_handle);
 #endif
 
-// sub components don't need to check GODOT_NATIVE_H
-//#ifndef GODOT_SUB_NATIVE_H
+// sub components don't need to check GDN_C_NATIVE_H
 #define GDN_C_SUB_NATIVE_H
-//#endif
 
 #include "godot_macros.h"
 

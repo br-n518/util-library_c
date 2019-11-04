@@ -36,7 +36,6 @@
 // each section is itself a hash table
 // each section table holds the key and void* value.
 // void* data is to be a char* null terminated
-// API needs a function to free all the memory.
 
 /**
  * @brief INI style document reader/writer struct.

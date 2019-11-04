@@ -95,3 +95,21 @@ test_quiet: $(TEST_SRC)
 	$(CC) $(CFLAGS) -D"NDEBUG" -o bin/test$(EXEC_EXT) $(TEST_SRC) $(TEST_LDFLAGS)
 
 
+
+# NativeScript
+NS_INI_DOC_SRC=src/nativescript_ini_doc.c src/util/ini_doc.c src/util/strbuff.c src/util/hash.c
+.PHONY: ns_ini_doc
+ns_ini_doc: src/nativescript_ini_doc.c
+	$(CC) -fPIC -shared $(GDFLAGS) -D"ENABLE_NATIVESCRIPT" $(NS_INI_DOC_SRC) -o bin/ini_doc$(SHARED_EXT)
+
+#NS_XML_DOC_SRC=src/nativescript_xml_doc.c src/util/xml_doc.c src/util/strbuff.c src/util/hash.c src/util/node.c
+#.PHONY: ns_xml_doc
+#ns_xml_doc: src/nativescript_xml_doc.c
+#	$(CC) -fPIC -shared $(GDFLAGS) -D"ENABLE_NATIVESCRIPT" $(NS_XML_DOC_SRC) -o bin/xml_doc$(SHARED_EXT)
+
+
+
+
+
+
+

@@ -3,6 +3,13 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Control
 
+const INI_DOC = preload(\"res://lib/ini_doc.gdns\")
+
+func _ready():
+	var doc:INI_DOC = INI_DOC.new()
+	doc.set_global(\"asdf\", \"jupiter\")
+	doc.set(\"solarsystem\", \"mars\", \"red\")
+	doc.save(\"../testfile.ini\")
 
 func _on_tiledmap_pressed():
 # warning-ignore:return_value_discarded
