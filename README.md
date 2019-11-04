@@ -66,16 +66,16 @@ MSYS isn't much help: just use CMD with MinGW in PATH.
 ### ini_doc NativeScript Class
 
     make ns_ini_doc
-    cp bin/ini\_doc.so godot\_project/lib/
+    cp bin/ini_doc.so godot_project/lib/
 
-Now make "`ini\_doc.tres`" to point to `ini\_doc.so` (`ini_doc.dll`)
-and `ini_doc.gdns` for referencing the "ini\_doc" class name.
+Now make "`ini_doc.tres`" to point to `ini_doc.so` (`ini_doc.dll`)
+and `ini_doc.gdns` for referencing the "ini_doc" class name.
 
 Example usage:
 
-    const INI\_DOC = preload("res://lib/ini\_doc.gdns")
+    const INI_DOC = preload("res://lib/ini_doc.gdns")
     
-    var doc = INI\_DOC.new()
+    var doc = INI_DOC.new()
     doc.set("section1", "key1", "value1")
     doc.set_global("key2", "value2")
     doc.save("../file.ini")
