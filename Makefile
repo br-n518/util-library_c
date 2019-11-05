@@ -30,23 +30,25 @@ GDFLAGS=$(CFLAGS) -I"godot_headers" -D"GODOT"
 # GODOT PROJECT
 DEPLOY=godot_project/lib/$(OUTPUT_SHARED)
 
+.PHONY: test test_quiet
+.PHONY: all clean shared
+.PHONY: godot deploy
+.PHONY: ns_ini_doc
 
 
-.PHONY: shared
+
 shared: clean build_shared rand.o
 	# LINK
 	$(CC) -shared -o bin/$(OUTPUT_SHARED) *.o $(LDFLAGS)
 
 
 
-.PHONY: godot
 godot: clean build_godot rand.o
 	# LINK
 	$(CC) -shared -o bin/$(OUTPUT_SHARED) *.o $(LDFLAGS)
 
 
 
-.PHONY: all
 all: clean shared
 
 
@@ -68,14 +70,12 @@ rand.o: src/rand/rand.cpp
 	$(CXX) -c -fPIC $(CXXFLAGS) src/rand/rand.cpp
 
 
-.PHONY: clean
 clean:
 	# CLEAN
 	rm -f *.o
 
 
 
-.PHONY: deploy
 deploy: bin/$(OUTPUT_SHARED)
 	# DEPLOY
 	cp bin/$(OUTPUT_SHARED) $(DEPLOY)
@@ -85,27 +85,27 @@ deploy: bin/$(OUTPUT_SHARED)
 TEST_SRC=rand.o src/test/test_main.c $(SRC)
 TEST_LDFLAGS=$(LDFLAGS)
 
-.PHONY: test
 test: $(TEST_SRC)
 	# BUILD TEST
 	$(CC) $(CFLAGS) -ggdb -o bin/test$(EXEC_EXT) $(TEST_SRC) $(TEST_LDFLAGS)
 
-.PHONY: test_quiet
 test_quiet: $(TEST_SRC)
+	# BUILD TEST
 	$(CC) $(CFLAGS) -D"NDEBUG" -o bin/test$(EXEC_EXT) $(TEST_SRC) $(TEST_LDFLAGS)
 
 
 
 # NativeScript
 NS_INI_DOC_SRC=src/nativescript_ini_doc.c src/util/ini_doc.c src/util/strbuff.c src/util/hash.c
-.PHONY: ns_ini_doc
+
 ns_ini_doc: src/nativescript_ini_doc.c
+	# BUILD NativeScript ini_doc
 	$(CC) -fPIC -shared $(GDFLAGS) -D"ENABLE_NATIVESCRIPT" $(NS_INI_DOC_SRC) -o bin/ini_doc$(SHARED_EXT)
 
-#NS_XML_DOC_SRC=src/nativescript_xml_doc.c src/util/xml_doc.c src/util/strbuff.c src/util/hash.c src/util/node.c
-#.PHONY: ns_xml_doc
-#ns_xml_doc: src/nativescript_xml_doc.c
-#	$(CC) -fPIC -shared $(GDFLAGS) -D"ENABLE_NATIVESCRIPT" $(NS_XML_DOC_SRC) -o bin/xml_doc$(SHARED_EXT)
+#~ NS_XML_DOC_SRC=src/nativescript_xml_doc.c src/util/xml_doc.c src/util/strbuff.c src/util/hash.c src/util/node.c
+#~ ns_xml_doc: src/nativescript_xml_doc.c
+#~ 	# BUILD NativeScript xml_doc
+#~ 	$(CC) -fPIC -shared $(GDFLAGS) -D"ENABLE_NATIVESCRIPT" $(NS_XML_DOC_SRC) -o bin/xml_doc$(SHARED_EXT)
 
 
 
