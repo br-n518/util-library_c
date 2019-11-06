@@ -112,43 +112,43 @@ extern "C" {
 #endif
 
 // return 1 for matching filename extension ( ".xml", or ".XML", or ".xMl" etc: case-insensitive )
-char	xml_check_filename ( const char *fname, const int len );
+char xml_check_filename( const char *fname, const int len );
 
-struct xml_doc*		 xml_doc_create		();
-struct xml_node*		 xml_node_create		( const char *name ); // strings are copied
-struct xml_attribute* xml_attribute_create( const char *name, const char *value );
+struct xml_doc*       xml_doc_create       ();
+struct xml_node*      xml_node_create      ( const char *name ); // strings are copied
+struct xml_attribute* xml_attribute_create ( const char *name, const char *value );
 
 void xml_text_create ( struct xml_text *t, const char *value );
 void xml_text_append ( struct xml_text *t, const char *value );
 
-void xml_text_free		( struct xml_text* );
-void xml_attribute_free	( struct xml_attribute* );
-void xml_node_free		( struct xml_node*, const char connect_children ); //connect_children as 0 will delete child nodes recursively.
-void xml_doc_free			( struct xml_doc* );
+void xml_text_free      ( struct xml_text* );
+void xml_attribute_free ( struct xml_attribute* );
+void xml_node_free      ( struct xml_node*, const char connect_children ); //connect_children as 0 will delete child nodes recursively.
+void xml_doc_free       ( struct xml_doc* );
 
 // open XML file
-struct xml_doc* xml_doc_open	( const char *fname, const char strict_formatting_bool );
-struct xml_doc* xml_doc_parse	( const char *x_data, const size_t x_data_len, const char strict_formatting_bool );
+struct xml_doc* xml_doc_open( const char *fname, const char strict_formatting_bool );
+struct xml_doc* xml_doc_parse( const char *x_data, const size_t x_data_len, const char strict_formatting_bool );
 
 // save XML file
-void				 xml_doc_save	( struct xml_doc *doc, const char *fname );
-void xml_doc_save_sans_prolog	( struct xml_doc *doc, const char *fname );
+void xml_doc_save            ( struct xml_doc *doc, const char *fname );
+void xml_doc_save_sans_prolog( struct xml_doc *doc, const char *fname );
 
 // attributes must live in a node, so no xml_attribute functions
-void		xml_node_set_attr( struct xml_node*, const char *name, const char *value );
-void		xml_node_apply_attr( struct xml_node*, struct xml_attribute* );
+void xml_node_set_attr  ( struct xml_node*, const char *name, const char *value );
+void xml_node_apply_attr( struct xml_node*, struct xml_attribute* );
 
-struct xml_attribute* xml_node_get_attr		( struct xml_node*, const char *name );
-struct xml_text*	  xml_node_get_attr_value( struct xml_node*, const char *name );
+struct xml_attribute* xml_node_get_attr      ( struct xml_node*, const char *name );
+struct xml_text*      xml_node_get_attr_value( struct xml_node*, const char *name );
 
-void xml_node_add_child			( struct xml_node*, struct xml_node* );
-void xml_node_insert_child_at	( struct xml_node*, struct xml_node*, int idx );
+void xml_node_add_child      ( struct xml_node*, struct xml_node* );
+void xml_node_insert_child_at( struct xml_node*, struct xml_node*, int idx );
 
 
-void xml_node_set_text( struct xml_node *node, const char *new_text );
+void xml_node_set_text   ( struct xml_node *node, const char *new_text );
 void xml_node_append_text( struct xml_node *node, const char *text );
 
-
+char* xml_doc_to_string( struct xml_doc *doc, const char include_prolog );
 
 
 

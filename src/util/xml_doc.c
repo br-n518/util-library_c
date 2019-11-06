@@ -54,7 +54,7 @@ char xml_check_filename( const char *fname, const int len )
 	
 	return (
 	
-			len >= 4 &&
+			len > 4 && //don't accept empty filenames (len == 4)
 			xml_check_xml(fname, len-3) &&
 			fname[len-4] == '.'
 			
@@ -972,38 +972,46 @@ struct xml_doc* xml_doc_parse( const char *x_data, const size_t x_data_len, cons
 * XML_WRITE
 ***********/
 
-void xml_write_attr_text( const struct xml_text *t, FILE *file ) {
+void xml_write_attr_text( strbuff *sb, const struct xml_text *t ) {
+	assert( sb );
 	assert( t );
 	
-	fputc( '"', file );
+	sb_putc( sb, '"' );
+	//fputc( '"', file );
 	
 	if ( t->text && t->text_len > 0 )
-		fwrite( t->text, t->text_len, 1, file );
+		sb_puts( sb, t->text, t->text_len );
+		//fwrite( t->text, t->text_len, 1, file );
 	
-	fputc( '"', file );
+	sb_putc( sb, '"' );
+	//fputc( '"', file );
 }
 
 // prepended space
-void xml_write_attribute( const struct xml_attribute *attr, FILE *file ) {
+void xml_write_attribute( strbuff *sb, const struct xml_attribute *attr ) {
+	assert( sb );
 	assert( attr );
-	assert( file );
 	
-	fputc( ' ', file );
-	fwrite( attr->name, strlen(attr->name), 1, file );
-	fputc( '=', file );
-	xml_write_attr_text( &(attr->text_body), file );
+	sb_putc( sb,  ' ' );
+	sb_puts( sb, attr->name, strlen(attr->name) );
+	sb_putc( sb, '=' );
+	//fwrite( attr->name, strlen(attr->name), 1, file );
+	//fputc( '=', file );
+	xml_write_attr_text( sb, &(attr->text_body) );
 }
 
-void xml_write_node( const struct xml_node *node, FILE *file ) {
+void xml_write_node( strbuff *sb, const struct xml_node *node) {
+	assert( sb );
 	assert( node );
-	assert( file );
 	
 	const char has_text = (node->text_body.text && node->text_body.text_len > 0);
 	const int len = strlen( node->name );
 	
 	// opening tag
-	fputc( '<', file );
-	fwrite( node->name, len, 1, file );
+	sb_putc( sb, '<' );
+	sb_puts( sb, node->name, len );
+	//~ fputc( '<', file );
+	//~ fwrite( node->name, len, 1, file );
 	
 	// write attributes
 	// for each attr...
@@ -1014,52 +1022,71 @@ void xml_write_node( const struct xml_node *node, FILE *file ) {
 		
 		if ( hte->key[0] != '\0' ) {
 			while ( hte ) {
-				xml_write_attribute( (struct xml_attribute*) hte->data, file );
+				xml_write_attribute( sb, (struct xml_attribute*) hte->data );
 				hte = hte->next;
 			}
 		}
 	}
 	
 	if ( has_text || node->child_nodes ) {
-		fputc( '>', file );
+		sb_putc( sb, '>' );
+		//~ fputc( '>', file );
 		
 		// child nodes
 		node_t *curr = node->child_nodes;
 		while ( curr ) {
-			xml_write_node( (struct xml_node*) curr->data, file );
+			xml_write_node( sb, (struct xml_node*) curr->data );
 			curr = curr->next;
 		}
 		
 		// text body
-		if ( has_text ) fwrite( node->text_body.text, node->text_body.text_len, 1, file);
+		if ( has_text )
+		{
+			sb_puts( sb, node->text_body.text, node->text_body.text_len );
+			//fwrite( node->text_body.text, node->text_body.text_len, 1, file);
+		}
 		
 		// closing body tag
-		fputs( "</", file );
-		fwrite( node->name, len, 1, file );
-		fputc( '>', file );
+		sb_putc( sb, '<' );
+		sb_putc( sb, '/' );
+		sb_puts( sb, node->name, len );
+		sb_putc( sb, '>' );
+		//~ fputs( "</", file );
+		//~ fwrite( node->name, len, 1, file );
+		//~ fputc( '>', file );
 	} else {
 		// closing line tag
-		fputs( " />", file );
+		//~ fputs( " />", file );
+		sb_puts( sb, " />", 3 );
 	}
 	
 }
 
-void xml_write_document( struct xml_doc *doc, FILE *file, const char include_prolog ) {
+void xml_write_document( strbuff *sb, struct xml_doc *doc, const char include_prolog ) {
+	assert( sb );
 	assert( doc );
-	assert( file );
 	
 	if ( include_prolog )
 	{
+		char XML__HEADER_BUFFER[XML_STRING_BUFFER_SIZE];
+		
 		if ( doc->encoding[0] == '\0') {
 			strcpy( doc->encoding, "UTF-8" );
 		}
 		// write header
-		fprintf( file, "<?xml version=\"%i.%i\" encoding=\"%s\" ?>", doc->version_major, doc->version_minor, doc->encoding );
+		//~ fprintf( file, "<?xml version=\"%i.%i\" encoding=\"%s\" ?>", doc->version_major, doc->version_minor, doc->encoding );
+		int written_len = snprintf( XML__HEADER_BUFFER, XML_STRING_BUFFER_SIZE, "<?xml version=\"%i.%i\" encoding=\"%s\" ?>", doc->version_major, doc->version_minor, doc->encoding );
+		
+		if ( written_len > 0 )
+		{
+			sb_puts( sb, XML__HEADER_BUFFER, written_len );
+		}
 	}
 	
 	// write root node
-	xml_write_node( doc->root_node, file );
-	fputc( '\n', file );
+	xml_write_node( sb, doc->root_node );
+	sb_putc( sb, '\n' );
+	//~ fputc( '\n', file );
 }
 
 
@@ -1093,8 +1120,13 @@ void xml_doc_save( struct xml_doc *doc, const char *fname )
 	FILE *file = fopen(fname, "w");
 	if ( file )
 	{
-		xml_write_document( doc, file, 1 );
+		
+		char *temp = xml_doc_to_string( doc, 1 );
+		
+		fputs( temp, file );
 		fclose( file );
+		
+		_FREE( temp );
 	}
 	else
 	{
@@ -1123,14 +1155,32 @@ void xml_doc_save_sans_prolog( struct xml_doc *doc, const char *fname )
 	FILE *file = fopen(fname, "w");
 	if ( file )
 	{
-		xml_write_document( doc, file, 0 );
+		
+		char *temp = xml_doc_to_string( doc, 0 );
+		
+		fputs( temp, file );
 		fclose( file );
+		
+		_FREE( temp );
 	}
 	else
 	{
 		printf("xml_doc_save (sans_prolog) error: Could not open file for writing (%s).\n", fname);
 		//return;
 	}
+}
+
+
+char* xml_doc_to_string( struct xml_doc *doc, const char include_prolog )
+{
+	strbuff contents;
+	sb_init( &contents );
+	xml_write_document( &contents, doc, include_prolog );
+	
+	char *ret = sb_cstr( &contents );
+	sb_clear( &contents );
+	
+	return ret;
 }
 
 
