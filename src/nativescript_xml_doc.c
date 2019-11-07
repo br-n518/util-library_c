@@ -36,7 +36,7 @@ GDCALLINGCONV void xml_doc_destructor(godot_object *p_instance, void *p_method_d
 // Function args with a value are optional arguments.
 
 // case sensitive search
-// disabled by default, always match case insensitive
+// disabled by default: always match case-insensitive
 
 use_case_sensitive_search( b:bool=1 )
 case_sensitive_enabled( ) -> bool
@@ -49,7 +49,6 @@ select_sibling( String) -> bool (select_parent then select_child, but noting ind
 select_parent( ) -> bool
 select_xpath( String ) -> bool (can be relative or absolute, can only select nodes, not attributes or any text values.)
 
-select_next_child( )
 select_next_sibling( )
 
 find_child( String )  (searches from current selected node until node with matching name is found)
@@ -59,18 +58,20 @@ get_children_tag_names() -> PoolStringArray
 
 // ATTRIBUTES
 
-set_attribute( String, String )
-append_attribute( String, String )
-unset_attribute( String )
-
+set_attribute_value( String, String )
+append_attribute_value( String, String )
 get_attribute_value( String ) -> String
+
+set_attributes( Dictionary )
 get_attributes( ) -> Dictionary
+
+unset_attribute( String )
 
 // TEXT
 
 set_text( String )
-get_text( ) -> String
 append_text( String )
+get_text( ) -> String
 
 // NODE CREATION AND DELETION
 
@@ -81,7 +82,7 @@ delete_selected_node( connect:bool=0 )  (selects parent, or none if root deleted
 
 // HAS
 
-has_child( String ) -> bool
+has_child( String, recursive:bool=0 ) -> bool
 has_attribute( String ) -> bool
 has_text( String, case_sensitive:bool=1 ) -> bool  (case sensitivity here is separate from global tag matching setting)
 
@@ -123,9 +124,7 @@ Otherwise use current behavior (stdio.h handles everything)
 
 
 
-
-
-godot_variant ns_xml_doc_open(godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args)
+godot_variant ns_xml_doc_open( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
 {
 	struct xml_doc *doc = (struct xml_doc*) p_user_data;
 	
@@ -139,7 +138,6 @@ godot_variant ns_xml_doc_open(godot_object *p_instance, void *p_method_data, voi
 		// convert key arg
 		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
 		api->godot_string_destroy(&fname_str);
-		
 		
 		// call xml_doc_load
 		ret = xml_doc_load( doc,
@@ -157,7 +155,7 @@ godot_variant ns_xml_doc_open(godot_object *p_instance, void *p_method_data, voi
 }
 
 
-godot_variant ns_xml_doc_save(godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args)
+godot_variant ns_xml_doc_save( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
 {
 	struct xml_doc *doc = (struct xml_doc*) p_user_data;
 	
@@ -181,7 +179,7 @@ godot_variant ns_xml_doc_save(godot_object *p_instance, void *p_method_data, voi
 }
 
 
-godot_variant ns_xml_doc_parse(godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args)
+godot_variant ns_xml_doc_parse( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
 {
 	struct xml_doc *doc = (struct xml_doc*) p_user_data;
 	
@@ -205,7 +203,1033 @@ godot_variant ns_xml_doc_parse(godot_object *p_instance, void *p_method_data, vo
 }
 
 
-void GDN_EXPORT godot_nativescript_init(void *p_handle)
+
+
+godot_variant  ns_xml_doc_use_case_sensitive_search( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_case_sensitive_enabled( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_select_root( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_select_child( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_select_sibling( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_select_parent( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_select_xpath( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_select_next_sibling( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_find_child( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_get_tag_name( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_get_childre_tag_names( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_set_attribute_value( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_append_attribute_value( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_get_attribute_value( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_set_attributes( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_get_attributes( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_unset_attribute( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_set_text( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_append_text( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+	
+}
+
+godot_variant  ns_xml_doc_get_text( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_create_root_node( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_create_child_node( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_delete_child_node_at( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_delete_selected_node( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_has_child( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_has_attribute( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_has_text( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_to_string( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_set_encoding( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_get_encoding( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_set_version( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_get_version( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_get_version_major( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+	
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+godot_variant  ns_xml_doc_get_version_minor( godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args )
+{
+
+	struct xml_doc *doc = (struct xml_doc*) p_user_data;
+	
+	godot_bool ret = 0;
+	
+	if ( p_num_args >= 1 )
+	{
+		// get args
+		godot_string fname_str = api->godot_variant_as_string(p_args[0]);
+		
+		// convert key arg
+		godot_char_string cs_fname = api->godot_string_ascii(&fname_str);
+		api->godot_string_destroy(&fname_str);
+		
+		ret = xml_doc_load( doc,
+				api->godot_char_string_get_data(&cs_fname) );
+		
+		// cleanup
+		api->godot_char_string_destroy( &cs_fname );
+		
+		
+	}
+	godot_variant ret_var;
+	api->godot_variant_new_bool(&ret_var, ret);
+	
+	return ret_var;
+}
+
+
+
+
+
+void GDN_EXPORT godot_nativescript_init( void *p_handle )
 {
 	godot_instance_create_func create = { NULL, NULL, NULL };
 	create.create_func = &ns_xml_doc_constructor;
@@ -219,26 +1243,116 @@ void GDN_EXPORT godot_nativescript_init(void *p_handle)
 	godot_method_attributes attributes = { GODOT_METHOD_RPC_MODE_DISABLED };
 	godot_instance_method method = { NULL, NULL, NULL };
 	
-	method.method = &ns_xml_doc_get;
-	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "get", attributes, method);
+	method.method = &ns_xml_doc_use_case_sensitive_search;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "use_case_sensitive_search", attributes, method);
 	
-	method.method = &ns_xml_doc_get_global;
-	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "get_global", attributes, method);
+	method.method = &ns_xml_doc_case_sensitive_enabled;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "case_sensitive_enabled", attributes, method);
 	
-	method.method = &ns_xml_doc_set;
-	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "set", attributes, method);
+	method.method = &ns_xml_doc_select_root;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "select_root", attributes, method);
 	
-	method.method = &ns_xml_doc_set_global;
-	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "set_global", attributes, method);
+	method.method = &ns_xml_doc_select_child;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "select_child", attributes, method);
 	
-	method.method = &ns_xml_doc_save;
-	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "save", attributes, method);
+	method.method = &ns_xml_doc_select_sibling;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "select_sibling", attributes, method);
+	
+	method.method = &ns_xml_doc_select_parent;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "select_parent", attributes, method);
+	
+	method.method = &ns_xml_doc_select_xpath;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "select_xpath", attributes, method);
+	
+	method.method = &ns_xml_doc_select_next_sibling;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "select_next_sibling", attributes, method);
+	
+	method.method = &ns_xml_doc_find_child;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "find_child", attributes, method);
+	
+	method.method = &ns_xml_doc_get_tag_name;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "get_tag_name", attributes, method);
+	
+	method.method = &ns_xml_doc_get_children_tag_names;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "get_children_tag_names", attributes, method);
+	
+	method.method = &ns_xml_doc_set_attribute_value;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "set_attribute_value", attributes, method);
+	
+	method.method = &ns_xml_doc_append_attribute_value;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "append_attribute_value", attributes, method);
+	
+	method.method = &ns_xml_doc_get_attribute_value;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "get_attribute_value", attributes, method);
+	
+	method.method = &ns_xml_doc_set_attributes;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "set_attributes", attributes, method);
+	
+	method.method = &ns_xml_doc_get_attributes;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "get_attributes", attributes, method);
+	
+	method.method = &ns_xml_doc_unset_attribute;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "unset_attribute", attributes, method);
+	
+	method.method = &ns_xml_doc_set_text;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "set_text", attributes, method);
+	
+	method.method = &ns_xml_doc_append_text;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "append_text", attributes, method);
+	
+	method.method = &ns_xml_doc_get_text;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "get_text", attributes, method);
+	
+	method.method = &ns_xml_doc_create_root_node;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "create_root_node", attributes, method);
+	
+	method.method = &ns_xml_doc_create_child_node;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "create_child_node", attributes, method);
+	
+	method.method = &ns_xml_doc_delete_child_node_at;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "delete_child_node_at", attributes, method);
+	
+	method.method = &ns_xml_doc_delete_selected_node;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "delete_selected_node", attributes, method);
+	
+	method.method = &ns_xml_doc_has_child;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "has_child", attributes, method);
+	
+	method.method = &ns_xml_doc_has_attribute;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "has_attribute", attributes, method);
+	
+	method.method = &ns_xml_doc_has_text;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "has_text", attributes, method);
 	
 	method.method = &ns_xml_doc_open;
 	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "open", attributes, method);
 	
+	method.method = &ns_xml_doc_save;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "save", attributes, method);
+	
 	method.method = &ns_xml_doc_parse;
 	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "parse", attributes, method);
+	
+	method.method = &ns_xml_doc_to_string;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "to_string", attributes, method);
+	
+	method.method = &ns_xml_doc_set_encoding;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "set_encoding", attributes, method);
+	
+	method.method = &ns_xml_doc_get_encoding;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "get_encoding", attributes, method);
+	
+	method.method = &ns_xml_doc_set_version;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "set_version", attributes, method);
+	
+	method.method = &ns_xml_doc_get_version;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "get_version", attributes, method);
+	
+	method.method = &ns_xml_doc_get_version_major;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "get_version_major", attributes, method);
+	
+	method.method = &ns_xml_doc_get_version_minor;
+	nativescript_api->godot_nativescript_register_method(p_handle, "xml_doc", "get_version_minor", attributes, method);
 	
 }
 
