@@ -44,7 +44,7 @@ void dsquare( heightmap *map, const int x, const int y, const int size, const ch
 			hm_get_elevation( map, x+size, y+size )
 			);
 	
-	center = (center >> 2) + rnd_pcg_range(1, roughness);
+	center = (center >> 2) + rnd_pcg_range( &dsquare_hmap_rnd,1, roughness);
 	
 	// DIAMOND STEP
 	hm_set_elevation( map, x + half_size, y + half_size, center );
@@ -58,7 +58,7 @@ void dsquare( heightmap *map, const int x, const int y, const int size, const ch
 				hm_get_elevation( map, x + size, y ) + //NE
 				center + center
 				);
-		hm_set_elevation( map, x + half_size, y, (a >> 2) + rnd_pcg_range(1, roughness) );
+		hm_set_elevation( map, x + half_size, y, (a >> 2) + rnd_pcg_range( &dsquare_hmap_rnd,1, roughness) );
 	}
 	// EAST
 	if ( hm_get_elevation( map, x + size, y + half_size ) == 0 ) {
@@ -67,7 +67,7 @@ void dsquare( heightmap *map, const int x, const int y, const int size, const ch
 				hm_get_elevation( map, x + size, y ) + //NE
 				center + center
 				);
-		hm_set_elevation( map, x + size, y + half_size, (a >> 2) + rnd_pcg_range(1, roughness) );
+		hm_set_elevation( map, x + size, y + half_size, (a >> 2) + rnd_pcg_range( &dsquare_hmap_rnd,1, roughness) );
 	}
 	// SOUTH
 	if ( hm_get_elevation( map, x + half_size, y + size ) == 0 ) {
@@ -76,7 +76,7 @@ void dsquare( heightmap *map, const int x, const int y, const int size, const ch
 				hm_get_elevation( map,  x + size, y + size ) + //SE
 				center + center
 				);
-		hm_set_elevation( map, x + half_size, y + size, (a >> 2) + rnd_pcg_range(1, roughness) );
+		hm_set_elevation( map, x + half_size, y + size, (a >> 2) + rnd_pcg_range( &dsquare_hmap_rnd,1, roughness) );
 	}
 	// WEST
 	if ( hm_get_elevation( map, x, y + half_size ) == 0 ) {
@@ -85,7 +85,7 @@ void dsquare( heightmap *map, const int x, const int y, const int size, const ch
 				hm_get_elevation( map, x, y + size ) + //SW
 				center + center
 				);
-		hm_set_elevation( map, x, y + half_size, (a >> 2) + rnd_pcg_range(1, roughness) );
+		hm_set_elevation( map, x, y + half_size, (a >> 2) + rnd_pcg_range( &dsquare_hmap_rnd, 1, roughness) );
 	}
 	
 	// 8x8 map

@@ -6,7 +6,7 @@ CXX=g++
 UTIL_SRC=src/util/*.c
 TERRAIN_SRC=src/terrain/*.c
 PCG_SRC=src/pcg/*.c
-SRC=$(UTIL_SRC) $(TERRAIN_SRC) $(PCG_SRC)
+SRC=$(UTIL_SRC) $(TERRAIN_SRC) $(PCG_SRC) src/rnd.c
 
 # OUT FILE
 SHARED_EXT=.so
@@ -21,7 +21,7 @@ CFLAGS=-std=c99 -Wall -Werror
 CXXFLAGS=-std=c++11 -Wall -Werror -O3
 
 # LINK
-LDFLAGS=-lstdc++
+LDFLAGS=
 
 # GODOT
 GDSRC=$(SRC) src/godot.c
@@ -37,13 +37,13 @@ DEPLOY=godot_project/lib/$(OUTPUT_SHARED)
 
 
 
-shared: clean build_shared rand.o
+shared: clean build_shared
 	# LINK
 	$(CC) -shared -o bin/$(OUTPUT_SHARED) *.o $(LDFLAGS)
 
 
 
-godot: clean build_godot rand.o
+godot: clean build_godot
 	# LINK
 	$(CC) -shared -o bin/$(OUTPUT_SHARED) *.o $(LDFLAGS)
 
@@ -65,11 +65,6 @@ build_godot: $(SRC)
 
 
 
-rand.o: src/rand/rand.cpp
-	# COMPILE C++ <random> wrapper
-	$(CXX) -c -fPIC $(CXXFLAGS) src/rand/rand.cpp
-
-
 clean:
 	# CLEAN
 	rm -f *.o
@@ -82,7 +77,7 @@ deploy: bin/$(OUTPUT_SHARED)
 
 
 
-TEST_SRC=rand.o src/test/test_main.c $(SRC)
+TEST_SRC=src/test/test_main.c $(SRC)
 TEST_LDFLAGS=$(LDFLAGS)
 
 test: $(TEST_SRC)
