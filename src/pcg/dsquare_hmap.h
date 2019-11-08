@@ -33,7 +33,7 @@ extern "C" {
 
 // split map, floor result
 
-void dsquare_hmap( heightmap *map, const int seed, const int max_initial_height, const char roughness );
+void dsquare_hmap( heightmap *map, const unsigned int seed, const int max_initial_height, const char roughness );
 
 #ifdef __cplusplus
 }

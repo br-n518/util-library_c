@@ -21,8 +21,10 @@
  * SOFTWARE.
  */
 #include "dsquare_hmap.h"
-#include "../rand/rand.h"
+#include "../rnd.h"
 
+
+static rnd_pcg_t dsquare_hmap_rnd;
 
 // initialize all elevations to zero, use as detection
 // heightmap must init all zero, and size must be a power of base 2 (uses bit shifts instead of divide, although much mod)
@@ -42,7 +44,7 @@ void dsquare( heightmap *map, const int x, const int y, const int size, const ch
 			hm_get_elevation( map, x+size, y+size )
 			);
 	
-	center = (center >> 2) + 1 + (int) (R_ranlux_get() % roughness);
+	center = (center >> 2) + rnd_pcg_range(1, roughness);
 	
 	// DIAMOND STEP
 	hm_set_elevation( map, x + half_size, y + half_size, center );
@@ -56,8 +58,7 @@ void dsquare( heightmap *map, const int x, const int y, const int size, const ch
 				hm_get_elevation( map, x + size, y ) + //NE
 				center + center
 				);
-		a = (a >> 2) + (int) (R_ranlux_get() % roughness);
-		hm_set_elevation( map, x + half_size, y, a + 1 );
+		hm_set_elevation( map, x + half_size, y, (a >> 2) + rnd_pcg_range(1, roughness) );
 	}
 	// EAST
 	if ( hm_get_elevation( map, x + size, y + half_size ) == 0 ) {
@@ -66,8 +67,7 @@ void dsquare( heightmap *map, const int x, const int y, const int size, const ch
 				hm_get_elevation( map, x + size, y ) + //NE
 				center + center
 				);
-		a = (a >> 2) + (int) (R_ranlux_get() % roughness);
-		hm_set_elevation( map, x + size, y + half_size, a + 1 );
+		hm_set_elevation( map, x + size, y + half_size, (a >> 2) + rnd_pcg_range(1, roughness) );
 	}
 	// SOUTH
 	if ( hm_get_elevation( map, x + half_size, y + size ) == 0 ) {
@@ -76,8 +76,7 @@ void dsquare( heightmap *map, const int x, const int y, const int size, const ch
 				hm_get_elevation( map,  x + size, y + size ) + //SE
 				center + center
 				);
-		a = (a >> 2) + (int) (R_ranlux_get() % roughness);
-		hm_set_elevation( map, x + half_size, y + size, a + 1 );
+		hm_set_elevation( map, x + half_size, y + size, (a >> 2) + rnd_pcg_range(1, roughness) );
 	}
 	// WEST
 	if ( hm_get_elevation( map, x, y + half_size ) == 0 ) {
@@ -86,8 +85,7 @@ void dsquare( heightmap *map, const int x, const int y, const int size, const ch
 				hm_get_elevation( map, x, y + size ) + //SW
 				center + center
 				);
-		a = (a >> 2) + (int) (R_ranlux_get() % roughness);
-		hm_set_elevation( map, x, y + half_size, a + 1 );
+		hm_set_elevation( map, x, y + half_size, (a >> 2) + rnd_pcg_range(1, roughness) );
 	}
 	
 	// 8x8 map
@@ -106,18 +104,19 @@ void dsquare( heightmap *map, const int x, const int y, const int size, const ch
 
 
 
-void dsquare_hmap( heightmap *map, const int seed, const int max_initial_height, const char roughness ) {
+void dsquare_hmap( heightmap *map, const unsigned int seed, const int max_initial_height, const char roughness ) {
 	assert( map );
 	assert( max_initial_height > 0 );
 	
 	// seed RNG
-	R_ranlux_seed( seed );
+	//R_ranlux_seed( seed );
+	rnd_pcg_seed( &dsquare_hmap_rnd, seed );
 	
 	// set 4 initial corners, then average and rough the rest recursively
-	hm_set_elevation( map, 0, 0, (R_ranlux_get() % max_initial_height) + 1 );
-	hm_set_elevation( map, map->size, 0, (R_ranlux_get() % max_initial_height) + 1 );
-	hm_set_elevation( map, 0, map->size, (R_ranlux_get() % max_initial_height) + 1 );
-	hm_set_elevation( map, map->size, map->size, (R_ranlux_get() % max_initial_height) + 1 );
+	hm_set_elevation( map, 0, 0, rnd_pcg_range( &dsquare_hmap_rnd, 1, max_initial_height) );
+	hm_set_elevation( map, map->size, 0, rnd_pcg_range( &dsquare_hmap_rnd, 1, max_initial_height) );
+	hm_set_elevation( map, 0, map->size, rnd_pcg_range( &dsquare_hmap_rnd, 1, max_initial_height) );
+	hm_set_elevation( map, map->size, map->size, rnd_pcg_range( &dsquare_hmap_rnd, 1, max_initial_height) );
 	
 	dsquare( map, 0, 0, map->size, roughness );
 }

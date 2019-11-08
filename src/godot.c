@@ -23,9 +23,9 @@
 
 #include "gdnative/godot_native.h"
 
-#include "rand/rand.h"
-
 #include "alloc.h"
+
+
 
 #include "pcg/dsquare_hmap.h"
 
@@ -79,8 +79,6 @@ godot_variant dungeon_octree_turtle(void *data, godot_array *args) {
 	unsigned int seed = api->godot_variant_as_uint(
 			api->godot_array_operator_index_const(args, 1));
 	
-	R_ranlux_seed( seed );
-	
 	if ( size <= 1 ) {
 		GD_PRINT("dungeon_octree_turtle: size (arg 0) should be >= 2")
 		GD_RETURN_NIL()
@@ -115,7 +113,6 @@ godot_variant dungeon_octree_turtle(void *data, godot_array *args) {
 	node_t *rules = 0;
 	push_grammar_rule( &rules, "F", "F+F-F-F+F" );
 	
-	//switch ( R_ranlux_get() % 5 ) {
 	switch ( seed ) {
 		case 0:
 			push_grammar_rule( &rules, "+F", "[+FDFF]" );

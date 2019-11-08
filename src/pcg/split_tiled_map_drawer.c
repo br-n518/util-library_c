@@ -22,7 +22,9 @@
  */
 #include "split_tiled_map_drawer.h"
 
-#include "../rand/rand.h"
+#include "../rnd.h"
+
+static rnd_pcg_t tmd_sd_rnd;
 
 typedef struct bsp_node {
 	struct bsp_node *left, *right;
@@ -65,8 +67,10 @@ int tmd_get_start_y() {
 }
 
 void tmd_split_dungeon(tiled_map *map, unsigned int seed) {
-	//srand(seed);
-	R_ranlux_seed(seed);
+	assert( map );
+	
+	rnd_pcg_seed( &tmd_sd_rnd, seed );
+	
 	bsp_node *head = tmd_create_node(create_rect(0, 0, map->width, map->height));
 	
 	ENEMY_COUNTER = TMD_ENEMY_TILE;
@@ -89,7 +93,7 @@ void tmd_split_dungeon(tiled_map *map, unsigned int seed) {
 void tmd_partition_room(bsp_node *node, char direction_vertical) {
 	// if width less than/equal to half room height (part horizontal)
 	node->part_vertical = direction_vertical;
-	int p = ( ((int)(R_ranlux_get()) % 3) - 1 );
+	int p = rnd_pcg_range( &tmd_sd_rnd, -1, 1 );
 	if (node->part_vertical == 0) {
 		// horizontal
 		node->partition = (node->room.h >> 1);
@@ -116,9 +120,9 @@ void tmd_do_split(tiled_map *map, bsp_node *node) {
 		node->room = r;
 		// place start/enemies
 		if (start_tile_placed == 1) {
-			int i = (R_ranlux_get() % 3) + 1;
-			while ( i > 0 ) {
-				switch (R_ranlux_get() % 4) {
+			int i = rnd_pcg_range( &tmd_sd_rnd, 1, 3 ) + 1;
+			while ( --i > 0 ) {
+				switch (rnd_pcg_range( &tmd_sd_rnd, 0, 3)) {
 					case 0:
 						set_tile(map, r.x+1, r.y+1, ENEMY_COUNTER);
 						break;
@@ -133,7 +137,6 @@ void tmd_do_split(tiled_map *map, bsp_node *node) {
 						break;
 				
 				}
-				i--;
 			}
 			ENEMY_COUNTER++;
 		} else {
@@ -146,7 +149,7 @@ void tmd_do_split(tiled_map *map, bsp_node *node) {
 	
 		if (node->room.w < node->room.h >> 1) tmd_partition_room(node, 0);
 		else if (node->room.h < node->room.w >> 1) tmd_partition_room(node, 1);
-		else tmd_partition_room(node, R_ranlux_get() % 2);
+		else tmd_partition_room(node, rnd_pcg_next(&tmd_sd_rnd) % 2);
 		
 		tmd_do_split(map, node->left);
 		tmd_do_split(map, node->right);
