@@ -1,6 +1,8 @@
 
 # util_lib
 
+[License](LICENSE)
+
 ### src
 - **alloc.h**: allows toggling malloc and godot_alloc.
 - **godot.c**: interfaces the pcg tools to GDNative.
@@ -44,14 +46,16 @@
 
 
 
-## Building
+# Building
+
 ### Requirements
-- gcc (GNU C Compiler)
-- g++ (GNU C++ Compiler; for libstdc++ &lt;random&gt; library)
-- make
+
+- **gcc** (GNU C Compiler)
+- **make**
+- **bash** (optional: for test scripts)
 
 On Linux these can be easily installed from repository.  
-For Windows, MinGW (*Minimalist GNU for Windows*) includes all the above tools.  
+For Windows, MinGW (*Minimalist GNU for Windows*) includes all of the above tools.  
 
 ### stdlib.h malloc
 
@@ -59,9 +63,11 @@ For Windows, MinGW (*Minimalist GNU for Windows*) includes all the above tools.
 
 ### Godot build (GDNative)
 
-    # Build
     make godot
-    # Copy to godot_project folder
+
+### Godot test
+
+    make godot
     make deploy
 
 ### ini_doc NativeScript Class
@@ -84,6 +90,7 @@ and create `ini_doc.gdns` for referencing the "ini_doc" class name.
 Currently ini_doc class does not support Godot path prefixes (res, user, and sys://).
 
 ##### ns_ini_doc functions
+
     set( section, key, value )
     get( section, key ) -> String
     
