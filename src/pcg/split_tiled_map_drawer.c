@@ -22,7 +22,7 @@
  */
 #include "split_tiled_map_drawer.h"
 
-#include "../rnd.h"
+#include "../rand/rnd.h"
 
 static rnd_pcg_t tmd_sd_rnd;
 

@@ -21,7 +21,8 @@
  * SOFTWARE.
  */
 #include "dsquare_hmap.h"
-#include "../rnd.h"
+
+#include "../rand/rnd.h"
 
 
 static rnd_pcg_t dsquare_hmap_rnd;
