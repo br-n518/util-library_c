@@ -6,7 +6,7 @@ CXX=g++
 UTIL_SRC=src/util/*.c
 TERRAIN_SRC=src/terrain/*.c
 PCG_SRC=src/pcg/*.c
-SRC=$(UTIL_SRC) $(TERRAIN_SRC) $(PCG_SRC) src/rnd.c
+SRC=$(UTIL_SRC) $(TERRAIN_SRC) $(PCG_SRC) src/rand/rnd.c
 
 # OUT FILE
 SHARED_EXT=.so
