@@ -33,6 +33,7 @@
 #include "graph.h"
 #include "hash.h"
 #include "node.h"
+#include "queue_stack.h"
 #include "strbuff.h"
 #include "vector_str.h"
 
