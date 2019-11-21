@@ -44,7 +44,9 @@
 	- **godot_sub_native.h**: Include by modules needing GDNative API struct.
 	- **godot_native.h**: Define GDNative API struct and init functions.
 
+### GDScript
 
+- **ini_doc.gd**: Stand-alone GDScript version of ini_doc using Dictionary.
 
 # Building
 
@@ -55,7 +57,13 @@
 - **bash** (optional: for test scripts)
 
 On Linux these can be easily installed from repository.  
-For Windows, MinGW (*Minimalist GNU for Windows*) includes all of the above tools.  
+For Windows, MinGW (*Minimalist GNU for Windows*) includes gcc and make.  
+
+Note that the code is tailored for Linux, and getting the library to export to working DLL is currently WIP.
+
+The **godot_headers** are also necessary. They're added to this repository as a submodule,
+but they don't download automatically. Use duckduckgo.com for info on git submodule,
+or you can download them manually by following the submodule link on github.
 
 ### stdlib.h malloc
 

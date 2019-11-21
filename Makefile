@@ -1,6 +1,5 @@
 # TOOLS
 CC=gcc
-CXX=g++
 
 # INPUT FILES
 UTIL_SRC=src/util/*.c
@@ -18,7 +17,6 @@ OUTPUT_EXEC=$(OUTPUT_NAME)$(EXEC_EXT)
 
 # COMPILE
 CFLAGS=-std=c99 -Wall -Werror
-CXXFLAGS=-std=c++11 -Wall -Werror -O3
 
 # LINK
 LDFLAGS=
